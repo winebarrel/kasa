@@ -55,7 +55,8 @@ func TestClientSendOK(t *testing.T) {
 		"max_per_page": 100
 	}`
 
-	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", "q=phrase",
+	params := map[string]string{"q": "phrase"}
+	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
 		httpmock.NewStringResponder(http.StatusOK, resBody))
 
 	client := newClient("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef")
@@ -76,7 +77,8 @@ func TestClientSendNotFound(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", "q=phrase",
+	params := map[string]string{"q": "phrase"}
+	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
 		httpmock.NewStringResponder(http.StatusNotFound, `{"error":"not_found","message":"Not found"}`))
 
 	client := newClient("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef")

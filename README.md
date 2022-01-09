@@ -30,7 +30,7 @@ Commands:
     Move category.
 
   post --team=STRING --token=STRING [<post-num>]
-    New post.
+    New/Update post.
 
   rm --team=STRING --token=STRING <post-num>
     Delete post.

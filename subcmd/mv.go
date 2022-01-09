@@ -18,7 +18,7 @@ type MvCmd struct {
 }
 
 func (cmd *MvCmd) Run(ctx *kasa.Context) error {
-	posts, hasMore, err := ctx.Driver.ListOrTagSearch(cmd.Source, 1, true)
+	posts, hasMore, err := ctx.Driver.ListOrTagSearch(cmd.Source, cmd.Page, true)
 
 	if err != nil {
 		return err
@@ -47,7 +47,7 @@ func (cmd *MvCmd) Run(ctx *kasa.Context) error {
 		}
 
 		if hasMore {
-			fmt.Println("(has more pages. Try increasing `-p NUM`)")
+			fmt.Printf("(has more pages. current page is %d, try `-p %d`)\n", cmd.Page, cmd.Page+1)
 		}
 
 		approval := prompter.YN("Do you want to move posts?", false)
@@ -67,7 +67,7 @@ func (cmd *MvCmd) Run(ctx *kasa.Context) error {
 	}
 
 	if hasMore {
-		fmt.Println("(has more page. Try increasing `-p NUM`)")
+		fmt.Printf("(has more pages. current page is %d, try `-p %d`)\n", cmd.Page, cmd.Page+1)
 	}
 
 	return nil

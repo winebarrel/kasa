@@ -26,7 +26,7 @@ func (cmd *SearchCmd) Run(ctx *kasa.Context) error {
 	}
 
 	if hasMore {
-		fmt.Println("(has more page. Try increasing `-p NUM`)")
+		fmt.Printf("(has more pages. current page is %d, try `-p %d`)\n", cmd.Page, cmd.Page+1)
 	}
 
 	return nil

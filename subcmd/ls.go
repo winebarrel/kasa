@@ -27,7 +27,7 @@ func (cmd *LsCmd) Run(ctx *kasa.Context) error {
 	}
 
 	if hasMore {
-		fmt.Println("(has more posts)")
+		fmt.Printf("(has more pages. current page is %d, try `-p %d`)\n", cmd.Page, cmd.Page+1)
 	}
 
 	return nil

@@ -1,6 +1,7 @@
 package subcmd
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -12,7 +13,7 @@ import (
 )
 
 type PostCmd struct {
-	Name     string   `short:"n" required:"" help:"Post title."`
+	Name     string   `short:"n" help:"Post title."`
 	BodyFile string   `arg:"" help:"Post body file."`
 	PostNum  int      `arg:"" optional:"" help:"Post number to update."`
 	Tags     []string `short:"t" help:"Post tags."`
@@ -22,6 +23,10 @@ type PostCmd struct {
 }
 
 func (cmd *PostCmd) Run(ctx *kasa.Context) error {
+	if cmd.PostNum == 0 && cmd.Name == "" {
+		return errors.New("missing flags: --name=STRING")
+	}
+
 	var file io.ReadCloser
 
 	if cmd.BodyFile == "-" {

@@ -13,8 +13,8 @@ vet:
 	go vet ./...
 
 .PHONY: test
-vet:
-	go test ./...
+test:
+	go test -v ./...
 
 .PHONY: clean
 clean:

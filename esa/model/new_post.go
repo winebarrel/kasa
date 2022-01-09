@@ -2,7 +2,7 @@ package model
 
 type NewPostBody struct {
 	Name     string   `json:"name,omitempty"`
-	BodyMd   string   `json:"body_md"`
+	BodyMd   string   `json:"body_md,omitempty"`
 	Tags     []string `json:"tags,omitempty"`
 	Category string   `json:"category,omitempty"`
 	WIP      bool     `json:"wip,omitempty"`

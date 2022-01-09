@@ -29,7 +29,7 @@ Commands:
   mvcat --team=STRING --token=STRING <from> <to>
     Move category.
 
-  post --team=STRING --token=STRING <body-file> [<post-num>]
+  post --team=STRING --token=STRING [<post-num>]
     New post.
 
   rm --team=STRING --token=STRING <post-num>

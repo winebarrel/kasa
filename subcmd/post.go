@@ -14,7 +14,7 @@ import (
 
 type PostCmd struct {
 	Name     string   `short:"n" help:"Post title."`
-	BodyFile string   `arg:"" help:"Post body file."`
+	Body     string   `short:"b" help:"Post body file."`
 	PostNum  int      `arg:"" optional:"" help:"Post number to update."`
 	Tags     []string `short:"t" help:"Post tags."`
 	Category string   `short:"c" help:"Post category."`
@@ -23,29 +23,42 @@ type PostCmd struct {
 }
 
 func (cmd *PostCmd) Run(ctx *kasa.Context) error {
-	if cmd.PostNum == 0 && cmd.Name == "" {
-		return errors.New("missing flags: --name=STRING")
+	if cmd.PostNum == 0 {
+		if cmd.Name == "" {
+			return errors.New("missing flags: --name=STRING")
+		}
+
+		if cmd.Body == "" {
+			return errors.New("missing flags: --body=STRING")
+		}
 	}
 
-	var file io.ReadCloser
+	var bodyMd []byte
 
-	if cmd.BodyFile == "-" {
-		file = os.Stdin
-	} else {
+	if cmd.Body != "" {
+		var file io.ReadCloser
+
+		if cmd.Body == "-" {
+			file = os.Stdin
+		} else {
+			var err error
+			file, err = os.OpenFile(cmd.Body, os.O_RDONLY, 0)
+
+			if err != nil {
+				return err
+			}
+
+			defer file.Close()
+		}
+
 		var err error
-		file, err = os.OpenFile(cmd.BodyFile, os.O_RDONLY, 0)
+		bodyMd, err = ioutil.ReadAll(file)
 
 		if err != nil {
 			return err
 		}
-
-		defer file.Close()
-	}
-
-	bodyMd, err := ioutil.ReadAll(file)
-
-	if err != nil {
-		return err
+	} else {
+		bodyMd = []byte{}
 	}
 
 	msg := cmd.Message

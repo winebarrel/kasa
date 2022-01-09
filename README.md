@@ -40,3 +40,12 @@ Commands:
 
 Run "kasa <command> --help" for more information on a command.
 ```
+
+## Installation
+
+## OS X
+
+```
+brew tap winebarrel/kasa
+brew install kasa
+```

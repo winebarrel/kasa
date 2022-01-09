@@ -1,6 +1,7 @@
 package subcmd
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/winebarrel/kasa"
@@ -17,11 +18,11 @@ func (cmd *CatCmd) Run(ctx *kasa.Context) error {
 		return err
 	}
 
-	if post != nil {
-		fmt.Println(post.BodyMd)
-	} else {
-		fmt.Printf("Page not found: %s\n", cmd.Path)
+	if post == nil {
+		return errors.New("post not found")
 	}
+
+	fmt.Println(post.BodyMd)
 
 	return nil
 }

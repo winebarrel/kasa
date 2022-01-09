@@ -51,6 +51,30 @@ func (dri *Driver) Get(rawPath string) (*model.Post, error) {
 	return nil, nil
 }
 
+func (dri *Driver) GetFromPageNum(pageNum int) (*model.Post, error) {
+	path := fmt.Sprintf("posts/%d", pageNum)
+	req, err := dri.esaCli.newRequest(http.MethodGet, path, nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := dri.esaCli.send(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	post := &model.Post{}
+	err = json.Unmarshal(body, &post)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return post, nil
+}
+
 func (dri *Driver) List(path *GlobPath, pageNum int, recursive bool) ([]*model.Post, bool, error) {
 	req, err := dri.esaCli.newRequest(http.MethodGet, "posts", nil)
 

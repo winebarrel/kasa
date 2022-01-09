@@ -17,6 +17,9 @@ Commands:
   cat --team=STRING --token=STRING [<path>]
     Print post.
 
+  info --team=STRING --token=STRING <post-num>
+    Show post info.
+
   ls --team=STRING --token=STRING [<path>]
     List posts.
 
@@ -26,7 +29,7 @@ Commands:
   mvcat --team=STRING --token=STRING <from> <to>
     Move category.
 
-  post --team=STRING --token=STRING --name=STRING <body-file> [<post-num>]
+  post --team=STRING --token=STRING <body-file> [<post-num>]
     New post.
 
   rm --team=STRING --token=STRING <post-num>

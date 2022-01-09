@@ -14,6 +14,7 @@ var cli struct {
 	Team    string           `required:"" env:"ESA_TEAM" help:"esa team"`
 	Token   string           `required:"" env:"ESA_TOKEN" help:"esa access token"`
 	Cat     subcmd.CatCmd    `cmd:"" help:"Print post."`
+	Info    subcmd.InfoCmd   `cmd:"" help:"Show post info."`
 	Ls      subcmd.LsCmd     `cmd:"" help:"List posts."`
 	Mv      subcmd.MvCmd     `cmd:"" help:"Move posts."`
 	Mvcat   subcmd.MvcatCmd  `cmd:"" help:"Move category."`

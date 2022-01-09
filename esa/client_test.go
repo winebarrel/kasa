@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestClientSendOK(t *testing.T) {
+func TestClient_SendOK(t *testing.T) {
 	assert := assert.New(t)
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -72,7 +72,7 @@ func TestClientSendOK(t *testing.T) {
 	assert.Equal(resBody, string(body))
 }
 
-func TestClientSendNotFound(t *testing.T) {
+func TestClientSend_NotFound(t *testing.T) {
 	assert := assert.New(t)
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()

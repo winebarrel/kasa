@@ -2,7 +2,7 @@ GOOS    := $(shell go env GOOS)
 GOARCH  := $(shell go env GOARCH)
 
 .PHONY: all
-all: vet build
+all: vet test build
 
 .PHONY: build
 build:
@@ -11,6 +11,10 @@ build:
 .PHONY: vet
 vet:
 	go vet ./...
+
+.PHONY: test
+vet:
+	go test ./...
 
 .PHONY: clean
 clean:

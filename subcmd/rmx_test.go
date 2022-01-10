@@ -26,6 +26,7 @@ func TestRmx_Dir(t *testing.T) {
 		assert.Equal("foo/bar/", path)
 		assert.Equal(1, postNum)
 		assert.True(recursive)
+
 		return []*model.Post{
 			{
 				Number:   1,
@@ -75,6 +76,7 @@ func TestRmx_HasMore(t *testing.T) {
 		assert.Equal("foo/bar/", path)
 		assert.Equal(1, postNum)
 		assert.True(recursive)
+
 		return []*model.Post{
 			{
 				Number:   1,
@@ -124,6 +126,7 @@ func TestRmx_Tag(t *testing.T) {
 		assert.Equal("#tagA", path)
 		assert.Equal(1, postNum)
 		assert.True(recursive)
+
 		return []*model.Post{
 			{
 				Number:   1,

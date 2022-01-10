@@ -612,7 +612,7 @@ func TestDriverPost_Post(t *testing.T) {
 		BodyMd:   "body_md",
 		Tags:     []string{"tagA", "tagB"},
 		Category: "foo/bar",
-		WIP:      false,
+		Wip:      false,
 		Message:  "message",
 	}
 
@@ -639,7 +639,7 @@ func TestDriverPost_Update(t *testing.T) {
 		BodyMd:   "body_md",
 		Tags:     []string{"tagA", "tagB"},
 		Category: "foo/bar",
-		WIP:      false,
+		Wip:      false,
 		Message:  "message",
 	}
 

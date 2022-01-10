@@ -21,8 +21,8 @@ var cli struct {
 	Mv      subcmd.MvCmd     `cmd:"" help:"Move posts."`
 	Mvcat   subcmd.MvcatCmd  `cmd:"" help:"Move category."`
 	Post    subcmd.PostCmd   `cmd:"" help:"New/Update post."`
-	Rm      subcmd.RmCmd     `cmd:"" help:"Delete post."`
-	Rmx     subcmd.RmxCmd    `cmd:"" help:"Delete multiple posts."`
+	Rmi     subcmd.RmiCmd    `cmd:"" help:"Delete post by number."`
+	Rm      subcmd.RmCmd     `cmd:"" help:"Delete posts."`
 	Search  subcmd.SearchCmd `cmd:"" help:"Search posts."`
 }
 

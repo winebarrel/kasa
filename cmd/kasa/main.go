@@ -24,6 +24,7 @@ var cli struct {
 	Post    subcmd.PostCmd   `cmd:"" help:"New/Update post."`
 	Rm      subcmd.RmCmd     `cmd:"" help:"Delete posts."`
 	Rmi     subcmd.RmiCmd    `cmd:"" help:"Delete post by number."`
+	Rms     subcmd.RmsCmd    `cmd:"" help:"Delete posts from search results."`
 	Search  subcmd.SearchCmd `cmd:"" help:"Search posts."`
 }
 

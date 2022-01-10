@@ -8,7 +8,7 @@ import (
 	"github.com/winebarrel/kasa/subcmd"
 )
 
-func TestRm(t *testing.T) {
+func TestRmi(t *testing.T) {
 	assert := assert.New(t)
 
 	rmi := &subcmd.RmiCmd{

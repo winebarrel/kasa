@@ -9,7 +9,7 @@ import (
 	"github.com/winebarrel/kasa/subcmd"
 )
 
-func TestRmx_Dir(t *testing.T) {
+func TestRm_Dir(t *testing.T) {
 	assert := assert.New(t)
 
 	rm := &subcmd.RmCmd{
@@ -59,7 +59,7 @@ rm 'foo/bar/baz'
 `, printer.String())
 }
 
-func TestRmx_HasMore(t *testing.T) {
+func TestRm_HasMore(t *testing.T) {
 	assert := assert.New(t)
 
 	rm := &subcmd.RmCmd{
@@ -109,7 +109,7 @@ rm 'foo/bar/baz'
 `+"(has more pages. current page is 1, try `-p 2`)\n", printer.String())
 }
 
-func TestRmx_Tag(t *testing.T) {
+func TestRm_Tag(t *testing.T) {
 	assert := assert.New(t)
 
 	rm := &subcmd.RmCmd{

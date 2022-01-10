@@ -5,7 +5,7 @@ type NewPostBody struct {
 	BodyMd   string   `json:"body_md,omitempty"`
 	Tags     []string `json:"tags,omitempty"`
 	Category string   `json:"category,omitempty"`
-	Wip      bool     `json:"wip,omitempty"`
+	Wip      *bool    `json:"wip,omitempty"`
 	Message  string   `json:"message,omitempty"`
 }
 

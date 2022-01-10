@@ -7,6 +7,7 @@ import (
 
 	"github.com/Songmu/prompter"
 	"github.com/winebarrel/kasa"
+	"github.com/winebarrel/kasa/esa"
 	"github.com/winebarrel/kasa/esa/model"
 	"github.com/winebarrel/kasa/postname"
 )
@@ -46,7 +47,7 @@ func (cmd *CpCmd) Run(ctx *kasa.Context) error {
 			BodyMd:   v.BodyMd,
 			Tags:     v.Tags,
 			Category: v.Category,
-			Wip:      v.Wip,
+			Wip:      esa.Bool(v.Wip),
 			Message:  v.Message,
 		}
 

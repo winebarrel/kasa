@@ -6,6 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/winebarrel/kasa"
+	"github.com/winebarrel/kasa/esa"
 	"github.com/winebarrel/kasa/esa/model"
 	"github.com/winebarrel/kasa/subcmd"
 )
@@ -57,7 +58,7 @@ func TestCp_DirToDir(t *testing.T) {
 			assert.Equal(&model.NewPostBody{
 				Name:     "zoo",
 				BodyMd:   "zooBody",
-				Wip:      false,
+				Wip:      esa.Bool(false),
 				Tags:     []string{"tagA", "tagB"},
 				Category: "bar/baz/",
 				Message:  "zooMsg",
@@ -66,7 +67,7 @@ func TestCp_DirToDir(t *testing.T) {
 			assert.Equal(&model.NewPostBody{
 				Name:     "baz",
 				BodyMd:   "bazBody",
-				Wip:      true,
+				Wip:      esa.Bool(true),
 				Tags:     []string{"tagA", "tagB"},
 				Category: "bar/baz/",
 				Message:  "barMsg",
@@ -141,7 +142,7 @@ func TestCp_HasMore(t *testing.T) {
 			assert.Equal(&model.NewPostBody{
 				Name:     "zoo",
 				BodyMd:   "zooBody",
-				Wip:      false,
+				Wip:      esa.Bool(false),
 				Tags:     []string{"tagA", "tagB"},
 				Category: "bar/baz/",
 				Message:  "zooMsg",
@@ -150,7 +151,7 @@ func TestCp_HasMore(t *testing.T) {
 			assert.Equal(&model.NewPostBody{
 				Name:     "baz",
 				BodyMd:   "bazBody",
-				Wip:      true,
+				Wip:      esa.Bool(true),
 				Tags:     []string{"tagA", "tagB"},
 				Category: "bar/baz/",
 				Message:  "barMsg",
@@ -214,7 +215,7 @@ func TestCp_FileToFile(t *testing.T) {
 		assert.Equal(&model.NewPostBody{
 			Name:     "baz",
 			BodyMd:   "zooBody",
-			Wip:      false,
+			Wip:      esa.Bool(false),
 			Tags:     []string{"tagA", "tagB"},
 			Category: "bar/baz",
 			Message:  "zooMsg",

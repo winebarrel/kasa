@@ -28,6 +28,7 @@ func TestMv_DirToDir(t *testing.T) {
 		assert.Equal("foo/bar/", path)
 		assert.Equal(1, postNum)
 		assert.True(recursive)
+
 		return []*model.Post{
 			{
 				Number:   1,
@@ -80,6 +81,7 @@ func TestMv_HasMore(t *testing.T) {
 		assert.Equal("foo/bar/", path)
 		assert.Equal(1, postNum)
 		assert.True(recursive)
+
 		return []*model.Post{
 			{
 				Number:   1,
@@ -184,6 +186,7 @@ func TestMv_FileToFile(t *testing.T) {
 		assert.Equal("foo/bar/zoo", path)
 		assert.Equal(1, postNum)
 		assert.True(recursive)
+
 		return []*model.Post{
 			{
 				Number:   1,
@@ -230,6 +233,7 @@ func TestMv_DirToFile(t *testing.T) {
 		assert.Equal("foo/bar/", path)
 		assert.Equal(1, postNum)
 		assert.True(recursive)
+
 		return []*model.Post{
 			{
 				Number:   1,
@@ -242,14 +246,6 @@ func TestMv_DirToFile(t *testing.T) {
 				Category: "foo/bar",
 			},
 		}, false, nil
-	}
-
-	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int) error {
-		assert.Equal(1, postNum)
-		assert.Equal("bar/baz", movePostBody.Category)
-		assert.Equal("zoo", movePostBody.Name)
-
-		return nil
 	}
 
 	err := mv.Run(&kasa.Context{

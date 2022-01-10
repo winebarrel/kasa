@@ -15,6 +15,7 @@ var cli struct {
 	Token   string           `required:"" env:"ESA_TOKEN" help:"esa access token"`
 	Debug   bool             `help:"Debug flag."`
 	Cat     subcmd.CatCmd    `cmd:"" help:"Print post."`
+	Cp      subcmd.CpCmd     `cmd:"" help:"Copy posts."`
 	Info    subcmd.InfoCmd   `cmd:"" help:"Show post info."`
 	Ls      subcmd.LsCmd     `cmd:"" help:"List posts."`
 	Mv      subcmd.MvCmd     `cmd:"" help:"Move posts."`

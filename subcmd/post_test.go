@@ -21,7 +21,7 @@ func TestPost_New(t *testing.T) {
 		Name:     "zoo",
 		Body:     bodyFile.Name(),
 		Category: "foo/bar",
-		WIP:      false,
+		Wip:      false,
 		Tags:     []string{"tagA", "tagB"},
 		Message:  "msg",
 	}
@@ -35,7 +35,7 @@ func TestPost_New(t *testing.T) {
 			BodyMd:   "bodyMd",
 			Tags:     []string{"tagA", "tagB"},
 			Category: "foo/bar",
-			WIP:      false,
+			Wip:      false,
 			Message:  "msg",
 		}, newPostBody)
 
@@ -59,7 +59,7 @@ func TestPost_Update(t *testing.T) {
 	post := &subcmd.PostCmd{
 		PostNum:  1,
 		Category: "foo/bar",
-		WIP:      false,
+		Wip:      false,
 		Tags:     []string{"tagA", "tagB"},
 		Message:  "msg",
 	}
@@ -73,7 +73,7 @@ func TestPost_Update(t *testing.T) {
 			BodyMd:   "",
 			Tags:     []string{"tagA", "tagB"},
 			Category: "foo/bar",
-			WIP:      false,
+			Wip:      false,
 			Message:  "msg",
 		}, newPostBody)
 

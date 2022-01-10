@@ -20,6 +20,9 @@ Commands:
   cat --team=STRING --token=STRING [<path>]
     Print post.
 
+  cp --team=STRING --token=STRING <source> <target>
+    Copy posts.
+
   info --team=STRING --token=STRING <post-num>
     Show post info.
 

@@ -2,6 +2,7 @@ package subcmd
 
 import (
 	"fmt"
+	pathpkg "path"
 	"sort"
 
 	"github.com/Songmu/prompter"
@@ -10,7 +11,7 @@ import (
 	"github.com/winebarrel/kasa/postname"
 )
 
-type MvCmd struct {
+type CpCmd struct {
 	Source    string `arg:"" help:"Source post name/category/tag."`
 	Target    string `arg:"" help:"Target post/category."`
 	Force     bool   `short:"f" default:"false" help:"Skip confirmation of files to move."`
@@ -18,7 +19,7 @@ type MvCmd struct {
 	Recursive bool   `short:"r" default:"true" negatable:"" help:"Recursively list posts."`
 }
 
-func (cmd *MvCmd) Run(ctx *kasa.Context) error {
+func (cmd *CpCmd) Run(ctx *kasa.Context) error {
 	posts, hasMore, err := ctx.Driver.ListOrTagSearch(cmd.Source, cmd.Page, cmd.Recursive)
 
 	if err != nil {
@@ -37,14 +38,33 @@ func (cmd *MvCmd) Run(ctx *kasa.Context) error {
 		return fmt.Errorf("target '%s' is not a category", cmd.Target)
 	}
 
-	movePost := &model.MovePostBody{
-		Name:     targetName,
-		Category: targetCat,
+	newPosts := make([]*model.NewPostBody, len(posts))
+
+	for i, v := range posts {
+		newPost := &model.NewPostBody{
+			Name:     v.Name,
+			BodyMd:   v.BodyMd,
+			Tags:     v.Tags,
+			Category: v.Category,
+			Wip:      v.Wip,
+			Message:  v.Message,
+		}
+
+		if targetName != "" {
+			newPost.Name = targetName
+		}
+
+		if targetCat != "" {
+			newPost.Category = targetCat
+		}
+
+		newPosts[i] = newPost
 	}
 
 	if !cmd.Force {
-		for _, v := range posts {
-			ctx.Fmt.Printf("mv '%s' '%s'\n", v.FullNameWithoutTags(), postname.Join(movePost.Category, movePost.Name))
+		for i, oldPost := range posts {
+			newPost := newPosts[i]
+			ctx.Fmt.Printf("cp '%s' '%s'\n", oldPost.FullNameWithoutTags(), postname.Join(newPost.Category, newPost.Name))
 		}
 
 		if hasMore {
@@ -59,16 +79,21 @@ func (cmd *MvCmd) Run(ctx *kasa.Context) error {
 		}
 	}
 
-	for _, v := range posts {
+	for i, oldPost := range posts {
+		newPost := newPosts[i]
+
 		if cmd.Force {
-			ctx.Fmt.Printf("mv '%s' '%s'\n", v.FullNameWithoutTags(), postname.Join(movePost.Category, movePost.Name))
+			ctx.Fmt.Printf("cp '%s' '%s'\n", oldPost.FullNameWithoutTags(), postname.Join(newPost.Category, newPost.Name))
 		}
 
-		err = ctx.Driver.Move(movePost, v.Number)
+		url, err := ctx.Driver.Post(newPost, 0)
 
 		if err != nil {
-			return fmt.Errorf("failed to move '%s':%w", v.FullNameWithoutTags(), err)
+			return fmt.Errorf("failed to cp '%s':%w", oldPost.FullNameWithoutTags(), err)
 		}
+
+		urlDir := pathpkg.Dir(url)
+		ctx.Fmt.Printf("%-*s  %s\n", len(urlDir)+9, url, postname.Join(newPost.Category, newPost.Name))
 	}
 
 	if hasMore {

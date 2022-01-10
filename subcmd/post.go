@@ -17,7 +17,7 @@ type PostCmd struct {
 	PostNum  int      `arg:"" optional:"" help:"Post number to update."`
 	Tags     []string `short:"t" help:"Post tags."`
 	Category string   `short:"c" help:"Post category."`
-	WIP      bool     `default:"false" negatable:"" help:"Post as WIP."`
+	Wip      bool     `default:"false" negatable:"" help:"Post as WIP."`
 	Message  string   `short:"m" help:"Post message."`
 }
 
@@ -71,7 +71,7 @@ func (cmd *PostCmd) Run(ctx *kasa.Context) error {
 		BodyMd:   string(bodyMd),
 		Tags:     cmd.Tags,
 		Category: cmd.Category,
-		WIP:      cmd.WIP,
+		Wip:      cmd.Wip,
 		Message:  msg,
 	}
 

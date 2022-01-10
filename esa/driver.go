@@ -17,17 +17,29 @@ const (
 	MaxPerPage = 50
 )
 
-type Driver struct {
+type Driver interface {
+	Get(string) (*model.Post, error)
+	GetFromPageNum(int) (*model.Post, error)
+	List(string, int, bool) ([]*model.Post, bool, error)
+	Search(string, int) ([]*model.Post, bool, error)
+	ListOrTagSearch(string, int, bool) ([]*model.Post, bool, error)
+	Post(*model.NewPostBody, int) (string, error)
+	Move(*model.MovePostBody, int) error
+	MoveCategory(string, string) error
+	Delete(int) error
+}
+
+type DriverImpl struct {
 	esaCli *Client
 }
 
-func NewDriver(team string, token string, debug bool) *Driver {
-	return &Driver{
+func NewDriver(team string, token string, debug bool) *DriverImpl {
+	return &DriverImpl{
 		esaCli: newClient(team, token, debug),
 	}
 }
 
-func (dri *Driver) Get(path string) (*model.Post, error) {
+func (dri *DriverImpl) Get(path string) (*model.Post, error) {
 	cat, name := postname.Split(path)
 	req, err := dri.esaCli.newRequest(http.MethodGet, "posts", nil)
 
@@ -37,7 +49,7 @@ func (dri *Driver) Get(path string) (*model.Post, error) {
 
 	query := req.URL.Query()
 	query.Add("q", name+` on:"`+cat+`"`)
-	page, err := dri.ListPostsInPage(req, 1, query)
+	page, err := dri.listPostsInPage(req, 1, query)
 
 	if err != nil {
 		return nil, err
@@ -52,7 +64,7 @@ func (dri *Driver) Get(path string) (*model.Post, error) {
 	return nil, nil
 }
 
-func (dri *Driver) GetFromPageNum(pageNum int) (*model.Post, error) {
+func (dri *DriverImpl) GetFromPageNum(pageNum int) (*model.Post, error) {
 	path := fmt.Sprintf("posts/%d", pageNum)
 	req, err := dri.esaCli.newRequest(http.MethodGet, path, nil)
 
@@ -76,7 +88,7 @@ func (dri *Driver) GetFromPageNum(pageNum int) (*model.Post, error) {
 	return post, nil
 }
 
-func (dri *Driver) List(path string, pageNum int, recursive bool) ([]*model.Post, bool, error) {
+func (dri *DriverImpl) List(path string, pageNum int, recursive bool) ([]*model.Post, bool, error) {
 	cat, name := postname.Split(path)
 	req, err := dri.esaCli.newRequest(http.MethodGet, "posts", nil)
 
@@ -98,7 +110,7 @@ func (dri *Driver) List(path string, pageNum int, recursive bool) ([]*model.Post
 
 	query := req.URL.Query()
 	query.Add("q", queryString)
-	page, err := dri.ListPostsInPage(req, pageNum, query)
+	page, err := dri.listPostsInPage(req, pageNum, query)
 
 	if err != nil {
 		return nil, false, err
@@ -119,7 +131,7 @@ func (dri *Driver) List(path string, pageNum int, recursive bool) ([]*model.Post
 	return posts, page.NextPage != nil, nil
 }
 
-func (dri *Driver) Search(queryString string, pageNum int) ([]*model.Post, bool, error) {
+func (dri *DriverImpl) Search(queryString string, pageNum int) ([]*model.Post, bool, error) {
 	req, err := dri.esaCli.newRequest(http.MethodGet, "posts", nil)
 
 	if err != nil {
@@ -128,7 +140,7 @@ func (dri *Driver) Search(queryString string, pageNum int) ([]*model.Post, bool,
 
 	query := req.URL.Query()
 	query.Add("q", queryString)
-	page, err := dri.ListPostsInPage(req, pageNum, query)
+	page, err := dri.listPostsInPage(req, pageNum, query)
 
 	if err != nil {
 		return nil, false, err
@@ -141,7 +153,7 @@ func (dri *Driver) Search(queryString string, pageNum int) ([]*model.Post, bool,
 	return page.Posts, page.NextPage != nil, nil
 }
 
-func (dri *Driver) ListOrTagSearch(path string, pageNum int, recursive bool) ([]*model.Post, bool, error) {
+func (dri *DriverImpl) ListOrTagSearch(path string, pageNum int, recursive bool) ([]*model.Post, bool, error) {
 	if strings.HasPrefix(path, "#") {
 		return dri.Search(path, pageNum)
 	} else {
@@ -149,7 +161,7 @@ func (dri *Driver) ListOrTagSearch(path string, pageNum int, recursive bool) ([]
 	}
 }
 
-func (dri *Driver) ListPostsInPage(req *http.Request, pageNum int, query url.Values) (*model.Posts, error) {
+func (dri *DriverImpl) listPostsInPage(req *http.Request, pageNum int, query url.Values) (*model.Posts, error) {
 	query.Add("page", strconv.Itoa(pageNum))
 	query.Add("per_page", strconv.Itoa(MaxPerPage))
 	req.URL.RawQuery = query.Encode()
@@ -169,7 +181,7 @@ func (dri *Driver) ListPostsInPage(req *http.Request, pageNum int, query url.Val
 	return page, nil
 }
 
-func (dri *Driver) Post(newPostBody *model.NewPostBody, postNum int) (string, error) {
+func (dri *DriverImpl) Post(newPostBody *model.NewPostBody, postNum int) (string, error) {
 	newPost := model.NewPost{
 		Post: *newPostBody,
 	}
@@ -211,7 +223,7 @@ func (dri *Driver) Post(newPostBody *model.NewPostBody, postNum int) (string, er
 	return res.URL, nil
 }
 
-func (dri *Driver) Move(movePostBody *model.MovePostBody, postNum int) error {
+func (dri *DriverImpl) Move(movePostBody *model.MovePostBody, postNum int) error {
 	movePost := model.MovePost{
 		Post: *movePostBody,
 	}
@@ -236,7 +248,7 @@ func (dri *Driver) Move(movePostBody *model.MovePostBody, postNum int) error {
 	return err
 }
 
-func (dri *Driver) MoveCategory(from string, to string) error {
+func (dri *DriverImpl) MoveCategory(from string, to string) error {
 	postBody, err := json.Marshal(&model.MoveCategory{
 		From: from,
 		To:   to,
@@ -259,7 +271,7 @@ func (dri *Driver) MoveCategory(from string, to string) error {
 	return err
 }
 
-func (dri *Driver) Delete(postNum int) error {
+func (dri *DriverImpl) Delete(postNum int) error {
 	path := fmt.Sprintf("posts/%d", postNum)
 	req, err := dri.esaCli.newRequest(http.MethodDelete, path, nil)
 

@@ -1,10 +1,11 @@
-package model
+package model_test
 
 import (
 	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/winebarrel/kasa/esa/model"
 )
 
 func TestPostFullNameWithoutTags(t *testing.T) {
@@ -50,7 +51,7 @@ func TestPostFullNameWithoutTags(t *testing.T) {
 	"watch": true
 }`
 
-	post := &Post{}
+	post := &model.Post{}
 	json.Unmarshal([]byte(postJson), &post)
 	assert.Equal("日報/2015/05/09/hi!", post.FullNameWithoutTags())
 }
@@ -98,7 +99,7 @@ func TestPostFullNameWithoutTags_NoCategory(t *testing.T) {
 	"watch": true
 }`
 
-	post := &Post{}
+	post := &model.Post{}
 	json.Unmarshal([]byte(postJson), &post)
 	assert.Equal("hi!", post.FullNameWithoutTags())
 }
@@ -146,7 +147,7 @@ func TestPostListString(t *testing.T) {
 	"watch": true
 }`
 
-	post := &Post{}
+	post := &model.Post{}
 	json.Unmarshal([]byte(postJson), &post)
 	assert.Equal("2015-05-09 11:54:51  WIP  https://docs.esa.io/posts/1        日報/2015/05/09/hi!  [#api,#dev]", post.ListString())
 }

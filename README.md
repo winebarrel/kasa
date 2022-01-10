@@ -1,5 +1,7 @@
 # kasa ☂️
 
+[![test](https://github.com/winebarrel/kasa/actions/workflows/test.yml/badge.svg)](https://github.com/winebarrel/kasa/actions/workflows/test.yml)
+
 CLI for [esa](https://esa.io/).
 
 ## Usage

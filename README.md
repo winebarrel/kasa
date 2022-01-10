@@ -53,6 +53,9 @@ Commands:
   search --team=STRING --token=STRING <query>
     Search posts.
 
+  tag --team=STRING --token=STRING --tags=TAGS,... <path>
+    Tagging posts.
+
 Run "kasa <command> --help" for more information on a command.
 ```
 

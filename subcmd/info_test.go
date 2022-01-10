@@ -22,6 +22,7 @@ func TestInfo(t *testing.T) {
 
 	driver.MockGetFromPageNum = func(postNum int) (*model.Post, error) {
 		assert.Equal(1, postNum)
+
 		return &model.Post{
 			Category: "foo/bar",
 			Name:     "name",

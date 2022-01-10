@@ -22,7 +22,10 @@ func TestCat(t *testing.T) {
 
 	driver.MockGet = func(path string) (*model.Post, error) {
 		assert.Equal("foo/bar/zoo", path)
-		return &model.Post{BodyMd: "body"}, nil
+
+		return &model.Post{
+			BodyMd: "body",
+		}, nil
 	}
 
 	err := cat.Run(&kasa.Context{

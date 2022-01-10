@@ -710,6 +710,48 @@ func TestDriverMove_Ok(t *testing.T) {
 	assert.NoError(err)
 }
 
+func TestDriverTag_Ok(t *testing.T) {
+	assert := assert.New(t)
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
+		resBody, _ := ioutil.ReadAll(req.Body)
+		assert.Equal(`{"post":{"tags":["foo","bar","zoo"]}}`, string(resBody))
+		return httpmock.NewStringResponse(http.StatusOK, ``), nil
+	})
+
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+
+	tagPost := &model.TagPostBody{
+		Tags: []string{"foo", "bar", "zoo"},
+	}
+
+	err := driver.Tag(tagPost, 1)
+	assert.NoError(err)
+}
+
+func TestDriverTag_Delete(t *testing.T) {
+	assert := assert.New(t)
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
+		resBody, _ := ioutil.ReadAll(req.Body)
+		assert.Equal(`{"post":{"tags":[]}}`, string(resBody))
+		return httpmock.NewStringResponse(http.StatusOK, ``), nil
+	})
+
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+
+	tagPost := &model.TagPostBody{
+		Tags: []string{},
+	}
+
+	err := driver.Tag(tagPost, 1)
+	assert.NoError(err)
+}
+
 func TestDriverMoveCategory_Ok(t *testing.T) {
 	assert := assert.New(t)
 	httpmock.Activate()

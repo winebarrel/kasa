@@ -26,6 +26,7 @@ var cli struct {
 	Rmi     subcmd.RmiCmd    `cmd:"" help:"Delete post by number."`
 	Rms     subcmd.RmsCmd    `cmd:"" help:"Delete posts from search results."`
 	Search  subcmd.SearchCmd `cmd:"" help:"Search posts."`
+	Tag     subcmd.TagCmd    `cmd:"" help:"Tagging posts."`
 }
 
 func main() {

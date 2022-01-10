@@ -3,8 +3,9 @@ package model
 import (
 	"fmt"
 	pathpkg "path"
-	"strings"
 	"time"
+
+	"github.com/winebarrel/kasa/utils"
 )
 
 type Post struct {
@@ -55,16 +56,10 @@ func (post *Post) ListString() string {
 		wip = "-"
 	}
 
-	var tags string
-
-	if len(post.Tags) > 0 {
-		tags = "[#" + strings.Join(post.Tags, ",#") + "]"
-	} else {
-		tags = ""
-	}
-
 	urlDir := pathpkg.Dir(post.URL)
-	return fmt.Sprintf("%s  %-3s  %-*s  %s  %s", post.UpdatedAt.Format("2006-01-02 03:04:05"), wip, len(urlDir)+9, post.URL, post.FullNameWithoutTags(), tags)
+
+	return fmt.Sprintf("%s  %-3s  %-*s  %s  %s",
+		post.UpdatedAt.Format("2006-01-02 03:04:05"), wip, len(urlDir)+9, post.URL, post.FullNameWithoutTags(), utils.TagsToString(post.Tags))
 }
 
 type Posts struct {

@@ -28,6 +28,7 @@ type Driver interface {
 	Move(*model.MovePostBody, int) error
 	MoveCategory(string, string) error
 	Delete(int) error
+	Tag(*model.TagPostBody, int) error
 }
 
 type DriverImpl struct {
@@ -192,7 +193,7 @@ func (dri *DriverImpl) listPostsInPage(req *http.Request, pageNum int, query url
 
 func (dri *DriverImpl) Post(newPostBody *model.NewPostBody, postNum int) (string, error) {
 	newPost := model.NewPost{
-		Post: *newPostBody,
+		Post: newPostBody,
 	}
 
 	postBody, err := json.Marshal(newPost)
@@ -234,7 +235,32 @@ func (dri *DriverImpl) Post(newPostBody *model.NewPostBody, postNum int) (string
 
 func (dri *DriverImpl) Move(movePostBody *model.MovePostBody, postNum int) error {
 	movePost := model.MovePost{
-		Post: *movePostBody,
+		Post: movePostBody,
+	}
+
+	postBody, err := json.Marshal(movePost)
+
+	if err != nil {
+		return err
+	}
+
+	reader := bytes.NewReader(postBody)
+	path := fmt.Sprintf("posts/%d", postNum)
+	req, err := dri.esaCli.newRequest(http.MethodPatch, path, reader)
+
+	if err != nil {
+		return err
+	}
+
+	req.Header.Add("Content-Type", "application/json")
+	_, err = dri.esaCli.send(req)
+
+	return err
+}
+
+func (dri *DriverImpl) Tag(tagPostBody *model.TagPostBody, postNum int) error {
+	movePost := model.TagPost{
+		Post: tagPostBody,
 	}
 
 	postBody, err := json.Marshal(movePost)

@@ -7,7 +7,7 @@ import (
 )
 
 type LsCmd struct {
-	Path      string `arg:"" optional:"" help:"Post name or Post category or Post tag."`
+	Path      string `arg:"" optional:"" help:"Post name/category/tag."`
 	Page      int    `short:"p" default:"1" help:"Page number."`
 	Recursive bool   `short:"r" default:"true" negatable:"" help:"Recursively list posts."`
 }

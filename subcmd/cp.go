@@ -55,10 +55,7 @@ func (cmd *CpCmd) Run(ctx *kasa.Context) error {
 			newPost.Name = targetName
 		}
 
-		if targetCat != "" {
-			newPost.Category = targetCat
-		}
-
+		newPost.Category = targetCat
 		newPosts[i] = newPost
 	}
 

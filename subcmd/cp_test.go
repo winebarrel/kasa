@@ -238,6 +238,65 @@ https://docs.esa.io/posts/0        bar/baz/baz
 `, printer.String())
 }
 
+func TestCp_FileToTopFile(t *testing.T) {
+	assert := assert.New(t)
+
+	cp := &subcmd.CpCmd{
+		Source:    "foo/bar/zoo",
+		Target:    "baz",
+		Force:     true,
+		Page:      1,
+		Recursive: true,
+	}
+
+	driver := NewMockDriver(t)
+	printer := &MockPrinterImpl{}
+
+	driver.MockListOrTagSearch = func(path string, postNum int, recursive bool) ([]*model.Post, bool, error) {
+		assert.Equal("foo/bar/zoo", path)
+		assert.Equal(1, postNum)
+		assert.True(recursive)
+
+		return []*model.Post{
+			{
+				Number:   1,
+				Name:     "zoo",
+				BodyMd:   "zooBody",
+				Wip:      false,
+				Tags:     []string{"tagA", "tagB"},
+				Category: "foo/bar",
+				Message:  "zooMsg",
+			},
+		}, false, nil
+	}
+
+	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int) (string, error) {
+		assert.Equal(&model.NewPostBody{
+			Name:     "baz",
+			BodyMd:   "zooBody",
+			Wip:      esa.Bool(false),
+			Tags:     []string{"tagA", "tagB"},
+			Category: "",
+			Message:  "zooMsg",
+		}, newPostBody)
+
+		assert.Equal(0, postNum)
+
+		return "https://docs.esa.io/posts/0", nil
+	}
+
+	err := cp.Run(&kasa.Context{
+		Driver: driver,
+		Fmt:    printer,
+	})
+
+	assert.NoError(err)
+
+	assert.Equal(`cp 'foo/bar/zoo' 'baz'
+https://docs.esa.io/posts/0        baz
+`, printer.String())
+}
+
 func TestCp_DirToFile(t *testing.T) {
 	assert := assert.New(t)
 

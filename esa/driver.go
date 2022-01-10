@@ -97,10 +97,12 @@ func (dri *DriverImpl) List(path string, pageNum int, recursive bool) ([]*model.
 		return nil, false, err
 	}
 
-	queryString := ""
+	var queryString string
 
 	if name != "" {
 		queryString = name
+	} else {
+		queryString = ""
 	}
 
 	if recursive {
@@ -120,7 +122,7 @@ func (dri *DriverImpl) List(path string, pageNum int, recursive bool) ([]*model.
 	posts := []*model.Post{}
 
 	for _, v := range page.Posts {
-		if strings.HasPrefix(v.FullNameWithoutTags(), path) {
+		if (name == "" && strings.HasPrefix(v.FullNameWithoutTags(), path)) || (name != "" && v.FullNameWithoutTags() == path) {
 			posts = append(posts, v)
 		}
 	}

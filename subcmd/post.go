@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/winebarrel/kasa"
+	"github.com/winebarrel/kasa/esa"
 	"github.com/winebarrel/kasa/esa/model"
 )
 
@@ -64,7 +65,7 @@ func (cmd *PostCmd) Run(ctx *kasa.Context) error {
 		BodyMd:   string(bodyMd),
 		Tags:     cmd.Tags,
 		Category: cmd.Category,
-		Wip:      cmd.Wip,
+		Wip:      esa.Bool(cmd.Wip),
 		Message:  cmd.Message,
 	}
 

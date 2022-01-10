@@ -7,6 +7,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/winebarrel/kasa"
+	"github.com/winebarrel/kasa/esa"
 	"github.com/winebarrel/kasa/esa/model"
 	"github.com/winebarrel/kasa/subcmd"
 )
@@ -35,7 +36,7 @@ func TestPost_New(t *testing.T) {
 			BodyMd:   "bodyMd",
 			Tags:     []string{"tagA", "tagB"},
 			Category: "foo/bar",
-			Wip:      false,
+			Wip:      esa.Bool(false),
 			Message:  "msg",
 		}, newPostBody)
 
@@ -73,7 +74,7 @@ func TestPost_Update(t *testing.T) {
 			BodyMd:   "",
 			Tags:     []string{"tagA", "tagB"},
 			Category: "foo/bar",
-			Wip:      false,
+			Wip:      esa.Bool(false),
 			Message:  "msg",
 		}, newPostBody)
 

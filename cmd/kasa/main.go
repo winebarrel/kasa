@@ -22,7 +22,7 @@ var cli struct {
 	Mvcat   subcmd.MvcatCmd  `cmd:"" help:"Move category."`
 	Post    subcmd.PostCmd   `cmd:"" help:"New/Update post."`
 	Rmi     subcmd.RmiCmd    `cmd:"" help:"Delete post by number."`
-	Rmx     subcmd.RmxCmd    `cmd:"" help:"Delete multiple posts."`
+	Rm      subcmd.RmCmd     `cmd:"" help:"Delete posts."`
 	Search  subcmd.SearchCmd `cmd:"" help:"Search posts."`
 }
 

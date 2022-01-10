@@ -12,7 +12,7 @@ import (
 func TestRmx_Dir(t *testing.T) {
 	assert := assert.New(t)
 
-	rmx := &subcmd.RmxCmd{
+	rm := &subcmd.RmCmd{
 		Path:      "foo/bar/",
 		Force:     true,
 		Page:      1,
@@ -47,7 +47,7 @@ func TestRmx_Dir(t *testing.T) {
 		return nil
 	}
 
-	err := rmx.Run(&kasa.Context{
+	err := rm.Run(&kasa.Context{
 		Driver: driver,
 		Fmt:    printer,
 	})
@@ -62,7 +62,7 @@ rm 'foo/bar/baz'
 func TestRmx_HasMore(t *testing.T) {
 	assert := assert.New(t)
 
-	rmx := &subcmd.RmxCmd{
+	rm := &subcmd.RmCmd{
 		Path:      "foo/bar/",
 		Force:     true,
 		Page:      1,
@@ -97,7 +97,7 @@ func TestRmx_HasMore(t *testing.T) {
 		return nil
 	}
 
-	err := rmx.Run(&kasa.Context{
+	err := rm.Run(&kasa.Context{
 		Driver: driver,
 		Fmt:    printer,
 	})
@@ -112,7 +112,7 @@ rm 'foo/bar/baz'
 func TestRmx_Tag(t *testing.T) {
 	assert := assert.New(t)
 
-	rmx := &subcmd.RmxCmd{
+	rm := &subcmd.RmCmd{
 		Path:      "#tagA",
 		Force:     true,
 		Page:      1,
@@ -147,7 +147,7 @@ func TestRmx_Tag(t *testing.T) {
 		return nil
 	}
 
-	err := rmx.Run(&kasa.Context{
+	err := rm.Run(&kasa.Context{
 		Driver: driver,
 		Fmt:    printer,
 	})

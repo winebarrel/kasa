@@ -8,14 +8,14 @@ import (
 	"github.com/winebarrel/kasa"
 )
 
-type RmxCmd struct {
+type RmCmd struct {
 	Path      string `arg:"" help:"Source post name/category/tag."`
 	Force     bool   `short:"f" default:"false" help:"Skip confirmation of files to delete."`
 	Page      int    `short:"p" default:"1" help:"Page number."`
 	Recursive bool   `short:"r" default:"true" negatable:"" help:"Recursively list posts."`
 }
 
-func (cmd *RmxCmd) Run(ctx *kasa.Context) error {
+func (cmd *RmCmd) Run(ctx *kasa.Context) error {
 	posts, hasMore, err := ctx.Driver.ListOrTagSearch(cmd.Path, cmd.Page, cmd.Recursive)
 
 	if err != nil {

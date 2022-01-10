@@ -2,6 +2,7 @@ package esa_test
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -183,6 +184,38 @@ func TestDriverList_Ok(t *testing.T) {
 	json.Unmarshal([]byte(resBody), expected)
 	assert.Equal(expected.Posts, posts)
 	assert.False(hasMore)
+}
+
+func TestDriverList_NotFound(t *testing.T) {
+	assert := assert.New(t)
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	resBody := `{"posts": []}`
+
+	params := map[string]string{"page": "2", "per_page": "50", "q": `hi! in:"日報/2015/05/09"`}
+	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
+		httpmock.NewStringResponder(http.StatusOK, resBody))
+
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	_, _, err := driver.List("日報/2015/05/09/hi!", 2, true)
+	assert.Equal(errors.New("post not found"), err)
+}
+
+func TestDriverList_NotFound_HasMore(t *testing.T) {
+	assert := assert.New(t)
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	resBody := `{"posts": [], "next_page": 3}`
+
+	params := map[string]string{"page": "2", "per_page": "50", "q": `hi! in:"日報/2015/05/09"`}
+	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
+		httpmock.NewStringResponder(http.StatusOK, resBody))
+
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	_, _, err := driver.List("日報/2015/05/09/hi!", 2, true)
+	assert.Equal(errors.New("post not found on page 2"), err)
 }
 
 func TestDriverList_WithCategory(t *testing.T) {
@@ -423,6 +456,22 @@ func TestDriverSearch_Ok(t *testing.T) {
 	json.Unmarshal([]byte(resBody), expected)
 	assert.Equal(expected.Posts, posts)
 	assert.False(hasMore)
+}
+
+func TestDriverSearch_NotFound(t *testing.T) {
+	assert := assert.New(t)
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	resBody := `{"posts": []}`
+
+	params := map[string]string{"page": "1", "per_page": "50", "q": `日報`}
+	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
+		httpmock.NewStringResponder(http.StatusOK, resBody))
+
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	_, _, err := driver.Search("日報", 1)
+	assert.Equal(errors.New("post not found"), err)
 }
 
 func TestDriverListOrTagSearch_List(t *testing.T) {

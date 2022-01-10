@@ -14,7 +14,7 @@ func TestMovePostBodyString(t *testing.T) {
 	tests := map[*model.MovePostBody]string{
 		{Name: "foo", Category: "bar/zoo"}:  "bar/zoo/foo",
 		{Name: "foo", Category: ""}:         "foo",
-		{Name: "", Category: "bar/zoo"}:     "bar/zoo",
+		{Name: "", Category: "bar/zoo"}:     "bar/zoo/",
 		{Name: "foo", Category: "/bar/zoo"}: "bar/zoo/foo",
 	}
 

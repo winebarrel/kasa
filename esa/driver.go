@@ -3,6 +3,7 @@ package esa
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -125,7 +126,13 @@ func (dri *DriverImpl) List(path string, pageNum int, recursive bool) ([]*model.
 	}
 
 	if len(posts) == 0 {
-		return nil, false, fmt.Errorf("post not found on page %d", pageNum)
+		msg := "post not found"
+
+		if page.NextPage != nil {
+			msg += fmt.Sprintf(" on page %d", pageNum)
+		}
+
+		return nil, false, errors.New(msg)
 	}
 
 	return posts, page.NextPage != nil, nil
@@ -147,7 +154,7 @@ func (dri *DriverImpl) Search(queryString string, pageNum int) ([]*model.Post, b
 	}
 
 	if len(page.Posts) == 0 {
-		return nil, false, fmt.Errorf("post not found on page %d", pageNum)
+		return nil, false, errors.New("post not found")
 	}
 
 	return page.Posts, page.NextPage != nil, nil

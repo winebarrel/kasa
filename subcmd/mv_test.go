@@ -257,5 +257,5 @@ func TestMv_DirToFile(t *testing.T) {
 		Fmt:    printer,
 	})
 
-	assert.Error(err, errors.New("target 'bar/baz/zoo' is not a category"))
+	assert.Equal(errors.New("target 'bar/baz/zoo' is not a category"), err)
 }

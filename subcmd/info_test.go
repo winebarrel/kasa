@@ -22,7 +22,12 @@ func TestInfo(t *testing.T) {
 
 	driver.MockGetFromPageNum = func(postNum int) (*model.Post, error) {
 		assert.Equal(1, postNum)
-		return &model.Post{}, nil
+		return &model.Post{
+			Category: "foo/bar",
+			Name:     "name",
+			BodyMd:   "body",
+			BodyHTML: "html",
+		}, nil
 	}
 
 	err := info.Run(&kasa.Context{
@@ -34,7 +39,7 @@ func TestInfo(t *testing.T) {
 
 	assert.Equal(`{
   "number": 0,
-  "name": "",
+  "name": "name",
   "full_name": "",
   "wip": false,
   "created_at": "0001-01-01T00:00:00Z",
@@ -42,7 +47,7 @@ func TestInfo(t *testing.T) {
   "url": "",
   "updated_at": "0001-01-01T00:00:00Z",
   "tags": null,
-  "category": "",
+  "category": "foo/bar",
   "revision_number": 0,
   "created_by": {
     "myself": false,

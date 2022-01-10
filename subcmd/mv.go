@@ -6,19 +6,20 @@ import (
 
 	"github.com/Songmu/prompter"
 	"github.com/winebarrel/kasa"
-	"github.com/winebarrel/kasa/esa"
 	"github.com/winebarrel/kasa/esa/model"
+	"github.com/winebarrel/kasa/postname"
 )
 
 type MvCmd struct {
-	Source string `arg:"" help:"Source post name/category/tag."`
-	Target string `arg:"" help:"Target post/category."`
-	Force  bool   `short:"f" default:"false" help:"Skip confirmation of files to move."`
-	Page   int    `short:"p" default:"1" help:"Page number."`
+	Source    string `arg:"" help:"Source post name/category/tag."`
+	Target    string `arg:"" help:"Target post/category."`
+	Force     bool   `short:"f" default:"false" help:"Skip confirmation of files to move."`
+	Page      int    `short:"p" default:"1" help:"Page number."`
+	Recursive bool   `short:"r" default:"true" negatable:"" help:"Recursively list posts."`
 }
 
 func (cmd *MvCmd) Run(ctx *kasa.Context) error {
-	posts, hasMore, err := ctx.Driver.ListOrTagSearch(cmd.Source, cmd.Page, true)
+	posts, hasMore, err := ctx.Driver.ListOrTagSearch(cmd.Source, cmd.Page, cmd.Recursive)
 
 	if err != nil {
 		return err
@@ -30,15 +31,15 @@ func (cmd *MvCmd) Run(ctx *kasa.Context) error {
 		return err
 	}
 
-	target := esa.NewPath(cmd.Target)
+	targetCat, targetName := postname.Split(cmd.Target)
 
-	if len(posts) > 1 && !target.IsCategory() {
+	if len(posts) > 1 && targetName == "" {
 		return fmt.Errorf("target '%s' is not a category", cmd.Target)
 	}
 
 	movePost := &model.MovePostBody{
-		Name:     target.Name,
-		Category: target.Category,
+		Name:     targetName,
+		Category: targetCat,
 	}
 
 	if !cmd.Force {

@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/winebarrel/kasa/esa/model"
+	"github.com/winebarrel/kasa/postname"
 )
 
 const (
@@ -20,14 +21,14 @@ type Driver struct {
 	esaCli *Client
 }
 
-func NewDriver(team string, token string) *Driver {
+func NewDriver(team string, token string, debug bool) *Driver {
 	return &Driver{
-		esaCli: newClient(team, token),
+		esaCli: newClient(team, token, debug),
 	}
 }
 
-func (dri *Driver) Get(rawPath string) (*model.Post, error) {
-	path := NewPath(rawPath)
+func (dri *Driver) Get(path string) (*model.Post, error) {
+	cat, name := postname.Split(path)
 	req, err := dri.esaCli.newRequest(http.MethodGet, "posts", nil)
 
 	if err != nil {
@@ -35,7 +36,7 @@ func (dri *Driver) Get(rawPath string) (*model.Post, error) {
 	}
 
 	query := req.URL.Query()
-	query.Add("q", path.Name+` on:"`+path.Category+`"`)
+	query.Add("q", name+` on:"`+cat+`"`)
 	page, err := dri.ListPostsInPage(req, 1, query)
 
 	if err != nil {
@@ -43,7 +44,7 @@ func (dri *Driver) Get(rawPath string) (*model.Post, error) {
 	}
 
 	for _, post := range page.Posts {
-		if post.Name == path.Name {
+		if post.Name == name {
 			return post, nil
 		}
 	}
@@ -75,7 +76,8 @@ func (dri *Driver) GetFromPageNum(pageNum int) (*model.Post, error) {
 	return post, nil
 }
 
-func (dri *Driver) List(path *GlobPath, pageNum int, recursive bool) ([]*model.Post, bool, error) {
+func (dri *Driver) List(path string, pageNum int, recursive bool) ([]*model.Post, bool, error) {
+	cat, name := postname.Split(path)
 	req, err := dri.esaCli.newRequest(http.MethodGet, "posts", nil)
 
 	if err != nil {
@@ -84,14 +86,14 @@ func (dri *Driver) List(path *GlobPath, pageNum int, recursive bool) ([]*model.P
 
 	queryString := ""
 
-	if path.filename != "" {
-		queryString = path.filename
+	if name != "" {
+		queryString = name
 	}
 
 	if recursive {
-		queryString += ` in:"` + path.category + `"`
+		queryString += ` in:"` + cat + `"`
 	} else {
-		queryString += ` on:"` + path.category + `"`
+		queryString += ` on:"` + cat + `"`
 	}
 
 	query := req.URL.Query()
@@ -105,7 +107,7 @@ func (dri *Driver) List(path *GlobPath, pageNum int, recursive bool) ([]*model.P
 	posts := []*model.Post{}
 
 	for _, v := range page.Posts {
-		if path.match(v.FullNameWithoutTags()) {
+		if strings.HasPrefix(v.FullNameWithoutTags(), path) {
 			posts = append(posts, v)
 		}
 	}
@@ -139,11 +141,10 @@ func (dri *Driver) Search(queryString string, pageNum int) ([]*model.Post, bool,
 	return page.Posts, page.NextPage != nil, nil
 }
 
-func (dri *Driver) ListOrTagSearch(rawPath string, pageNum int, recursive bool) ([]*model.Post, bool, error) {
-	if strings.HasPrefix(rawPath, "#") {
-		return dri.Search(rawPath, pageNum)
+func (dri *Driver) ListOrTagSearch(path string, pageNum int, recursive bool) ([]*model.Post, bool, error) {
+	if strings.HasPrefix(path, "#") {
+		return dri.Search(path, pageNum)
 	} else {
-		path := newGlobPath(rawPath)
 		return dri.List(path, pageNum, recursive)
 	}
 }

@@ -13,6 +13,7 @@ var cli struct {
 	Version kong.VersionFlag
 	Team    string           `required:"" env:"ESA_TEAM" help:"esa team"`
 	Token   string           `required:"" env:"ESA_TOKEN" help:"esa access token"`
+	Debug   bool             `help:"Debug flag."`
 	Cat     subcmd.CatCmd    `cmd:"" help:"Print post."`
 	Info    subcmd.InfoCmd   `cmd:"" help:"Show post info."`
 	Ls      subcmd.LsCmd     `cmd:"" help:"List posts."`
@@ -28,7 +29,7 @@ func main() {
 	ctx := kong.Parse(&cli, kong.Vars{"version": version})
 
 	err := ctx.Run(&kasa.Context{
-		Driver: esa.NewDriver(cli.Team, cli.Token),
+		Driver: esa.NewDriver(cli.Team, cli.Token, cli.Debug),
 	})
 
 	ctx.FatalIfErrorf(err)

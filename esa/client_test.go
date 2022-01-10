@@ -59,7 +59,7 @@ func TestClient_SendOK(t *testing.T) {
 	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
 		httpmock.NewStringResponder(http.StatusOK, resBody))
 
-	client := newClient("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef")
+	client := newClient("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
 	req, err := client.newRequest(http.MethodGet, "posts", nil)
 	assert.NoError(err)
 
@@ -81,7 +81,7 @@ func TestClientSend_NotFound(t *testing.T) {
 	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
 		httpmock.NewStringResponder(http.StatusNotFound, `{"error":"not_found","message":"Not found"}`))
 
-	client := newClient("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef")
+	client := newClient("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
 	req, err := client.newRequest(http.MethodGet, "posts", nil)
 	assert.NoError(err)
 

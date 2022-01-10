@@ -12,6 +12,7 @@ Flags:
       --version
       --team=STRING     esa team ($ESA_TEAM)
       --token=STRING    esa access token ($ESA_TOKEN)
+      --debug           Debug flag.
 
 Commands:
   cat --team=STRING --token=STRING [<path>]

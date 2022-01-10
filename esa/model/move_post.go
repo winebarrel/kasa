@@ -11,7 +11,7 @@ type MovePostBody struct {
 
 func (post *MovePostBody) String() string {
 	cat := strings.TrimSuffix(post.Category, "/")
-	return cat + "/" + post.Name
+	return strings.TrimPrefix(cat+"/"+post.Name, "/")
 }
 
 type MovePost struct {

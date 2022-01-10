@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/http/httputil"
 )
 
 const (
@@ -16,13 +17,15 @@ type Client struct {
 	team    string
 	token   string
 	httpCli *http.Client
+	debug   bool
 }
 
-func newClient(team string, token string) *Client {
+func newClient(team string, token string, debug bool) *Client {
 	return &Client{
 		team:    team,
 		token:   token,
 		httpCli: &http.Client{},
+		debug:   debug,
 	}
 }
 
@@ -40,7 +43,17 @@ func (cli *Client) newRequest(method string, path string, body io.Reader) (*http
 }
 
 func (cli *Client) send(req *http.Request) ([]byte, error) {
+	if cli.debug {
+		b, _ := httputil.DumpRequest(req, true)
+		fmt.Printf("---request begin---\n%s\n---request end---\n", b)
+	}
+
 	res, err := cli.httpCli.Do(req)
+
+	if cli.debug {
+		b, _ := httputil.DumpResponse(res, true)
+		fmt.Printf("---response begin---\n%s\n---response end---\n", b)
+	}
 
 	if err != nil {
 		return nil, err

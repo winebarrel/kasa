@@ -1,8 +1,6 @@
 package subcmd
 
 import (
-	"sort"
-
 	"github.com/winebarrel/kasa"
 )
 
@@ -17,8 +15,6 @@ func (cmd *SearchCmd) Run(ctx *kasa.Context) error {
 	if err != nil {
 		return err
 	}
-
-	sort.Slice(posts, func(i, j int) bool { return posts[i].FullName < posts[j].FullName })
 
 	for _, v := range posts {
 		ctx.Fmt.Println(v.ListString())

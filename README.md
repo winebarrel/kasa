@@ -62,6 +62,9 @@ Run "kasa <command> --help" for more information on a command.
 ### Example
 
 ```sh
+$ export ESA_TEAM=winebarrel
+$ export ESA_TOKEN=...
+
 $ kasa ls
 2021-09-07 11:07:44  -    https://winebarrel.esa.io/posts/1        README
 

@@ -115,7 +115,7 @@ $ kasa ls
 
 ## Installation
 
-```
+```sh
 # OSX or Linux
 brew tap winebarrel/kasa
 brew install kasa

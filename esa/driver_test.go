@@ -186,6 +186,46 @@ func TestDriverList_Ok(t *testing.T) {
 	assert.False(hasMore)
 }
 
+func TestDriverList_MatchNameOnly(t *testing.T) {
+	assert := assert.New(t)
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	resBody := `{
+		"posts": [
+			{
+				"number": 1,
+				"name": "hi!!",
+				"category": "日報/2015/05/09"
+			},
+			{
+				"number": 2,
+				"name": "hi!",
+				"category": "日報/2015/05/09"
+			}
+		],
+		"prev_page": null,
+		"next_page": null,
+		"total_count": 1,
+		"page": 1,
+		"per_page": 20,
+		"max_per_page": 100
+	}`
+
+	params := map[string]string{"page": "2", "per_page": "50", "q": `hi! in:"日報/2015/05/09"`}
+	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
+		httpmock.NewStringResponder(http.StatusOK, resBody))
+
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	posts, hasMore, err := driver.List("日報/2015/05/09/hi!", 2, true)
+	assert.NoError(err)
+
+	expected := &model.Posts{}
+	json.Unmarshal([]byte(resBody), expected)
+	assert.Equal(expected.Posts[1:2], posts)
+	assert.False(hasMore)
+}
+
 func TestDriverList_NotFound(t *testing.T) {
 	assert := assert.New(t)
 	httpmock.Activate()

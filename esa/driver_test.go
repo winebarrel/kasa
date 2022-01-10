@@ -681,6 +681,22 @@ func TestDriverMove_Ok(t *testing.T) {
 	assert.NoError(err)
 }
 
+func TestDriverMoveCategory_Ok(t *testing.T) {
+	assert := assert.New(t)
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	httpmock.RegisterResponder(http.MethodPost, "https://api.esa.io/v1/teams/example/categories/batch_move", func(req *http.Request) (*http.Response, error) {
+		resBody, _ := ioutil.ReadAll(req.Body)
+		assert.Equal(`{"from":"from_cat","to":"to_cat"}`, string(resBody))
+		return httpmock.NewStringResponse(http.StatusOK, ``), nil
+	})
+
+	driver := NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	err := driver.MoveCategory("from_cat", "to_cat")
+	assert.NoError(err)
+}
+
 func TestDriverDriverDelete_Ok(t *testing.T) {
 	assert := assert.New(t)
 	httpmock.Activate()

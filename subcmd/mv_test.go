@@ -12,7 +12,6 @@ import (
 
 func TestMv_DirToDir(t *testing.T) {
 	assert := assert.New(t)
-	assert.Nil(nil)
 
 	mv := &subcmd.MvCmd{
 		Source:    "foo/bar/",
@@ -65,7 +64,6 @@ mv 'foo/bar/baz' 'bar/baz/'
 
 func TestMv_HasMore(t *testing.T) {
 	assert := assert.New(t)
-	assert.Nil(nil)
 
 	mv := &subcmd.MvCmd{
 		Source:    "foo/bar/",
@@ -118,7 +116,6 @@ mv 'foo/bar/baz' 'bar/baz/'
 
 func TestMv_TagToDir(t *testing.T) {
 	assert := assert.New(t)
-	assert.Nil(nil)
 
 	mv := &subcmd.MvCmd{
 		Source:    "#tagA",
@@ -171,7 +168,6 @@ mv 'foo/bar/baz' 'bar/baz/'
 
 func TestMv_FileToFile(t *testing.T) {
 	assert := assert.New(t)
-	assert.Nil(nil)
 
 	mv := &subcmd.MvCmd{
 		Source:    "foo/bar/zoo",
@@ -218,7 +214,6 @@ func TestMv_FileToFile(t *testing.T) {
 
 func TestMv_DirToFile(t *testing.T) {
 	assert := assert.New(t)
-	assert.Nil(nil)
 
 	mv := &subcmd.MvCmd{
 		Source:    "foo/bar/",

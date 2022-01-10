@@ -11,7 +11,6 @@ import (
 
 func TestInfo(t *testing.T) {
 	assert := assert.New(t)
-	assert.Nil(nil)
 
 	info := &subcmd.InfoCmd{
 		PostNum: 1,

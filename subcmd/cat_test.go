@@ -11,7 +11,6 @@ import (
 
 func TestCat(t *testing.T) {
 	assert := assert.New(t)
-	assert.Nil(nil)
 
 	cat := &subcmd.CatCmd{
 		Path: "foo/bar/zoo",

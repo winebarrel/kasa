@@ -10,7 +10,6 @@ import (
 
 func TestMvcat(t *testing.T) {
 	assert := assert.New(t)
-	assert.Nil(nil)
 
 	mvcat := &subcmd.MvcatCmd{
 		From: "foo/bar",

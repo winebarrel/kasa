@@ -10,7 +10,6 @@ import (
 
 func TestPostFullNameWithoutTags(t *testing.T) {
 	assert := assert.New(t)
-	assert.Nil(nil)
 
 	postJson := `{
 	"number": 1,
@@ -58,7 +57,6 @@ func TestPostFullNameWithoutTags(t *testing.T) {
 
 func TestPostFullNameWithoutTags_NoCategory(t *testing.T) {
 	assert := assert.New(t)
-	assert.Nil(nil)
 
 	postJson := `{
 	"number": 1,
@@ -106,7 +104,6 @@ func TestPostFullNameWithoutTags_NoCategory(t *testing.T) {
 
 func TestPostListString(t *testing.T) {
 	assert := assert.New(t)
-	assert.Nil(nil)
 
 	postJson := `{
 	"number": 1,

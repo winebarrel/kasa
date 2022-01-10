@@ -11,7 +11,6 @@ import (
 
 func TestLs(t *testing.T) {
 	assert := assert.New(t)
-	assert.Nil(nil)
 
 	ls := &subcmd.LsCmd{
 		Path:      "foo/bar/",
@@ -56,7 +55,6 @@ func TestLs(t *testing.T) {
 
 func TestLs_HasMore(t *testing.T) {
 	assert := assert.New(t)
-	assert.Nil(nil)
 
 	ls := &subcmd.LsCmd{
 		Path:      "foo/bar/",

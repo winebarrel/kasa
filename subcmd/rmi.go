@@ -4,10 +4,10 @@ import (
 	"github.com/winebarrel/kasa"
 )
 
-type RmCmd struct {
+type RmiCmd struct {
 	PostNum int `arg:"" help:"Post number to delete."`
 }
 
-func (cmd *RmCmd) Run(ctx *kasa.Context) error {
+func (cmd *RmiCmd) Run(ctx *kasa.Context) error {
 	return ctx.Driver.Delete(cmd.PostNum)
 }

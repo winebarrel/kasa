@@ -11,7 +11,7 @@ import (
 func TestRm(t *testing.T) {
 	assert := assert.New(t)
 
-	rm := &subcmd.RmCmd{
+	rmi := &subcmd.RmiCmd{
 		PostNum: 1,
 	}
 
@@ -24,7 +24,7 @@ func TestRm(t *testing.T) {
 		return nil
 	}
 
-	err := rm.Run(&kasa.Context{
+	err := rmi.Run(&kasa.Context{
 		Driver: driver,
 		Fmt:    printer,
 	})

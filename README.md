@@ -47,6 +47,9 @@ Commands:
   rmi --team=STRING --token=STRING <post-num>
     Delete post by number.
 
+  rms --team=STRING --token=STRING <phrase>
+    Delete posts from search results.
+
   search --team=STRING --token=STRING <query>
     Search posts.
 

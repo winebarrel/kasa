@@ -33,6 +33,7 @@ func main() {
 	ctx := kong.Parse(&cli, kong.Vars{"version": version})
 
 	err := ctx.Run(&kasa.Context{
+		Team:   cli.Team,
 		Driver: esa.NewDriver(cli.Team, cli.Token, cli.Debug),
 		Fmt:    &kasa.PrinterImpl{},
 	})

@@ -20,9 +20,10 @@ var cli struct {
 	Ls      subcmd.LsCmd     `cmd:"" help:"List posts."`
 	Mv      subcmd.MvCmd     `cmd:"" help:"Move posts."`
 	Mvcat   subcmd.MvcatCmd  `cmd:"" help:"Move category."`
+	Mvs     subcmd.MvsCmd    `cmd:"" help:"Move posts from search results."`
 	Post    subcmd.PostCmd   `cmd:"" help:"New/Update post."`
-	Rmi     subcmd.RmiCmd    `cmd:"" help:"Delete post by number."`
 	Rm      subcmd.RmCmd     `cmd:"" help:"Delete posts."`
+	Rmi     subcmd.RmiCmd    `cmd:"" help:"Delete post by number."`
 	Search  subcmd.SearchCmd `cmd:"" help:"Search posts."`
 }
 

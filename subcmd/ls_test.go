@@ -71,6 +71,7 @@ func TestLs_HasMore(t *testing.T) {
 		assert.Equal("foo/bar/", path)
 		assert.Equal(1, postNum)
 		assert.True(recursive)
+
 		return []*model.Post{
 			{
 				Name:     "zoo",

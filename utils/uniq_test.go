@@ -7,7 +7,7 @@ import (
 	"github.com/winebarrel/kasa/utils"
 )
 
-func TestLs(t *testing.T) {
+func TestUniq(t *testing.T) {
 	assert := assert.New(t)
 	assert.Nil(nil)
 

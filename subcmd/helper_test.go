@@ -19,6 +19,7 @@ type MockDriverImpl struct {
 	MockMove            func(*model.MovePostBody, int) error
 	MockMoveCategory    func(string, string) error
 	MockDelete          func(int) error
+	MockTag             func(*model.TagPostBody, int) error
 }
 
 func (dri *MockDriverImpl) Get(path string) (*model.Post, error) {
@@ -55,6 +56,10 @@ func (dri *MockDriverImpl) MoveCategory(from string, to string) error {
 
 func (dri *MockDriverImpl) Delete(postNum int) error {
 	return dri.MockDelete(postNum)
+}
+
+func (dri *MockDriverImpl) Tag(tagPostBody *model.TagPostBody, postNum int) error {
+	return dri.MockTag(tagPostBody, postNum)
 }
 
 func NewMockDriver(t *testing.T) *MockDriverImpl {

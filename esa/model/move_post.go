@@ -6,5 +6,5 @@ type MovePostBody struct {
 }
 
 type MovePost struct {
-	Post MovePostBody `json:"post"`
+	Post *MovePostBody `json:"post"`
 }

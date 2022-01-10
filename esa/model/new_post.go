@@ -10,7 +10,7 @@ type NewPostBody struct {
 }
 
 type NewPost struct {
-	Post NewPostBody `json:"post"`
+	Post *NewPostBody `json:"post"`
 }
 
 type NewPostResponse struct {

@@ -51,21 +51,21 @@ func TestTag(t *testing.T) {
 		}, false, nil
 	}
 
-	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int) (string, error) {
+	driver.MockTag = func(tagPostBody *model.TagPostBody, postNum int) error {
 		switch postNum {
 		case 1:
-			assert.Equal(&model.NewPostBody{
+			assert.Equal(&model.TagPostBody{
 				Tags: []string{"bar", "baz", "tagA", "tagB"},
-			}, newPostBody)
+			}, tagPostBody)
 		case 2:
-			assert.Equal(&model.NewPostBody{
+			assert.Equal(&model.TagPostBody{
 				Tags: []string{"bar", "baz", "tagA", "tagB"},
-			}, newPostBody)
+			}, tagPostBody)
 		default:
 			assert.Failf("invalid post", "post num=%d", postNum)
 		}
 
-		return "https://docs.esa.io/posts/0", nil
+		return nil
 	}
 
 	err := tag.Run(&kasa.Context{
@@ -76,9 +76,7 @@ func TestTag(t *testing.T) {
 	assert.NoError(err)
 
 	assert.Equal(`tag '[#bar,#baz,#tagA,#tagB]' 'foo/bar/zoo'
-https://docs.esa.io/posts/0        foo/bar/zoo  [#bar,#baz,#tagA,#tagB]
 tag '[#bar,#baz,#tagA,#tagB]' 'foo/bar/baz'
-https://docs.esa.io/posts/0        foo/bar/baz  [#bar,#baz,#tagA,#tagB]
 `, printer.String())
 }
 
@@ -124,21 +122,21 @@ func TestTag_HasMore(t *testing.T) {
 		}, true, nil
 	}
 
-	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int) (string, error) {
+	driver.MockTag = func(tagPostBody *model.TagPostBody, postNum int) error {
 		switch postNum {
 		case 1:
-			assert.Equal(&model.NewPostBody{
+			assert.Equal(&model.TagPostBody{
 				Tags: []string{"bar", "baz", "tagA", "tagB"},
-			}, newPostBody)
+			}, tagPostBody)
 		case 2:
-			assert.Equal(&model.NewPostBody{
+			assert.Equal(&model.TagPostBody{
 				Tags: []string{"bar", "baz", "tagA", "tagB"},
-			}, newPostBody)
+			}, tagPostBody)
 		default:
 			assert.Failf("invalid post", "post num=%d", postNum)
 		}
 
-		return "https://docs.esa.io/posts/0", nil
+		return nil
 	}
 
 	err := tag.Run(&kasa.Context{
@@ -149,9 +147,7 @@ func TestTag_HasMore(t *testing.T) {
 	assert.NoError(err)
 
 	assert.Equal(`tag '[#bar,#baz,#tagA,#tagB]' 'foo/bar/zoo'
-https://docs.esa.io/posts/0        foo/bar/zoo  [#bar,#baz,#tagA,#tagB]
 tag '[#bar,#baz,#tagA,#tagB]' 'foo/bar/baz'
-https://docs.esa.io/posts/0        foo/bar/baz  [#bar,#baz,#tagA,#tagB]
 `+"(has more pages. current page is 1, try `-p 2`)\n", printer.String())
 }
 
@@ -197,21 +193,21 @@ func TestTag_Override(t *testing.T) {
 		}, false, nil
 	}
 
-	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int) (string, error) {
+	driver.MockTag = func(tagPostBody *model.TagPostBody, postNum int) error {
 		switch postNum {
 		case 1:
-			assert.Equal(&model.NewPostBody{
+			assert.Equal(&model.TagPostBody{
 				Tags: []string{"bar", "baz"},
-			}, newPostBody)
+			}, tagPostBody)
 		case 2:
-			assert.Equal(&model.NewPostBody{
+			assert.Equal(&model.TagPostBody{
 				Tags: []string{"bar", "baz"},
-			}, newPostBody)
+			}, tagPostBody)
 		default:
 			assert.Failf("invalid post", "post num=%d", postNum)
 		}
 
-		return "https://docs.esa.io/posts/0", nil
+		return nil
 	}
 
 	err := tag.Run(&kasa.Context{
@@ -222,8 +218,77 @@ func TestTag_Override(t *testing.T) {
 	assert.NoError(err)
 
 	assert.Equal(`tag '[#bar,#baz]' 'foo/bar/zoo'
-https://docs.esa.io/posts/0        foo/bar/zoo  [#bar,#baz]
 tag '[#bar,#baz]' 'foo/bar/baz'
-https://docs.esa.io/posts/0        foo/bar/baz  [#bar,#baz]
+`, printer.String())
+}
+
+func TestTag_Delete(t *testing.T) {
+	assert := assert.New(t)
+
+	tag := &subcmd.TagCmd{
+		Path:      "foo/bar/",
+		Tags:      []string{},
+		Override:  true,
+		Force:     true,
+		Page:      1,
+		Recursive: true,
+	}
+
+	driver := NewMockDriver(t)
+	printer := &MockPrinterImpl{}
+
+	driver.MockListOrTagSearch = func(path string, postNum int, recursive bool) ([]*model.Post, bool, error) {
+		assert.Equal("foo/bar/", path)
+		assert.Equal(1, postNum)
+		assert.True(recursive)
+
+		return []*model.Post{
+			{
+				Number:   1,
+				Name:     "zoo",
+				BodyMd:   "zooBody",
+				Wip:      false,
+				Tags:     []string{"tagA", "tagB"},
+				Category: "foo/bar",
+				Message:  "zooMsg",
+			},
+			{
+				Number:   2,
+				Name:     "baz",
+				BodyMd:   "bazBody",
+				Wip:      true,
+				Tags:     []string{"tagA", "tagB"},
+				Category: "foo/bar",
+				Message:  "barMsg",
+			},
+		}, false, nil
+	}
+
+	driver.MockTag = func(tagPostBody *model.TagPostBody, postNum int) error {
+		switch postNum {
+		case 1:
+			assert.Equal(&model.TagPostBody{
+				Tags: []string{},
+			}, tagPostBody)
+		case 2:
+			assert.Equal(&model.TagPostBody{
+				Tags: []string{},
+			}, tagPostBody)
+		default:
+			assert.Failf("invalid post", "post num=%d", postNum)
+		}
+
+		return nil
+	}
+
+	err := tag.Run(&kasa.Context{
+		Driver: driver,
+		Fmt:    printer,
+	})
+
+	assert.NoError(err)
+
+	assert.Equal(`tag '' 'foo/bar/zoo'
+tag '' 'foo/bar/baz'
 `, printer.String())
 }

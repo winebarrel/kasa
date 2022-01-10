@@ -2,9 +2,7 @@ package subcmd
 
 import (
 	"fmt"
-	pathpkg "path"
 	"sort"
-	"strings"
 
 	"github.com/Songmu/prompter"
 	"github.com/winebarrel/kasa"
@@ -34,7 +32,7 @@ func (cmd *TagCmd) Run(ctx *kasa.Context) error {
 		return err
 	}
 
-	newPosts := make([]*model.NewPostBody, len(posts))
+	newPosts := make([]*model.TagPostBody, len(posts))
 
 	for i, v := range posts {
 		var tags []string
@@ -47,7 +45,7 @@ func (cmd *TagCmd) Run(ctx *kasa.Context) error {
 
 		tags = utils.Uniq(tags)
 
-		newPost := &model.NewPostBody{
+		newPost := &model.TagPostBody{
 			Tags: tags,
 		}
 
@@ -57,8 +55,7 @@ func (cmd *TagCmd) Run(ctx *kasa.Context) error {
 	if !cmd.Force {
 		for i, oldPost := range posts {
 			newPost := newPosts[i]
-			tags := "[#" + strings.Join(newPost.Tags, ",#") + "]"
-			ctx.Fmt.Printf("tag '%s' '%s'\n", tags, oldPost.FullNameWithoutTags())
+			ctx.Fmt.Printf("tag '%s' '%s'\n", utils.TagsToString(newPost.Tags), oldPost.FullNameWithoutTags())
 		}
 
 		if hasMore {
@@ -75,20 +72,17 @@ func (cmd *TagCmd) Run(ctx *kasa.Context) error {
 
 	for i, oldPost := range posts {
 		newPost := newPosts[i]
-		tags := "[#" + strings.Join(newPost.Tags, ",#") + "]"
+		tags := utils.TagsToString(newPost.Tags)
 
 		if cmd.Force {
 			ctx.Fmt.Printf("tag '%s' '%s'\n", tags, oldPost.FullNameWithoutTags())
 		}
 
-		url, err := ctx.Driver.Post(newPost, oldPost.Number)
+		err := ctx.Driver.Tag(newPost, oldPost.Number)
 
 		if err != nil {
 			return fmt.Errorf("failed to tag '%s':%w", oldPost.FullNameWithoutTags(), err)
 		}
-
-		urlDir := pathpkg.Dir(url)
-		ctx.Fmt.Printf("%-*s  %s  %s\n", len(urlDir)+9, url, oldPost.FullNameWithoutTags(), tags)
 	}
 
 	if hasMore {

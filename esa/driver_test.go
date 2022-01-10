@@ -469,12 +469,73 @@ func TestDriverListOrTagSearch_List(t *testing.T) {
 		"max_per_page": 100
 	}`
 
-	params := map[string]string{"page": "1", "per_page": "50", "q": `hi! in:"日報/2015/05/09"`}
+	params := map[string]string{"page": "1", "per_page": "50"}
 	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
 		httpmock.NewStringResponder(http.StatusOK, resBody))
 
 	driver := NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
-	posts, hasMore, err := driver.ListOrTagSearch("日報/2015/05/09/hi!", 1, true)
+	req, err := driver.esaCli.newRequest(http.MethodGet, "posts", nil)
+	assert.NoError(err)
+	posts, err := driver.ListPostsInPage(req, 1, req.URL.Query())
+	assert.NoError(err)
+
+	expected := &model.Posts{}
+	json.Unmarshal([]byte(resBody), expected)
+	assert.Equal(expected, posts)
+}
+
+func TestDriverListOrTagSearch_Search(t *testing.T) {
+	assert := assert.New(t)
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	resBody := `{
+		"posts": [
+			{
+				"number": 1,
+				"name": "hi!",
+				"full_name": "日報/2015/05/09/hi! #api #dev",
+				"wip": true,
+				"body_md": "# Getting Started",
+				"body_html": "<h1 id=\"1-0-0\" name=\"1-0-0\">\n<a class=\"anchor\" href=\"#1-0-0\"><i class=\"fa fa-link\"></i><span class=\"hidden\" data-text=\"Getting Started\"> &gt; Getting Started</span></a>Getting Started</h1>\n",
+				"created_at": "2015-05-09T11:54:50+09:00",
+				"message": "Add Getting Started section",
+				"url": "https://docs.esa.io/posts/1",
+				"updated_at": "2015-05-09T11:54:51+09:00",
+				"tags": [
+					"api",
+					"dev"
+				],
+				"category": "日報/2015/05/09",
+				"revision_number": 1,
+				"created_by": {
+					"myself": true,
+					"name": "Atsuo Fukaya",
+					"screen_name": "fukayatsu",
+					"icon": "http://img.esa.io/uploads/production/users/1/icon/thumb_m_402685a258cf2a33c1d6c13a89adec92.png"
+				},
+				"updated_by": {
+					"myself": true,
+					"name": "Atsuo Fukaya",
+					"screen_name": "fukayatsu",
+					"icon": "http://img.esa.io/uploads/production/users/1/icon/thumb_m_402685a258cf2a33c1d6c13a89adec92.png"
+				}
+			}
+		],
+		"prev_page": null,
+		"next_page": null,
+		"total_count": 1,
+		"page": 1,
+		"per_page": 20,
+		"max_per_page": 100
+	}`
+
+	params := map[string]string{"page": "1", "per_page": "50", "q": `#tag`}
+	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
+		httpmock.NewStringResponder(http.StatusOK, resBody))
+
+	driver := NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	posts, hasMore, err := driver.ListOrTagSearch("#tag", 1, false)
 	assert.NoError(err)
 
 	expected := &model.Posts{}
@@ -483,7 +544,7 @@ func TestDriverListOrTagSearch_List(t *testing.T) {
 	assert.False(hasMore)
 }
 
-func TestDriverListOrTagSearch_Search(t *testing.T) {
+func ListPostsInPage_OK(t *testing.T) {
 	assert := assert.New(t)
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()

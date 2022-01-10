@@ -13,3 +13,12 @@ builds:
       - darwin
 checksum:
   name_template: "checksums.txt"
+brews:
+  - tap:
+      owner: winebarrel
+      name: homebrew-kasa
+    homepage: https://github.com/winebarrel/kasa
+    description: CLI for esa.
+    license: MIT
+    install: |
+      bin.install 'kasa'

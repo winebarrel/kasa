@@ -30,6 +30,7 @@ func main() {
 
 	err := ctx.Run(&kasa.Context{
 		Driver: esa.NewDriver(cli.Team, cli.Token, cli.Debug),
+		Fmt:    &kasa.PrinterImpl{},
 	})
 
 	ctx.FatalIfErrorf(err)

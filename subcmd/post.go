@@ -2,7 +2,6 @@ package subcmd
 
 import (
 	"errors"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -82,7 +81,7 @@ func (cmd *PostCmd) Run(ctx *kasa.Context) error {
 		return err
 	}
 
-	fmt.Println(url)
+	ctx.Fmt.Println(url)
 
 	return nil
 }

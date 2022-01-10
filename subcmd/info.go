@@ -2,7 +2,6 @@ package subcmd
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/winebarrel/kasa"
 )
@@ -26,7 +25,7 @@ func (cmd *InfoCmd) Run(ctx *kasa.Context) error {
 		return err
 	}
 
-	fmt.Println(string(rawJson))
+	ctx.Fmt.Println(string(rawJson))
 
 	return nil
 }

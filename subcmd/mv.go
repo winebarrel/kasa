@@ -33,7 +33,7 @@ func (cmd *MvCmd) Run(ctx *kasa.Context) error {
 
 	targetCat, targetName := postname.Split(cmd.Target)
 
-	if len(posts) > 1 && targetName == "" {
+	if len(posts) > 1 && targetName != "" {
 		return fmt.Errorf("target '%s' is not a category", cmd.Target)
 	}
 
@@ -44,24 +44,24 @@ func (cmd *MvCmd) Run(ctx *kasa.Context) error {
 
 	if !cmd.Force {
 		for _, v := range posts {
-			fmt.Printf("mv '%s' '%s'\n", v.FullNameWithoutTags(), movePost.String())
+			ctx.Fmt.Printf("mv '%s' '%s'\n", v.FullNameWithoutTags(), movePost.String())
 		}
 
 		if hasMore {
-			fmt.Printf("(has more pages. current page is %d, try `-p %d`)\n", cmd.Page, cmd.Page+1)
+			ctx.Fmt.Printf("(has more pages. current page is %d, try `-p %d`)\n", cmd.Page, cmd.Page+1)
 		}
 
 		approval := prompter.YN("Do you want to move posts?", false)
 
 		if !approval {
-			fmt.Println("Move cancelled.")
+			ctx.Fmt.Println("Move cancelled.")
 			return nil
 		}
 	}
 
 	for _, v := range posts {
 		if cmd.Force {
-			fmt.Printf("mv '%s' '%s'\n", v.FullNameWithoutTags(), movePost.String())
+			ctx.Fmt.Printf("mv '%s' '%s'\n", v.FullNameWithoutTags(), movePost.String())
 		}
 
 		err = ctx.Driver.Move(movePost, v.Number)
@@ -72,7 +72,7 @@ func (cmd *MvCmd) Run(ctx *kasa.Context) error {
 	}
 
 	if hasMore {
-		fmt.Printf("(has more pages. current page is %d, try `-p %d`)\n", cmd.Page, cmd.Page+1)
+		ctx.Fmt.Printf("(has more pages. current page is %d, try `-p %d`)\n", cmd.Page, cmd.Page+1)
 	}
 
 	return nil

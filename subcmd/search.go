@@ -1,7 +1,6 @@
 package subcmd
 
 import (
-	"fmt"
 	"sort"
 
 	"github.com/winebarrel/kasa"
@@ -22,11 +21,11 @@ func (cmd *SearchCmd) Run(ctx *kasa.Context) error {
 	sort.Slice(posts, func(i, j int) bool { return posts[i].FullName < posts[j].FullName })
 
 	for _, v := range posts {
-		fmt.Println(v.ListString())
+		ctx.Fmt.Println(v.ListString())
 	}
 
 	if hasMore {
-		fmt.Printf("(has more pages. current page is %d, try `-p %d`)\n", cmd.Page, cmd.Page+1)
+		ctx.Fmt.Printf("(has more pages. current page is %d, try `-p %d`)\n", cmd.Page, cmd.Page+1)
 	}
 
 	return nil

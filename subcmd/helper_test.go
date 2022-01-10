@@ -1,6 +1,8 @@
 package subcmd_test
 
 import (
+	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -97,4 +99,22 @@ func NewMockDriver(t *testing.T) *MockDriverImpl {
 			return nil
 		},
 	}
+}
+
+type MockPrinterImpl struct {
+	buf strings.Builder
+}
+
+func (printer *MockPrinterImpl) Printf(format string, a ...interface{}) (n int, err error) {
+	printer.buf.WriteString(fmt.Sprintf(format, a...))
+	return 0, nil
+}
+
+func (printer *MockPrinterImpl) Println(a ...interface{}) (n int, err error) {
+	printer.buf.WriteString(fmt.Sprintln(a...))
+	return n, nil
+}
+
+func (printer *MockPrinterImpl) String() string {
+	return printer.buf.String()
 }

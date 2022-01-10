@@ -18,14 +18,18 @@ func TestCat(t *testing.T) {
 	}
 
 	driver := NewMockDriver(t)
+	printer := &MockPrinterImpl{}
 
 	driver.MockGet = func(path string) (*model.Post, error) {
 		assert.Equal("foo/bar/zoo", path)
-		return &model.Post{}, nil
+		return &model.Post{BodyMd: "body"}, nil
 	}
 
-	cat.Run(&kasa.Context{
-		Team:   "example",
+	err := cat.Run(&kasa.Context{
 		Driver: driver,
+		Fmt:    printer,
 	})
+
+	assert.NoError(err)
+	assert.Equal("body\n", printer.String())
 }

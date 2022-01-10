@@ -5,6 +5,6 @@ import (
 )
 
 type Context struct {
-	Team   string
 	Driver esa.Driver
+	Fmt    Printer
 }

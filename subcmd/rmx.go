@@ -26,24 +26,24 @@ func (cmd *RmxCmd) Run(ctx *kasa.Context) error {
 
 	if !cmd.Force {
 		for _, v := range posts {
-			fmt.Printf("rm '%s'\n", v.FullNameWithoutTags())
+			ctx.Fmt.Printf("rm '%s'\n", v.FullNameWithoutTags())
 		}
 
 		if hasMore {
-			fmt.Printf("(has more pages. current page is %d, try `-p %d`)\n", cmd.Page, cmd.Page+1)
+			ctx.Fmt.Printf("(has more pages. current page is %d, try `-p %d`)\n", cmd.Page, cmd.Page+1)
 		}
 
 		approval := prompter.YN("Do you want to delete posts?", false)
 
 		if !approval {
-			fmt.Println("Delete cancelled.")
+			ctx.Fmt.Println("Delete cancelled.")
 			return nil
 		}
 	}
 
 	for _, v := range posts {
 		if cmd.Force {
-			fmt.Printf("rm '%s'\n", v.FullNameWithoutTags())
+			ctx.Fmt.Printf("rm '%s'\n", v.FullNameWithoutTags())
 		}
 
 		err = ctx.Driver.Delete(v.Number)
@@ -56,7 +56,7 @@ func (cmd *RmxCmd) Run(ctx *kasa.Context) error {
 	}
 
 	if hasMore {
-		fmt.Printf("(has more pages. current page is %d, try `-p %d`)\n", cmd.Page, cmd.Page+1)
+		ctx.Fmt.Printf("(has more pages. current page is %d, try `-p %d`)\n", cmd.Page, cmd.Page+1)
 	}
 
 	return nil

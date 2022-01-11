@@ -14,7 +14,7 @@ func TestMvs_FilesToDir(t *testing.T) {
 	assert := assert.New(t)
 
 	mvs := &subcmd.MvsCmd{
-		Phrase: "foo/bar/",
+		Query:  "foo/bar/",
 		Target: "bar/baz/",
 		Force:  true,
 		Page:   1,
@@ -23,8 +23,8 @@ func TestMvs_FilesToDir(t *testing.T) {
 	driver := NewMockDriver(t)
 	printer := &MockPrinterImpl{}
 
-	driver.MockSearch = func(path string, postNum int) ([]*model.Post, bool, error) {
-		assert.Equal("foo/bar/", path)
+	driver.MockSearch = func(query string, postNum int) ([]*model.Post, bool, error) {
+		assert.Equal("foo/bar/", query)
 		assert.Equal(1, postNum)
 
 		return []*model.Post{
@@ -65,7 +65,7 @@ func TestMvs_HasMore(t *testing.T) {
 	assert := assert.New(t)
 
 	mvs := &subcmd.MvsCmd{
-		Phrase: "foo/bar/",
+		Query:  "foo/bar/",
 		Target: "bar/baz/",
 		Force:  true,
 		Page:   1,
@@ -74,8 +74,8 @@ func TestMvs_HasMore(t *testing.T) {
 	driver := NewMockDriver(t)
 	printer := &MockPrinterImpl{}
 
-	driver.MockSearch = func(path string, postNum int) ([]*model.Post, bool, error) {
-		assert.Equal("foo/bar/", path)
+	driver.MockSearch = func(query string, postNum int) ([]*model.Post, bool, error) {
+		assert.Equal("foo/bar/", query)
 		assert.Equal(1, postNum)
 
 		return []*model.Post{
@@ -116,7 +116,7 @@ func TestMvs_FileToFile(t *testing.T) {
 	assert := assert.New(t)
 
 	mvs := &subcmd.MvsCmd{
-		Phrase: "foo/bar/zoo",
+		Query:  "foo/bar/zoo",
 		Target: "bar/baz/qux",
 		Force:  true,
 		Page:   1,
@@ -125,8 +125,8 @@ func TestMvs_FileToFile(t *testing.T) {
 	driver := NewMockDriver(t)
 	printer := &MockPrinterImpl{}
 
-	driver.MockSearch = func(path string, postNum int) ([]*model.Post, bool, error) {
-		assert.Equal("foo/bar/zoo", path)
+	driver.MockSearch = func(query string, postNum int) ([]*model.Post, bool, error) {
+		assert.Equal("foo/bar/zoo", query)
 		assert.Equal(1, postNum)
 
 		return []*model.Post{
@@ -161,7 +161,7 @@ func TestMvs_FilesToFile(t *testing.T) {
 	assert := assert.New(t)
 
 	mvs := &subcmd.MvsCmd{
-		Phrase: "foo/bar/",
+		Query:  "foo/bar/",
 		Target: "bar/baz/qux",
 		Force:  true,
 		Page:   1,
@@ -170,8 +170,8 @@ func TestMvs_FilesToFile(t *testing.T) {
 	driver := NewMockDriver(t)
 	printer := &MockPrinterImpl{}
 
-	driver.MockSearch = func(path string, postNum int) ([]*model.Post, bool, error) {
-		assert.Equal("foo/bar/", path)
+	driver.MockSearch = func(query string, postNum int) ([]*model.Post, bool, error) {
+		assert.Equal("foo/bar/", query)
 		assert.Equal(1, postNum)
 
 		return []*model.Post{

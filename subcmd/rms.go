@@ -9,13 +9,13 @@ import (
 )
 
 type RmsCmd struct {
-	Phrase string `arg:"" help:"Search phrase."`
-	Force  bool   `short:"f" default:"false" help:"Skip confirmation of files to delete."`
-	Page   int    `short:"p" default:"1" help:"Page number."`
+	Query string `arg:"" help:"Search query. see https://docs.esa.io/posts/104"`
+	Force bool   `short:"f" default:"false" help:"Skip confirmation of files to delete."`
+	Page  int    `short:"p" default:"1" help:"Page number."`
 }
 
 func (cmd *RmsCmd) Run(ctx *kasa.Context) error {
-	posts, hasMore, err := ctx.Driver.Search(cmd.Phrase, cmd.Page)
+	posts, hasMore, err := ctx.Driver.Search(cmd.Query, cmd.Page)
 
 	if err != nil {
 		return err

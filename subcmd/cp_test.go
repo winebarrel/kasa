@@ -346,3 +346,173 @@ func TestCp_DirToFile(t *testing.T) {
 
 	assert.Equal(errors.New("target 'bar/baz/baz' is not a category"), err)
 }
+
+func TestCp_WithCat_Minus(t *testing.T) {
+	assert := assert.New(t)
+
+	cp := &subcmd.CpCmd{
+		Source:    "foo/bar/",
+		Target:    "bar/baz/",
+		Force:     true,
+		WithCat:   -1,
+		Page:      1,
+		Recursive: true,
+	}
+
+	driver := NewMockDriver(t)
+	printer := &MockPrinterImpl{}
+
+	driver.MockListOrTagSearch = func(path string, postNum int, recursive bool) ([]*model.Post, bool, error) {
+		assert.Equal("foo/bar/", path)
+		assert.Equal(1, postNum)
+		assert.True(recursive)
+
+		return []*model.Post{
+			{
+				Number:   1,
+				Name:     "zoo",
+				BodyMd:   "zooBody",
+				Wip:      false,
+				Tags:     []string{"tagA", "tagB"},
+				Category: "foo/bar",
+				Message:  "zooMsg",
+			},
+			{
+				Number:   2,
+				Name:     "baz",
+				BodyMd:   "bazBody",
+				Wip:      true,
+				Tags:     []string{"tagA", "tagB"},
+				Category: "foo/bar/hoge",
+				Message:  "barMsg",
+			},
+		}, false, nil
+	}
+
+	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int) (string, error) {
+		switch newPostBody.Name {
+		case "zoo":
+			assert.Equal(&model.NewPostBody{
+				Name:     "zoo",
+				BodyMd:   "zooBody",
+				Wip:      esa.Bool(false),
+				Tags:     []string{"tagA", "tagB"},
+				Category: "bar/baz/bar",
+				Message:  "zooMsg",
+			}, newPostBody)
+		case "baz":
+			assert.Equal(&model.NewPostBody{
+				Name:     "baz",
+				BodyMd:   "bazBody",
+				Wip:      esa.Bool(true),
+				Tags:     []string{"tagA", "tagB"},
+				Category: "bar/baz/hoge",
+				Message:  "barMsg",
+			}, newPostBody)
+		default:
+			assert.Failf("invalid post", "post name=%s", newPostBody.Name)
+		}
+
+		assert.Equal(0, postNum)
+
+		return "https://docs.esa.io/posts/0", nil
+	}
+
+	err := cp.Run(&kasa.Context{
+		Driver: driver,
+		Fmt:    printer,
+	})
+
+	assert.NoError(err)
+
+	assert.Equal(`cp 'foo/bar/zoo' 'bar/baz/bar/zoo'
+https://docs.esa.io/posts/0        bar/baz/bar/zoo
+cp 'foo/bar/hoge/baz' 'bar/baz/hoge/baz'
+https://docs.esa.io/posts/0        bar/baz/hoge/baz
+`, printer.String())
+}
+
+func TestCp_WithCat_Plus(t *testing.T) {
+	assert := assert.New(t)
+
+	cp := &subcmd.CpCmd{
+		Source:    "foo/bar/",
+		Target:    "bar/baz/",
+		Force:     true,
+		WithCat:   1,
+		Page:      1,
+		Recursive: true,
+	}
+
+	driver := NewMockDriver(t)
+	printer := &MockPrinterImpl{}
+
+	driver.MockListOrTagSearch = func(path string, postNum int, recursive bool) ([]*model.Post, bool, error) {
+		assert.Equal("foo/bar/", path)
+		assert.Equal(1, postNum)
+		assert.True(recursive)
+
+		return []*model.Post{
+			{
+				Number:   1,
+				Name:     "zoo",
+				BodyMd:   "zooBody",
+				Wip:      false,
+				Tags:     []string{"tagA", "tagB"},
+				Category: "foo/bar",
+				Message:  "zooMsg",
+			},
+			{
+				Number:   2,
+				Name:     "baz",
+				BodyMd:   "bazBody",
+				Wip:      true,
+				Tags:     []string{"tagA", "tagB"},
+				Category: "foo/bar/hoge",
+				Message:  "barMsg",
+			},
+		}, false, nil
+	}
+
+	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int) (string, error) {
+		switch newPostBody.Name {
+		case "zoo":
+			assert.Equal(&model.NewPostBody{
+				Name:     "zoo",
+				BodyMd:   "zooBody",
+				Wip:      esa.Bool(false),
+				Tags:     []string{"tagA", "tagB"},
+				Category: "bar/baz/foo/bar",
+				Message:  "zooMsg",
+			}, newPostBody)
+		case "baz":
+			assert.Equal(&model.NewPostBody{
+				Name:     "baz",
+				BodyMd:   "bazBody",
+				Wip:      esa.Bool(true),
+				Tags:     []string{"tagA", "tagB"},
+				Category: "bar/baz/foo/bar/hoge",
+				Message:  "barMsg",
+			}, newPostBody)
+		default:
+			assert.Failf("invalid post", "post name=%s", newPostBody.Name)
+		}
+
+		assert.Equal(0, postNum)
+
+		return "https://docs.esa.io/posts/0", nil
+	}
+
+	err := cp.Run(&kasa.Context{
+		Driver: driver,
+		Fmt:    printer,
+	})
+
+	assert.NoError(err)
+
+	assert.Equal(`cp 'foo/bar/zoo' 'bar/baz/foo/bar/zoo'
+https://docs.esa.io/posts/0        bar/baz/foo/bar/zoo
+cp 'foo/bar/hoge/baz' 'bar/baz/foo/bar/hoge/baz'
+https://docs.esa.io/posts/0        bar/baz/foo/bar/hoge/baz
+`, printer.String())
+}

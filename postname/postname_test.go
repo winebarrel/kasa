@@ -45,6 +45,43 @@ func TestPostnameJoin(t *testing.T) {
 	}
 
 	for _, t := range tests {
-		assert.Equal(postname.Join(t.category, t.name), t.expected)
+		assert.Equal(t.expected, postname.Join(t.category, t.name))
+	}
+}
+
+func TestPostnameAppendCategoryN(t *testing.T) {
+	assert := assert.New(t)
+	assert.Nil(nil)
+
+	tests := []struct {
+		src      string
+		extra    string
+		n        int
+		expected string
+	}{
+		// Minus
+		{"foo/bar/zoo", "hoge/fuga/piyo", 0, "foo/bar/zoo"},
+		{"foo/bar/zoo", "hoge/fuga/piyo", -1, "foo/bar/zoo/piyo"},
+		{"foo/bar/zoo", "hoge/fuga/piyo", -2, "foo/bar/zoo/fuga/piyo"},
+		{"foo/bar/zoo", "hoge/fuga/piyo", -3, "foo/bar/zoo/hoge/fuga/piyo"},
+		{"foo/bar/zoo", "hoge/fuga/piyo", -4, "foo/bar/zoo/hoge/fuga/piyo"},
+		{"foo/bar/zoo", "hoge/fuga/piyo/", -1, "foo/bar/zoo/piyo"},
+		{"foo/bar/zoo/", "hoge/fuga/piyo", -1, "foo/bar/zoo/piyo"},
+		{"foo/bar/zoo", "/", -2, "foo/bar/zoo"},
+		{"foo/bar/zoo", "", -2, "foo/bar/zoo"},
+		// Plus
+		{"foo/bar/zoo", "hoge/fuga/piyo", 1, "foo/bar/zoo/hoge/fuga/piyo"},
+		{"foo/bar/zoo", "hoge/fuga/piyo", 2, "foo/bar/zoo/fuga/piyo"},
+		{"foo/bar/zoo", "hoge/fuga/piyo", 3, "foo/bar/zoo/piyo"},
+		{"foo/bar/zoo", "hoge/fuga/piyo", 4, "foo/bar/zoo"},
+		{"foo/bar/zoo", "hoge/fuga/piyo", 5, "foo/bar/zoo"},
+		{"foo/bar/zoo", "hoge/fuga/piyo/", 1, "foo/bar/zoo/hoge/fuga/piyo"},
+		{"foo/bar/zoo/", "hoge/fuga/piyo", 1, "foo/bar/zoo/hoge/fuga/piyo"},
+		{"foo/bar/zoo", "/", 2, "foo/bar/zoo"},
+		{"foo/bar/zoo", "", 2, "foo/bar/zoo"},
+	}
+
+	for _, t := range tests {
+		assert.Equal(t.expected, postname.AppendCategoryN(t.src, t.extra, t.n))
 	}
 }

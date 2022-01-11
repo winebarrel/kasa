@@ -1,6 +1,7 @@
 package subcmd
 
 import (
+	"errors"
 	"fmt"
 	"sort"
 
@@ -14,12 +15,21 @@ type TagCmd struct {
 	Path      string   `arg:"" help:"Post name/Post category/Post tag."`
 	Tags      []string `short:"t" help:"Post tags."`
 	Override  bool     `short:"o" help:"Override tags."`
+	Delete    bool     `short:"d" help:"Delete tags."`
 	Force     bool     `short:"f" default:"false" help:"Skip confirmation of files to move."`
 	Page      int      `short:"p" default:"1" help:"Page number."`
 	Recursive bool     `short:"r" default:"true" negatable:"" help:"Recursively list posts."`
 }
 
 func (cmd *TagCmd) Run(ctx *kasa.Context) error {
+	if cmd.Delete {
+		if len(cmd.Tags) > 0 {
+			return errors.New("cannot specify both '--delete' and '--tags'")
+		}
+
+		cmd.Override = true
+	}
+
 	posts, hasMore, err := ctx.Driver.ListOrTagSearch(cmd.Path, cmd.Page, cmd.Recursive)
 
 	if err != nil {

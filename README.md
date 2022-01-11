@@ -17,7 +17,7 @@ Flags:
       --debug           Debug flag.
 
 Commands:
-  cat --team=STRING --token=STRING [<path>]
+  cat --team=STRING --token=STRING <path>
     Print post.
 
   cp --team=STRING --token=STRING <source> <target>
@@ -55,6 +55,9 @@ Commands:
 
   tag --team=STRING --token=STRING --tags=TAGS,... <path>
     Tagging posts.
+
+  install-completions --team=STRING --token=STRING
+    Install shell completions
 
 Run "kasa <command> --help" for more information on a command.
 ```
@@ -119,4 +122,10 @@ $ kasa ls
 # OSX or Linux
 brew tap winebarrel/kasa
 brew install kasa
+```
+
+## Install shell completions
+
+```sh
+kasa install-completions > ~/.zshrc
 ```

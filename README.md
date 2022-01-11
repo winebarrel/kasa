@@ -127,5 +127,5 @@ brew install kasa
 ## Install shell completions
 
 ```sh
-kasa install-completions > ~/.zshrc
+kasa install-completions >> ~/.zshrc
 ```

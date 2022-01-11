@@ -224,77 +224,6 @@ tag '[#bar,#baz]' 'foo/bar/baz'
 `, printer.String())
 }
 
-func TestTag_DeleteOverride(t *testing.T) {
-	assert := assert.New(t)
-
-	tag := &subcmd.TagCmd{
-		Path:      "foo/bar/",
-		Tags:      []string{},
-		Override:  true,
-		Force:     true,
-		Page:      1,
-		Recursive: true,
-	}
-
-	driver := NewMockDriver(t)
-	printer := &MockPrinterImpl{}
-
-	driver.MockListOrTagSearch = func(path string, postNum int, recursive bool) ([]*model.Post, bool, error) {
-		assert.Equal("foo/bar/", path)
-		assert.Equal(1, postNum)
-		assert.True(recursive)
-
-		return []*model.Post{
-			{
-				Number:   1,
-				Name:     "zoo",
-				BodyMd:   "zooBody",
-				Wip:      false,
-				Tags:     []string{"tagA", "tagB"},
-				Category: "foo/bar",
-				Message:  "zooMsg",
-			},
-			{
-				Number:   2,
-				Name:     "baz",
-				BodyMd:   "bazBody",
-				Wip:      true,
-				Tags:     []string{"tagA", "tagB"},
-				Category: "foo/bar",
-				Message:  "barMsg",
-			},
-		}, false, nil
-	}
-
-	driver.MockTag = func(tagPostBody *model.TagPostBody, postNum int) error {
-		switch postNum {
-		case 1:
-			assert.Equal(&model.TagPostBody{
-				Tags: []string{},
-			}, tagPostBody)
-		case 2:
-			assert.Equal(&model.TagPostBody{
-				Tags: []string{},
-			}, tagPostBody)
-		default:
-			assert.Failf("invalid post", "post num=%d", postNum)
-		}
-
-		return nil
-	}
-
-	err := tag.Run(&kasa.Context{
-		Driver: driver,
-		Fmt:    printer,
-	})
-
-	assert.NoError(err)
-
-	assert.Equal(`tag '' 'foo/bar/zoo'
-tag '' 'foo/bar/baz'
-`, printer.String())
-}
-
 func TestTag_Delete(t *testing.T) {
 	assert := assert.New(t)
 
@@ -412,5 +341,5 @@ func TestTag_NoTagsOptionError(t *testing.T) {
 		Fmt:    printer,
 	})
 
-	assert.Equal(errors.New("missing flags: --body=TAGS,..."), err)
+	assert.Equal(errors.New("missing flags: --body=TAGS"), err)
 }

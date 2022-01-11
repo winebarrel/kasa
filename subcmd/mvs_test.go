@@ -13,9 +13,10 @@ import (
 func TestMvs_FilesToDir(t *testing.T) {
 	assert := assert.New(t)
 
-	mvs := &subcmd.MvsCmd{
-		Query:  "foo/bar/",
+	mvs := &subcmd.MvCmd{
+		Source: "foo/bar/",
 		Target: "bar/baz/",
+		Search: true,
 		Force:  true,
 		Page:   1,
 	}
@@ -64,9 +65,10 @@ mv 'foo/bar/baz' 'bar/baz/'
 func TestMvs_HasMore(t *testing.T) {
 	assert := assert.New(t)
 
-	mvs := &subcmd.MvsCmd{
-		Query:  "foo/bar/",
+	mvs := &subcmd.MvCmd{
+		Source: "foo/bar/",
 		Target: "bar/baz/",
+		Search: true,
 		Force:  true,
 		Page:   1,
 	}
@@ -116,9 +118,10 @@ mv 'foo/bar/baz' 'bar/baz/'
 func TestMvs_FileToFile(t *testing.T) {
 	assert := assert.New(t)
 
-	mvs := &subcmd.MvsCmd{
-		Query:  "foo/bar/zoo",
+	mvs := &subcmd.MvCmd{
+		Source: "foo/bar/zoo",
 		Target: "bar/baz/qux",
+		Search: true,
 		Force:  true,
 		Page:   1,
 	}
@@ -161,9 +164,10 @@ func TestMvs_FileToFile(t *testing.T) {
 func TestMvs_FilesToFile(t *testing.T) {
 	assert := assert.New(t)
 
-	mvs := &subcmd.MvsCmd{
-		Query:  "foo/bar/",
+	mvs := &subcmd.MvCmd{
+		Source: "foo/bar/",
 		Target: "bar/baz/qux",
+		Search: true,
 		Force:  true,
 		Page:   1,
 	}

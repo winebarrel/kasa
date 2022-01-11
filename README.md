@@ -35,9 +35,6 @@ Commands:
   mvcat --team=STRING --token=STRING <from> <to>
     Move category.
 
-  mvs --team=STRING --token=STRING <query> <target>
-    Move posts from search results.
-
   post --team=STRING --token=STRING [<post-num>]
     New/Update post.
 
@@ -46,9 +43,6 @@ Commands:
 
   rmi --team=STRING --token=STRING <post-num>
     Delete post by number.
-
-  rms --team=STRING --token=STRING <query>
-    Delete posts from search results.
 
   search --team=STRING --token=STRING <query>
     Search posts.

@@ -79,11 +79,7 @@ func (cmd *CpCmd) Run(ctx *kasa.Context) error {
 
 	for i, oldPost := range posts {
 		newPost := newPosts[i]
-
-		if cmd.Force {
-			ctx.Fmt.Printf("cp '%s' '%s'\n", oldPost.FullNameWithoutTags(), postname.Join(newPost.Category, newPost.Name))
-		}
-
+		ctx.Fmt.Printf("cp '%s' '%s'\n", oldPost.FullNameWithoutTags(), postname.Join(newPost.Category, newPost.Name))
 		url, err := ctx.Driver.Post(newPost, 0)
 
 		if err != nil {

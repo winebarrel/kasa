@@ -176,7 +176,8 @@ func TestCp_HasMore(t *testing.T) {
 https://docs.esa.io/posts/0        bar/baz/zoo
 cp 'foo/bar/baz' 'bar/baz/baz'
 https://docs.esa.io/posts/0        bar/baz/baz
-`+"(has more pages. current page is 1, try `-p 2`)\n", printer.String())
+(has more pages. current page is 1, try '-p 2')
+`, printer.String())
 }
 
 func TestCp_FileToFile(t *testing.T) {

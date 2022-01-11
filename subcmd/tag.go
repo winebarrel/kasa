@@ -12,7 +12,7 @@ import (
 
 type TagCmd struct {
 	Path      string   `arg:"" help:"Post name/Post category/Post tag."`
-	Tags      []string `short:"t" required:"" help:"Post tags."`
+	Tags      []string `short:"t" help:"Post tags."`
 	Override  bool     `short:"o" help:"Override tags."`
 	Force     bool     `short:"f" default:"false" help:"Skip confirmation of files to move."`
 	Page      int      `short:"p" default:"1" help:"Page number."`
@@ -59,7 +59,7 @@ func (cmd *TagCmd) Run(ctx *kasa.Context) error {
 		}
 
 		if hasMore {
-			ctx.Fmt.Printf("(has more pages. current page is %d, try `-p %d`)\n", cmd.Page, cmd.Page+1)
+			ctx.Fmt.Printf("(has more pages. current page is %d, try '-p %d')\n", cmd.Page, cmd.Page+1)
 		}
 
 		approval := prompter.YN("Do you want to tag posts?", false)
@@ -86,7 +86,7 @@ func (cmd *TagCmd) Run(ctx *kasa.Context) error {
 	}
 
 	if hasMore {
-		ctx.Fmt.Printf("(has more pages. current page is %d, try `-p %d`)\n", cmd.Page, cmd.Page+1)
+		ctx.Fmt.Printf("(has more pages. current page is %d, try '-p %d')\n", cmd.Page, cmd.Page+1)
 	}
 
 	return nil

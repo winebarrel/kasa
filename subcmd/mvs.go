@@ -47,7 +47,7 @@ func (cmd *MvsCmd) Run(ctx *kasa.Context) error {
 		}
 
 		if hasMore {
-			ctx.Fmt.Printf("(has more pages. current page is %d, try `-p %d`)\n", cmd.Page, cmd.Page+1)
+			ctx.Fmt.Printf("(has more pages. current page is %d, try '-p %d')\n", cmd.Page, cmd.Page+1)
 		}
 
 		approval := prompter.YN("Do you want to move posts?", false)
@@ -71,7 +71,7 @@ func (cmd *MvsCmd) Run(ctx *kasa.Context) error {
 	}
 
 	if hasMore {
-		ctx.Fmt.Printf("(has more pages. current page is %d, try `-p %d`)\n", cmd.Page, cmd.Page+1)
+		ctx.Fmt.Printf("(has more pages. current page is %d, try '-p %d')\n", cmd.Page, cmd.Page+1)
 	}
 
 	return nil

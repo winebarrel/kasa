@@ -69,10 +69,7 @@ func (cmd *MvCmd) Run(ctx *kasa.Context) error {
 	}
 
 	for _, v := range posts {
-		if cmd.Force {
-			ctx.Fmt.Printf("mv '%s' '%s'\n", v.FullNameWithoutTags(), postname.Join(movePost.Category, movePost.Name))
-		}
-
+		ctx.Fmt.Printf("mv '%s' '%s'\n", v.FullNameWithoutTags(), postname.Join(movePost.Category, movePost.Name))
 		err = ctx.Driver.Move(movePost, v.Number)
 
 		if err != nil {

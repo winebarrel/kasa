@@ -94,11 +94,7 @@ func (cmd *TagCmd) Run(ctx *kasa.Context) error {
 	for i, oldPost := range posts {
 		newPost := newPosts[i]
 		tags := utils.TagsToString(newPost.Tags)
-
-		if cmd.Force {
-			ctx.Fmt.Printf("tag '%s' '%s'\n", tags, oldPost.FullNameWithoutTags())
-		}
-
+		ctx.Fmt.Printf("tag '%s' '%s'\n", tags, oldPost.FullNameWithoutTags())
 		err := ctx.Driver.Tag(newPost, oldPost.Number)
 
 		if err != nil {

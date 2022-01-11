@@ -53,7 +53,7 @@ Commands:
   search --team=STRING --token=STRING <query>
     Search posts.
 
-  tag --team=STRING --token=STRING --tags=TAGS,... <path>
+  tag --team=STRING --token=STRING <path>
     Tagging posts.
 
   install-completions --team=STRING --token=STRING

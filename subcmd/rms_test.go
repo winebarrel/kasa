@@ -12,10 +12,11 @@ import (
 func TestRms_Dir(t *testing.T) {
 	assert := assert.New(t)
 
-	rms := &subcmd.RmsCmd{
-		Query: "foo/bar/",
-		Force: true,
-		Page:  1,
+	rms := &subcmd.RmCmd{
+		Path:   "foo/bar/",
+		Search: true,
+		Force:  true,
+		Page:   1,
 	}
 
 	driver := NewMockDriver(t)
@@ -60,10 +61,11 @@ rm 'foo/bar/baz'
 func TestRms_HasMore(t *testing.T) {
 	assert := assert.New(t)
 
-	rms := &subcmd.RmsCmd{
-		Query: "foo/bar/",
-		Force: true,
-		Page:  1,
+	rms := &subcmd.RmCmd{
+		Path:   "foo/bar/",
+		Search: true,
+		Force:  true,
+		Page:   1,
 	}
 
 	driver := NewMockDriver(t)

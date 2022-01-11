@@ -24,11 +24,9 @@ var cli struct {
 	Ls                 subcmd.LsCmd                 `cmd:"" help:"List posts."`
 	Mv                 subcmd.MvCmd                 `cmd:"" help:"Move posts."`
 	Mvcat              subcmd.MvcatCmd              `cmd:"" help:"Move category."`
-	Mvs                subcmd.MvsCmd                `cmd:"" help:"Move posts from search results."`
 	Post               subcmd.PostCmd               `cmd:"" help:"New/Update post."`
 	Rm                 subcmd.RmCmd                 `cmd:"" help:"Delete posts."`
 	Rmi                subcmd.RmiCmd                `cmd:"" help:"Delete post by number."`
-	Rms                subcmd.RmsCmd                `cmd:"" help:"Delete posts from search results."`
 	Search             subcmd.SearchCmd             `cmd:"" help:"Search posts."`
 	Tag                subcmd.TagCmd                `cmd:"" help:"Tagging posts."`
 	InstallCompletions kongplete.InstallCompletions `cmd:"" help:"Install shell completions"`

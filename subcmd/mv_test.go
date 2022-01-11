@@ -256,3 +256,111 @@ func TestMv_DirToFile(t *testing.T) {
 
 	assert.Equal(errors.New("target 'bar/baz/zoo' is not a category"), err)
 }
+
+func TestMv_WithCat_Minus(t *testing.T) {
+	assert := assert.New(t)
+
+	mv := &subcmd.MvCmd{
+		Source:    "foo/bar/",
+		Target:    "bar/baz/",
+		Force:     true,
+		WithCat:   -1,
+		Page:      1,
+		Recursive: true,
+	}
+
+	driver := NewMockDriver(t)
+	printer := &MockPrinterImpl{}
+
+	driver.MockListOrTagSearch = func(path string, postNum int, recursive bool) ([]*model.Post, bool, error) {
+		assert.Equal("foo/bar/", path)
+		assert.Equal(1, postNum)
+		assert.True(recursive)
+
+		return []*model.Post{
+			{
+				Number:   1,
+				Name:     "zoo",
+				Category: "foo/bar",
+			},
+			{
+				Number:   2,
+				Name:     "baz",
+				Category: "foo/bar/hoge",
+			},
+		}, false, nil
+	}
+
+	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int) error {
+		assert.Contains([]int{1, 2}, postNum)
+		assert.Contains([]string{"bar/baz/bar", "bar/baz/hoge"}, movePostBody.Category)
+		assert.Empty(movePostBody.Name)
+
+		return nil
+	}
+
+	err := mv.Run(&kasa.Context{
+		Driver: driver,
+		Fmt:    printer,
+	})
+
+	assert.NoError(err)
+
+	assert.Equal(`mv 'foo/bar/zoo' 'bar/baz/bar/'
+mv 'foo/bar/hoge/baz' 'bar/baz/hoge/'
+`, printer.String())
+}
+
+func TestMv_WithCat_Plus(t *testing.T) {
+	assert := assert.New(t)
+
+	mv := &subcmd.MvCmd{
+		Source:    "foo/bar/",
+		Target:    "bar/baz/",
+		Force:     true,
+		WithCat:   1,
+		Page:      1,
+		Recursive: true,
+	}
+
+	driver := NewMockDriver(t)
+	printer := &MockPrinterImpl{}
+
+	driver.MockListOrTagSearch = func(path string, postNum int, recursive bool) ([]*model.Post, bool, error) {
+		assert.Equal("foo/bar/", path)
+		assert.Equal(1, postNum)
+		assert.True(recursive)
+
+		return []*model.Post{
+			{
+				Number:   1,
+				Name:     "zoo",
+				Category: "foo/bar",
+			},
+			{
+				Number:   2,
+				Name:     "baz",
+				Category: "foo/bar/hoge",
+			},
+		}, false, nil
+	}
+
+	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int) error {
+		assert.Contains([]int{1, 2}, postNum)
+		assert.Contains([]string{"bar/baz/foo/bar", "bar/baz/foo/bar/hoge"}, movePostBody.Category)
+		assert.Empty(movePostBody.Name)
+
+		return nil
+	}
+
+	err := mv.Run(&kasa.Context{
+		Driver: driver,
+		Fmt:    printer,
+	})
+
+	assert.NoError(err)
+
+	assert.Equal(`mv 'foo/bar/zoo' 'bar/baz/foo/bar/'
+mv 'foo/bar/hoge/baz' 'bar/baz/foo/bar/hoge/'
+`, printer.String())
+}

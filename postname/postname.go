@@ -1,6 +1,9 @@
 package postname
 
-import "strings"
+import (
+	"path"
+	"strings"
+)
 
 func Split(fullName string) (string, string) {
 	if fullName == "" {
@@ -19,4 +22,34 @@ func Split(fullName string) (string, string) {
 func Join(cat string, name string) string {
 	cat = strings.TrimSuffix(cat, "/")
 	return strings.TrimPrefix(cat+"/"+name, "/")
+}
+
+func AppendCategoryN(src string, extra string, n int) string {
+	if n == 0 {
+		return src
+	}
+
+	extra = strings.TrimSuffix(extra, "/")
+
+	if extra == "" {
+		return src
+	}
+
+	extraItems := strings.Split(extra, "/")
+
+	if n >= 0 && n > len(extraItems) {
+		return src
+	} else if n < 0 && -n >= len(extraItems) {
+		return path.Join(src, extra)
+	}
+
+	newCat := []string{src}
+
+	if n >= 0 {
+		newCat = append(newCat, extraItems[n-1:]...)
+	} else {
+		newCat = append(newCat, extraItems[len(extraItems)+n:]...)
+	}
+
+	return path.Join(newCat...)
 }

@@ -16,6 +16,7 @@ type CpCmd struct {
 	Source    string `arg:"" help:"Source post name/category/tag."`
 	Target    string `arg:"" help:"Target post/category."`
 	Force     bool   `short:"f" default:"false" help:"Skip confirmation of files to move."`
+	WithCat   int    `short:"n" help:"Copy with category."`
 	Page      int    `short:"p" default:"1" help:"Page number."`
 	Recursive bool   `short:"r" default:"true" negatable:"" help:"Recursively list posts."`
 }
@@ -46,7 +47,7 @@ func (cmd *CpCmd) Run(ctx *kasa.Context) error {
 			Name:     v.Name,
 			BodyMd:   v.BodyMd,
 			Tags:     v.Tags,
-			Category: v.Category,
+			Category: postname.AppendCategoryN(targetCat, v.Category, cmd.WithCat),
 			Wip:      esa.Bool(v.Wip),
 			Message:  v.Message,
 		}
@@ -55,7 +56,6 @@ func (cmd *CpCmd) Run(ctx *kasa.Context) error {
 			newPost.Name = targetName
 		}
 
-		newPost.Category = targetCat
 		newPosts[i] = newPost
 	}
 

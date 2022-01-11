@@ -28,6 +28,8 @@ func (cmd *TagCmd) Run(ctx *kasa.Context) error {
 		}
 
 		cmd.Override = true
+	} else if len(cmd.Tags) == 0 {
+		return errors.New("missing flags: --body=TAGS,...")
 	}
 
 	posts, hasMore, err := ctx.Driver.ListOrTagSearch(cmd.Path, cmd.Page, cmd.Recursive)

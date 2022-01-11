@@ -390,3 +390,27 @@ func TestTag_DeleteOptionError(t *testing.T) {
 
 	assert.Equal(errors.New("cannot specify both '--delete' and '--tags'"), err)
 }
+
+func TestTag_NoTagsOptionError(t *testing.T) {
+	assert := assert.New(t)
+
+	tag := &subcmd.TagCmd{
+		Path:      "foo/bar/",
+		Tags:      []string{},
+		Override:  false,
+		Delete:    false,
+		Force:     true,
+		Page:      1,
+		Recursive: true,
+	}
+
+	driver := NewMockDriver(t)
+	printer := &MockPrinterImpl{}
+
+	err := tag.Run(&kasa.Context{
+		Driver: driver,
+		Fmt:    printer,
+	})
+
+	assert.Equal(errors.New("missing flags: --body=TAGS,..."), err)
+}

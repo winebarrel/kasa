@@ -5,7 +5,7 @@ import (
 )
 
 type SearchCmd struct {
-	Query string `arg:"" help:"Search query."`
+	Query string `arg:"" help:"Search query. see https://docs.esa.io/posts/104"`
 	Page  int    `short:"p" default:"1" help:"Page number."`
 }
 

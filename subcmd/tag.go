@@ -16,7 +16,8 @@ type TagCmd struct {
 	Tags      []string `short:"t" help:"Post tags."`
 	Override  bool     `short:"o" help:"Override tags."`
 	Delete    bool     `short:"d" help:"Delete tags."`
-	Force     bool     `short:"f" default:"false" help:"Skip confirmation of files to move."`
+	Search    bool     `short:"s" help:"Search posts. see https://docs.esa.io/posts/104"`
+	Force     bool     `short:"f" help:"Skip confirmation of files to move."`
 	Page      int      `short:"p" default:"1" help:"Page number."`
 	Recursive bool     `short:"r" default:"true" negatable:"" help:"Recursively list posts."`
 }
@@ -32,7 +33,15 @@ func (cmd *TagCmd) Run(ctx *kasa.Context) error {
 		return errors.New("missing flags: --body=TAGS")
 	}
 
-	posts, hasMore, err := ctx.Driver.ListOrTagSearch(cmd.Path, cmd.Page, cmd.Recursive)
+	var posts []*model.Post
+	var hasMore bool
+	var err error
+
+	if cmd.Search {
+		posts, hasMore, err = ctx.Driver.Search(cmd.Path, cmd.Page)
+	} else {
+		posts, hasMore, err = ctx.Driver.ListOrTagSearch(cmd.Path, cmd.Page, cmd.Recursive)
+	}
 
 	if err != nil {
 		return err

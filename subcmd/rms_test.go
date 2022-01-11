@@ -13,16 +13,16 @@ func TestRms_Dir(t *testing.T) {
 	assert := assert.New(t)
 
 	rms := &subcmd.RmsCmd{
-		Phrase: "foo/bar/",
-		Force:  true,
-		Page:   1,
+		Query: "foo/bar/",
+		Force: true,
+		Page:  1,
 	}
 
 	driver := NewMockDriver(t)
 	printer := &MockPrinterImpl{}
 
-	driver.MockSearch = func(phrase string, postNum int) ([]*model.Post, bool, error) {
-		assert.Equal("foo/bar/", phrase)
+	driver.MockSearch = func(query string, postNum int) ([]*model.Post, bool, error) {
+		assert.Equal("foo/bar/", query)
 		assert.Equal(1, postNum)
 
 		return []*model.Post{
@@ -61,16 +61,16 @@ func TestRms_HasMore(t *testing.T) {
 	assert := assert.New(t)
 
 	rms := &subcmd.RmsCmd{
-		Phrase: "foo/bar/",
-		Force:  true,
-		Page:   1,
+		Query: "foo/bar/",
+		Force: true,
+		Page:  1,
 	}
 
 	driver := NewMockDriver(t)
 	printer := &MockPrinterImpl{}
 
-	driver.MockSearch = func(phrase string, postNum int) ([]*model.Post, bool, error) {
-		assert.Equal("foo/bar/", phrase)
+	driver.MockSearch = func(query string, postNum int) ([]*model.Post, bool, error) {
+		assert.Equal("foo/bar/", query)
 		assert.Equal(1, postNum)
 
 		return []*model.Post{

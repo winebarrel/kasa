@@ -90,5 +90,6 @@ func TestSearch_HasMore(t *testing.T) {
 
 	assert.Equal(`0001-01-01 12:00:00  WIP              foo/bar/zoo  [#tagA,#tagB]
 0001-01-01 12:00:00  -                foo/bar/baz  [#tagB]
-`+"(has more pages. current page is 1, try `-p 2`)\n", printer.String())
+(has more pages. current page is 1, try '-p 2')
+`, printer.String())
 }

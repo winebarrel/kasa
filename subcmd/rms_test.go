@@ -102,5 +102,6 @@ func TestRms_HasMore(t *testing.T) {
 
 	assert.Equal(`rm 'foo/bar/zoo'
 rm 'foo/bar/baz'
-`+"(has more pages. current page is 1, try `-p 2`)\n", printer.String())
+(has more pages. current page is 1, try '-p 2')
+`, printer.String())
 }

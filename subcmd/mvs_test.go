@@ -109,7 +109,8 @@ func TestMvs_HasMore(t *testing.T) {
 
 	assert.Equal(`mv 'foo/bar/zoo' 'bar/baz/'
 mv 'foo/bar/baz' 'bar/baz/'
-`+"(has more pages. current page is 1, try `-p 2`)\n", printer.String())
+(has more pages. current page is 1, try '-p 2')
+`, printer.String())
 }
 
 func TestMvs_FileToFile(t *testing.T) {

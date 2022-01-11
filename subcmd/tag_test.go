@@ -1,6 +1,7 @@
 package subcmd_test
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -148,7 +149,8 @@ func TestTag_HasMore(t *testing.T) {
 
 	assert.Equal(`tag '[#bar,#baz,#tagA,#tagB]' 'foo/bar/zoo'
 tag '[#bar,#baz,#tagA,#tagB]' 'foo/bar/baz'
-`+"(has more pages. current page is 1, try `-p 2`)\n", printer.String())
+(has more pages. current page is 1, try '-p 2')
+`, printer.String())
 }
 
 func TestTag_Override(t *testing.T) {
@@ -228,7 +230,8 @@ func TestTag_Delete(t *testing.T) {
 	tag := &subcmd.TagCmd{
 		Path:      "foo/bar/",
 		Tags:      []string{},
-		Override:  true,
+		Override:  false,
+		Delete:    true,
 		Force:     true,
 		Page:      1,
 		Recursive: true,
@@ -291,4 +294,52 @@ func TestTag_Delete(t *testing.T) {
 	assert.Equal(`tag '' 'foo/bar/zoo'
 tag '' 'foo/bar/baz'
 `, printer.String())
+}
+
+func TestTag_DeleteOptionError(t *testing.T) {
+	assert := assert.New(t)
+
+	tag := &subcmd.TagCmd{
+		Path:      "foo/bar/",
+		Tags:      []string{"bar", "baz"},
+		Override:  false,
+		Delete:    true,
+		Force:     true,
+		Page:      1,
+		Recursive: true,
+	}
+
+	driver := NewMockDriver(t)
+	printer := &MockPrinterImpl{}
+
+	err := tag.Run(&kasa.Context{
+		Driver: driver,
+		Fmt:    printer,
+	})
+
+	assert.Equal(errors.New("cannot specify both '--delete' and '--tags'"), err)
+}
+
+func TestTag_NoTagsOptionError(t *testing.T) {
+	assert := assert.New(t)
+
+	tag := &subcmd.TagCmd{
+		Path:      "foo/bar/",
+		Tags:      []string{},
+		Override:  false,
+		Delete:    false,
+		Force:     true,
+		Page:      1,
+		Recursive: true,
+	}
+
+	driver := NewMockDriver(t)
+	printer := &MockPrinterImpl{}
+
+	err := tag.Run(&kasa.Context{
+		Driver: driver,
+		Fmt:    printer,
+	})
+
+	assert.Equal(errors.New("missing flags: --body=TAGS"), err)
 }

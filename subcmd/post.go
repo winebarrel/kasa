@@ -13,7 +13,7 @@ import (
 
 type PostCmd struct {
 	Name     string   `short:"n" help:"Post title."`
-	Body     string   `short:"b" help:"Post body file."`
+	Body     string   `short:"b" help:"Post body file." predictor:"file"`
 	PostNum  int      `arg:"" optional:"" help:"Post number to update."`
 	Tags     []string `short:"t" help:"Post tags."`
 	Category string   `short:"c" help:"Post category."`

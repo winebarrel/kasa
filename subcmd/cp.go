@@ -17,7 +17,7 @@ type CpCmd struct {
 	Target    string `arg:"" help:"Target post/category."`
 	Force     bool   `short:"f" default:"false" help:"Skip confirmation of files to move."`
 	WithCat   int    `help:"Copy with category."`
-	Notice    bool   `short:"n" help:"Copy with notify."`
+	Notice    bool   `negatable:"" help:"Copy with notify."`
 	Page      int    `short:"p" default:"1" help:"Page number."`
 	Recursive bool   `short:"r" default:"true" negatable:"" help:"Recursively list posts."`
 }

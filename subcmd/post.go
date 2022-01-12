@@ -19,7 +19,7 @@ type PostCmd struct {
 	Category string   `short:"c" help:"Post category."`
 	Wip      bool     `negatable:"" help:"Post as WIP."`
 	Message  string   `short:"m" help:"Post message."`
-	Notice   bool     `short:"n" help:"Post with notify."`
+	Notice   bool     `negatable:"" help:"Post with notify."`
 }
 
 func (cmd *PostCmd) Run(ctx *kasa.Context) error {

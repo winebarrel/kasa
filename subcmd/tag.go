@@ -18,7 +18,7 @@ type TagCmd struct {
 	Delete    bool     `short:"d" help:"Delete tags."`
 	Search    bool     `short:"s" help:"Search posts. see https://docs.esa.io/posts/104"`
 	Force     bool     `short:"f" help:"Skip confirmation of files to move."`
-	Notice    bool     `short:"n" help:"Tagging with notify."`
+	Notice    bool     `negatable:"" help:"Tagging with notify."`
 	Page      int      `short:"p" default:"1" help:"Page number."`
 	Recursive bool     `short:"r" default:"true" negatable:"" help:"Recursively list posts."`
 }

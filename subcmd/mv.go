@@ -16,7 +16,7 @@ type MvCmd struct {
 	Search    bool   `short:"s" help:"Search posts. see https://docs.esa.io/posts/104"`
 	Force     bool   `short:"f" help:"Skip confirmation of files to move."`
 	WithCat   int    `help:"Move with category."`
-	Notice    bool   `short:"n" help:"Move with notify."`
+	Notice    bool   `negatable:"" help:"Move with notify."`
 	Page      int    `short:"p" default:"1" help:"Page number."`
 	Recursive bool   `short:"r" default:"true" negatable:"" help:"Recursively list posts."`
 }

@@ -16,10 +16,11 @@ func TestTagsToString(t *testing.T) {
 		expected string
 	}{
 		{[]string{"a", "b", "c", "d"}, "[#a,#b,#c,#d]"},
+		{[]string{"a", "#b", "##c", "###d"}, "[#a,#b,#c,#d]"},
 		{[]string{}, ""},
 	}
 
 	for _, t := range tests {
-		assert.Equal(utils.TagsToString(t.tags), t.expected)
+		assert.Equal(t.expected, utils.TagsToString(t.tags))
 	}
 }

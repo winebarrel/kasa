@@ -9,5 +9,11 @@ func TagsToString(tags []string) string {
 		return ""
 	}
 
-	return "[#" + strings.Join(tags, ",#") + "]"
+	formatted := make([]string, 0, len(tags))
+
+	for _, t := range tags {
+		formatted = append(formatted, strings.TrimLeft(t, "#"))
+	}
+
+	return "[#" + strings.Join(formatted, ",#") + "]"
 }

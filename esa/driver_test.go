@@ -695,7 +695,7 @@ func TestDriverMove_Ok(t *testing.T) {
 
 	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
 		resBody, _ := ioutil.ReadAll(req.Body)
-		assert.Equal(`{"post":{"name":"new_name","category":"new_cat"}}`, string(resBody))
+		assert.Equal(`{"post":{"name":"new_name","category":"new_cat","message":"[skip notice]"}}`, string(resBody))
 		return httpmock.NewStringResponse(http.StatusOK, ``), nil
 	})
 
@@ -707,6 +707,28 @@ func TestDriverMove_Ok(t *testing.T) {
 	}
 
 	err := driver.Move(movePost, 1, false)
+	assert.NoError(err)
+}
+
+func TestDriverMove_WithNotify(t *testing.T) {
+	assert := assert.New(t)
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
+		resBody, _ := ioutil.ReadAll(req.Body)
+		assert.Equal(`{"post":{"name":"new_name","category":"new_cat"}}`, string(resBody))
+		return httpmock.NewStringResponse(http.StatusOK, ``), nil
+	})
+
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+
+	movePost := &model.MovePostBody{
+		Name:     "new_name",
+		Category: "new_cat",
+	}
+
+	err := driver.Move(movePost, 1, true)
 	assert.NoError(err)
 }
 

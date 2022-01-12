@@ -15,7 +15,8 @@ import (
 )
 
 const (
-	MaxPerPage = 50
+	MaxPerPage        = 50
+	SkipNoticeMessage = "[skip notice]"
 )
 
 type Driver interface {
@@ -234,6 +235,8 @@ func (dri *DriverImpl) Post(newPostBody *model.NewPostBody, postNum int) (string
 }
 
 func (dri *DriverImpl) Move(movePostBody *model.MovePostBody, postNum int, notice bool) error {
+	movePostBody.Message = updateMessageUnlessNotify(movePostBody.Message, notice)
+
 	movePost := model.MovePost{
 		Post: movePostBody,
 	}
@@ -317,4 +320,16 @@ func (dri *DriverImpl) Delete(postNum int) error {
 	_, err = dri.esaCli.send(req)
 
 	return err
+}
+
+func updateMessageUnlessNotify(msg string, notice bool) string {
+	if notice {
+		return msg
+	}
+
+	if msg == "" {
+		return SkipNoticeMessage
+	} else {
+		return SkipNoticeMessage + " " + msg
+	}
 }

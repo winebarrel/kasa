@@ -25,7 +25,7 @@ type Driver interface {
 	List(string, int, bool) ([]*model.Post, bool, error)
 	Search(string, int) ([]*model.Post, bool, error)
 	ListOrTagSearch(string, int, bool) ([]*model.Post, bool, error)
-	Post(*model.NewPostBody, int) (string, error)
+	Post(*model.NewPostBody, int, bool) (string, error)
 	Move(*model.MovePostBody, int, bool) error
 	MoveCategory(string, string) error
 	Delete(int) error
@@ -192,7 +192,9 @@ func (dri *DriverImpl) listPostsInPage(req *http.Request, pageNum int, query url
 	return page, nil
 }
 
-func (dri *DriverImpl) Post(newPostBody *model.NewPostBody, postNum int) (string, error) {
+func (dri *DriverImpl) Post(newPostBody *model.NewPostBody, postNum int, notice bool) (string, error) {
+	newPostBody.Message = updateMessageUnlessNotify(newPostBody.Message, notice)
+
 	newPost := model.NewPost{
 		Post: newPostBody,
 	}

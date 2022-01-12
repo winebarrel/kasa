@@ -30,7 +30,7 @@ func TestPost_New(t *testing.T) {
 	driver := NewMockDriver(t)
 	printer := &MockPrinterImpl{}
 
-	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int) (string, error) {
+	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int, notice bool) (string, error) {
 		assert.Equal(&model.NewPostBody{
 			Name:     "zoo",
 			BodyMd:   "bodyMd",
@@ -41,6 +41,7 @@ func TestPost_New(t *testing.T) {
 		}, newPostBody)
 
 		assert.Equal(0, postNum)
+		assert.False(notice)
 
 		return "https://docs.esa.io/posts/1", nil
 	}
@@ -68,7 +69,7 @@ func TestPost_Update(t *testing.T) {
 	driver := NewMockDriver(t)
 	printer := &MockPrinterImpl{}
 
-	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int) (string, error) {
+	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int, notice bool) (string, error) {
 		assert.Equal(&model.NewPostBody{
 			Name:     "",
 			BodyMd:   "",
@@ -79,6 +80,7 @@ func TestPost_Update(t *testing.T) {
 		}, newPostBody)
 
 		assert.Equal(1, postNum)
+		assert.False(notice)
 
 		return "https://docs.esa.io/posts/2", nil
 	}

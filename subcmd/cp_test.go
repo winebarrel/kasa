@@ -52,7 +52,7 @@ func TestCp_DirToDir(t *testing.T) {
 		}, false, nil
 	}
 
-	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int) (string, error) {
+	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int, notice bool) (string, error) {
 		switch newPostBody.Name {
 		case "zoo":
 			assert.Equal(&model.NewPostBody{
@@ -77,6 +77,7 @@ func TestCp_DirToDir(t *testing.T) {
 		}
 
 		assert.Equal(0, postNum)
+		assert.False(notice)
 
 		return "https://docs.esa.io/posts/0", nil
 	}
@@ -136,7 +137,7 @@ func TestCp_HasMore(t *testing.T) {
 		}, true, nil
 	}
 
-	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int) (string, error) {
+	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int, notice bool) (string, error) {
 		switch newPostBody.Name {
 		case "zoo":
 			assert.Equal(&model.NewPostBody{
@@ -161,6 +162,7 @@ func TestCp_HasMore(t *testing.T) {
 		}
 
 		assert.Equal(0, postNum)
+		assert.False(notice)
 
 		return "https://docs.esa.io/posts/0", nil
 	}
@@ -212,7 +214,7 @@ func TestCp_FileToFile(t *testing.T) {
 		}, false, nil
 	}
 
-	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int) (string, error) {
+	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int, notice bool) (string, error) {
 		assert.Equal(&model.NewPostBody{
 			Name:     "baz",
 			BodyMd:   "zooBody",
@@ -223,6 +225,7 @@ func TestCp_FileToFile(t *testing.T) {
 		}, newPostBody)
 
 		assert.Equal(0, postNum)
+		assert.False(notice)
 
 		return "https://docs.esa.io/posts/0", nil
 	}
@@ -271,7 +274,7 @@ func TestCp_FileToTopFile(t *testing.T) {
 		}, false, nil
 	}
 
-	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int) (string, error) {
+	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int, notice bool) (string, error) {
 		assert.Equal(&model.NewPostBody{
 			Name:     "baz",
 			BodyMd:   "zooBody",
@@ -282,6 +285,7 @@ func TestCp_FileToTopFile(t *testing.T) {
 		}, newPostBody)
 
 		assert.Equal(0, postNum)
+		assert.False(notice)
 
 		return "https://docs.esa.io/posts/0", nil
 	}
@@ -389,7 +393,7 @@ func TestCp_WithCat_Minus(t *testing.T) {
 		}, false, nil
 	}
 
-	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int) (string, error) {
+	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int, notice bool) (string, error) {
 		switch newPostBody.Name {
 		case "zoo":
 			assert.Equal(&model.NewPostBody{
@@ -414,6 +418,7 @@ func TestCp_WithCat_Minus(t *testing.T) {
 		}
 
 		assert.Equal(0, postNum)
+		assert.False(notice)
 
 		return "https://docs.esa.io/posts/0", nil
 	}
@@ -474,7 +479,7 @@ func TestCp_WithCat_Plus(t *testing.T) {
 		}, false, nil
 	}
 
-	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int) (string, error) {
+	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int, notice bool) (string, error) {
 		switch newPostBody.Name {
 		case "zoo":
 			assert.Equal(&model.NewPostBody{
@@ -499,6 +504,7 @@ func TestCp_WithCat_Plus(t *testing.T) {
 		}
 
 		assert.Equal(0, postNum)
+		assert.False(notice)
 
 		return "https://docs.esa.io/posts/0", nil
 	}

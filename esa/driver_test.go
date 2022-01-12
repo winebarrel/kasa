@@ -641,6 +641,33 @@ func TestDriverPost_Post(t *testing.T) {
 
 	httpmock.RegisterResponder(http.MethodPost, "https://api.esa.io/v1/teams/example/posts", func(req *http.Request) (*http.Response, error) {
 		resBody, _ := ioutil.ReadAll(req.Body)
+		assert.Equal(`{"post":{"name":"name","body_md":"body_md","tags":["tagA","tagB"],"category":"foo/bar","wip":false,"message":"[skip notice] message"}}`, string(resBody))
+		return httpmock.NewStringResponse(http.StatusCreated, `{"url":"https://docs.esa.io/posts/5"}`), nil
+	})
+
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+
+	post := &model.NewPostBody{
+		Name:     "name",
+		BodyMd:   "body_md",
+		Tags:     []string{"tagA", "tagB"},
+		Category: "foo/bar",
+		Wip:      esa.Bool(false),
+		Message:  "message",
+	}
+
+	url, err := driver.Post(post, 0, false)
+	assert.Equal("https://docs.esa.io/posts/5", url)
+	assert.NoError(err)
+}
+
+func TestDriverPost_WithNotify(t *testing.T) {
+	assert := assert.New(t)
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	httpmock.RegisterResponder(http.MethodPost, "https://api.esa.io/v1/teams/example/posts", func(req *http.Request) (*http.Response, error) {
+		resBody, _ := ioutil.ReadAll(req.Body)
 		assert.Equal(`{"post":{"name":"name","body_md":"body_md","tags":["tagA","tagB"],"category":"foo/bar","wip":false,"message":"message"}}`, string(resBody))
 		return httpmock.NewStringResponse(http.StatusCreated, `{"url":"https://docs.esa.io/posts/5"}`), nil
 	})
@@ -656,7 +683,7 @@ func TestDriverPost_Post(t *testing.T) {
 		Message:  "message",
 	}
 
-	url, err := driver.Post(post, 0)
+	url, err := driver.Post(post, 0, true)
 	assert.Equal("https://docs.esa.io/posts/5", url)
 	assert.NoError(err)
 }
@@ -668,7 +695,7 @@ func TestDriverPost_Update(t *testing.T) {
 
 	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
 		resBody, _ := ioutil.ReadAll(req.Body)
-		assert.Equal(`{"post":{"name":"name","body_md":"body_md","tags":["tagA","tagB"],"category":"foo/bar","wip":false,"message":"message"}}`, string(resBody))
+		assert.Equal(`{"post":{"name":"name","body_md":"body_md","tags":["tagA","tagB"],"category":"foo/bar","wip":false,"message":"[skip notice] message"}}`, string(resBody))
 		return httpmock.NewStringResponse(http.StatusOK, `{"url":"https://docs.esa.io/posts/5"}`), nil
 	})
 
@@ -683,7 +710,7 @@ func TestDriverPost_Update(t *testing.T) {
 		Message:  "message",
 	}
 
-	url, err := driver.Post(post, 1)
+	url, err := driver.Post(post, 1, false)
 	assert.Equal("https://docs.esa.io/posts/5", url)
 	assert.NoError(err)
 }

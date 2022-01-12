@@ -1,7 +1,8 @@
 package model
 
 type TagPostBody struct {
-	Tags []string `json:"tags"`
+	Tags    []string `json:"tags"`
+	Message string   `json:"message,omitempty"`
 }
 
 type TagPost struct {

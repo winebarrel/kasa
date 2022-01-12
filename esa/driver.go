@@ -29,7 +29,7 @@ type Driver interface {
 	Move(*model.MovePostBody, int, bool) error
 	MoveCategory(string, string) error
 	Delete(int) error
-	Tag(*model.TagPostBody, int) error
+	Tag(*model.TagPostBody, int, bool) error
 }
 
 type DriverImpl struct {
@@ -261,12 +261,14 @@ func (dri *DriverImpl) Move(movePostBody *model.MovePostBody, postNum int, notic
 	return err
 }
 
-func (dri *DriverImpl) Tag(tagPostBody *model.TagPostBody, postNum int) error {
-	movePost := model.TagPost{
+func (dri *DriverImpl) Tag(tagPostBody *model.TagPostBody, postNum int, notice bool) error {
+	tagPostBody.Message = updateMessageUnlessNotify(tagPostBody.Message, notice)
+
+	tagPost := model.TagPost{
 		Post: tagPostBody,
 	}
 
-	postBody, err := json.Marshal(movePost)
+	postBody, err := json.Marshal(tagPost)
 
 	if err != nil {
 		return err

@@ -51,7 +51,7 @@ func TestTags(t *testing.T) {
 		}, false, nil
 	}
 
-	driver.MockTag = func(tagPostBody *model.TagPostBody, postNum int) error {
+	driver.MockTag = func(tagPostBody *model.TagPostBody, postNum int, notice bool) error {
 		switch postNum {
 		case 1:
 			assert.Equal(&model.TagPostBody{
@@ -64,6 +64,8 @@ func TestTags(t *testing.T) {
 		default:
 			assert.Failf("invalid post", "post num=%d", postNum)
 		}
+
+		assert.False(notice)
 
 		return nil
 	}

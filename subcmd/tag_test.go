@@ -52,7 +52,7 @@ func TestTag(t *testing.T) {
 		}, false, nil
 	}
 
-	driver.MockTag = func(tagPostBody *model.TagPostBody, postNum int) error {
+	driver.MockTag = func(tagPostBody *model.TagPostBody, postNum int, notice bool) error {
 		switch postNum {
 		case 1:
 			assert.Equal(&model.TagPostBody{
@@ -65,6 +65,8 @@ func TestTag(t *testing.T) {
 		default:
 			assert.Failf("invalid post", "post num=%d", postNum)
 		}
+
+		assert.False(notice)
 
 		return nil
 	}
@@ -123,7 +125,7 @@ func TestTag_HasMore(t *testing.T) {
 		}, true, nil
 	}
 
-	driver.MockTag = func(tagPostBody *model.TagPostBody, postNum int) error {
+	driver.MockTag = func(tagPostBody *model.TagPostBody, postNum int, notice bool) error {
 		switch postNum {
 		case 1:
 			assert.Equal(&model.TagPostBody{
@@ -136,6 +138,8 @@ func TestTag_HasMore(t *testing.T) {
 		default:
 			assert.Failf("invalid post", "post num=%d", postNum)
 		}
+
+		assert.False(notice)
 
 		return nil
 	}
@@ -195,7 +199,7 @@ func TestTag_Override(t *testing.T) {
 		}, false, nil
 	}
 
-	driver.MockTag = func(tagPostBody *model.TagPostBody, postNum int) error {
+	driver.MockTag = func(tagPostBody *model.TagPostBody, postNum int, notice bool) error {
 		switch postNum {
 		case 1:
 			assert.Equal(&model.TagPostBody{
@@ -208,6 +212,8 @@ func TestTag_Override(t *testing.T) {
 		default:
 			assert.Failf("invalid post", "post num=%d", postNum)
 		}
+
+		assert.False(notice)
 
 		return nil
 	}
@@ -267,7 +273,7 @@ func TestTag_Delete(t *testing.T) {
 		}, false, nil
 	}
 
-	driver.MockTag = func(tagPostBody *model.TagPostBody, postNum int) error {
+	driver.MockTag = func(tagPostBody *model.TagPostBody, postNum int, notice bool) error {
 		switch postNum {
 		case 1:
 			assert.Equal(&model.TagPostBody{
@@ -280,6 +286,8 @@ func TestTag_Delete(t *testing.T) {
 		default:
 			assert.Failf("invalid post", "post num=%d", postNum)
 		}
+
+		assert.False(notice)
 
 		return nil
 	}

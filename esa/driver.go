@@ -15,7 +15,8 @@ import (
 )
 
 const (
-	MaxPerPage = 50
+	MaxPerPage        = 50
+	SkipNoticeMessage = "[skip notice]"
 )
 
 type Driver interface {
@@ -24,11 +25,11 @@ type Driver interface {
 	List(string, int, bool) ([]*model.Post, bool, error)
 	Search(string, int) ([]*model.Post, bool, error)
 	ListOrTagSearch(string, int, bool) ([]*model.Post, bool, error)
-	Post(*model.NewPostBody, int) (string, error)
-	Move(*model.MovePostBody, int) error
+	Post(*model.NewPostBody, int, bool) (string, error)
+	Move(*model.MovePostBody, int, bool) error
 	MoveCategory(string, string) error
 	Delete(int) error
-	Tag(*model.TagPostBody, int) error
+	Tag(*model.TagPostBody, int, bool) error
 }
 
 type DriverImpl struct {
@@ -191,7 +192,9 @@ func (dri *DriverImpl) listPostsInPage(req *http.Request, pageNum int, query url
 	return page, nil
 }
 
-func (dri *DriverImpl) Post(newPostBody *model.NewPostBody, postNum int) (string, error) {
+func (dri *DriverImpl) Post(newPostBody *model.NewPostBody, postNum int, notice bool) (string, error) {
+	newPostBody.Message = updateMessageUnlessNotify(newPostBody.Message, notice)
+
 	newPost := model.NewPost{
 		Post: newPostBody,
 	}
@@ -233,7 +236,9 @@ func (dri *DriverImpl) Post(newPostBody *model.NewPostBody, postNum int) (string
 	return res.URL, nil
 }
 
-func (dri *DriverImpl) Move(movePostBody *model.MovePostBody, postNum int) error {
+func (dri *DriverImpl) Move(movePostBody *model.MovePostBody, postNum int, notice bool) error {
+	movePostBody.Message = updateMessageUnlessNotify(movePostBody.Message, notice)
+
 	movePost := model.MovePost{
 		Post: movePostBody,
 	}
@@ -258,12 +263,14 @@ func (dri *DriverImpl) Move(movePostBody *model.MovePostBody, postNum int) error
 	return err
 }
 
-func (dri *DriverImpl) Tag(tagPostBody *model.TagPostBody, postNum int) error {
-	movePost := model.TagPost{
+func (dri *DriverImpl) Tag(tagPostBody *model.TagPostBody, postNum int, notice bool) error {
+	tagPostBody.Message = updateMessageUnlessNotify(tagPostBody.Message, notice)
+
+	tagPost := model.TagPost{
 		Post: tagPostBody,
 	}
 
-	postBody, err := json.Marshal(movePost)
+	postBody, err := json.Marshal(tagPost)
 
 	if err != nil {
 		return err
@@ -317,4 +324,16 @@ func (dri *DriverImpl) Delete(postNum int) error {
 	_, err = dri.esaCli.send(req)
 
 	return err
+}
+
+func updateMessageUnlessNotify(msg string, notice bool) string {
+	if notice {
+		return msg
+	}
+
+	if msg == "" {
+		return SkipNoticeMessage
+	} else {
+		return SkipNoticeMessage + " " + msg
+	}
 }

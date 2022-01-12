@@ -18,6 +18,7 @@ type TagCmd struct {
 	Delete    bool     `short:"d" help:"Delete tags."`
 	Search    bool     `short:"s" help:"Search posts. see https://docs.esa.io/posts/104"`
 	Force     bool     `short:"f" help:"Skip confirmation of files to move."`
+	Notice    bool     `negatable:"" help:"Tagging with notify."`
 	Page      int      `short:"p" default:"1" help:"Page number."`
 	Recursive bool     `short:"r" default:"true" negatable:"" help:"Recursively list posts."`
 }
@@ -95,7 +96,7 @@ func (cmd *TagCmd) Run(ctx *kasa.Context) error {
 		newPost := newPosts[i]
 		tags := utils.TagsToString(newPost.Tags)
 		ctx.Fmt.Printf("tag '%s' '%s'\n", tags, oldPost.FullNameWithoutTags())
-		err := ctx.Driver.Tag(newPost, oldPost.Number)
+		err := ctx.Driver.Tag(newPost, oldPost.Number, cmd.Notice)
 
 		if err != nil {
 			return fmt.Errorf("failed to tag '%s':%w", oldPost.FullNameWithoutTags(), err)

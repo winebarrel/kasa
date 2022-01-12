@@ -641,6 +641,33 @@ func TestDriverPost_Post(t *testing.T) {
 
 	httpmock.RegisterResponder(http.MethodPost, "https://api.esa.io/v1/teams/example/posts", func(req *http.Request) (*http.Response, error) {
 		resBody, _ := ioutil.ReadAll(req.Body)
+		assert.Equal(`{"post":{"name":"name","body_md":"body_md","tags":["tagA","tagB"],"category":"foo/bar","wip":false,"message":"[skip notice] message"}}`, string(resBody))
+		return httpmock.NewStringResponse(http.StatusCreated, `{"url":"https://docs.esa.io/posts/5"}`), nil
+	})
+
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+
+	post := &model.NewPostBody{
+		Name:     "name",
+		BodyMd:   "body_md",
+		Tags:     []string{"tagA", "tagB"},
+		Category: "foo/bar",
+		Wip:      esa.Bool(false),
+		Message:  "message",
+	}
+
+	url, err := driver.Post(post, 0, false)
+	assert.Equal("https://docs.esa.io/posts/5", url)
+	assert.NoError(err)
+}
+
+func TestDriverPost_WithNotify(t *testing.T) {
+	assert := assert.New(t)
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	httpmock.RegisterResponder(http.MethodPost, "https://api.esa.io/v1/teams/example/posts", func(req *http.Request) (*http.Response, error) {
+		resBody, _ := ioutil.ReadAll(req.Body)
 		assert.Equal(`{"post":{"name":"name","body_md":"body_md","tags":["tagA","tagB"],"category":"foo/bar","wip":false,"message":"message"}}`, string(resBody))
 		return httpmock.NewStringResponse(http.StatusCreated, `{"url":"https://docs.esa.io/posts/5"}`), nil
 	})
@@ -656,7 +683,7 @@ func TestDriverPost_Post(t *testing.T) {
 		Message:  "message",
 	}
 
-	url, err := driver.Post(post, 0)
+	url, err := driver.Post(post, 0, true)
 	assert.Equal("https://docs.esa.io/posts/5", url)
 	assert.NoError(err)
 }
@@ -668,7 +695,7 @@ func TestDriverPost_Update(t *testing.T) {
 
 	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
 		resBody, _ := ioutil.ReadAll(req.Body)
-		assert.Equal(`{"post":{"name":"name","body_md":"body_md","tags":["tagA","tagB"],"category":"foo/bar","wip":false,"message":"message"}}`, string(resBody))
+		assert.Equal(`{"post":{"name":"name","body_md":"body_md","tags":["tagA","tagB"],"category":"foo/bar","wip":false,"message":"[skip notice] message"}}`, string(resBody))
 		return httpmock.NewStringResponse(http.StatusOK, `{"url":"https://docs.esa.io/posts/5"}`), nil
 	})
 
@@ -683,12 +710,34 @@ func TestDriverPost_Update(t *testing.T) {
 		Message:  "message",
 	}
 
-	url, err := driver.Post(post, 1)
+	url, err := driver.Post(post, 1, false)
 	assert.Equal("https://docs.esa.io/posts/5", url)
 	assert.NoError(err)
 }
 
 func TestDriverMove_Ok(t *testing.T) {
+	assert := assert.New(t)
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
+		resBody, _ := ioutil.ReadAll(req.Body)
+		assert.Equal(`{"post":{"name":"new_name","category":"new_cat","message":"[skip notice]"}}`, string(resBody))
+		return httpmock.NewStringResponse(http.StatusOK, ``), nil
+	})
+
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+
+	movePost := &model.MovePostBody{
+		Name:     "new_name",
+		Category: "new_cat",
+	}
+
+	err := driver.Move(movePost, 1, false)
+	assert.NoError(err)
+}
+
+func TestDriverMove_WithNotify(t *testing.T) {
 	assert := assert.New(t)
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -706,11 +755,53 @@ func TestDriverMove_Ok(t *testing.T) {
 		Category: "new_cat",
 	}
 
-	err := driver.Move(movePost, 1)
+	err := driver.Move(movePost, 1, true)
 	assert.NoError(err)
 }
 
 func TestDriverTag_Ok(t *testing.T) {
+	assert := assert.New(t)
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
+		resBody, _ := ioutil.ReadAll(req.Body)
+		assert.Equal(`{"post":{"tags":["foo","bar","zoo"],"message":"[skip notice]"}}`, string(resBody))
+		return httpmock.NewStringResponse(http.StatusOK, ``), nil
+	})
+
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+
+	tagPost := &model.TagPostBody{
+		Tags: []string{"foo", "bar", "zoo"},
+	}
+
+	err := driver.Tag(tagPost, 1, false)
+	assert.NoError(err)
+}
+
+func TestDriverTag_Delete(t *testing.T) {
+	assert := assert.New(t)
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
+		resBody, _ := ioutil.ReadAll(req.Body)
+		assert.Equal(`{"post":{"tags":[],"message":"[skip notice]"}}`, string(resBody))
+		return httpmock.NewStringResponse(http.StatusOK, ``), nil
+	})
+
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+
+	tagPost := &model.TagPostBody{
+		Tags: []string{},
+	}
+
+	err := driver.Tag(tagPost, 1, false)
+	assert.NoError(err)
+}
+
+func TestDriverTag_WithNotify(t *testing.T) {
 	assert := assert.New(t)
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -727,28 +818,7 @@ func TestDriverTag_Ok(t *testing.T) {
 		Tags: []string{"foo", "bar", "zoo"},
 	}
 
-	err := driver.Tag(tagPost, 1)
-	assert.NoError(err)
-}
-
-func TestDriverTag_Delete(t *testing.T) {
-	assert := assert.New(t)
-	httpmock.Activate()
-	defer httpmock.DeactivateAndReset()
-
-	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
-		resBody, _ := ioutil.ReadAll(req.Body)
-		assert.Equal(`{"post":{"tags":[]}}`, string(resBody))
-		return httpmock.NewStringResponse(http.StatusOK, ``), nil
-	})
-
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
-
-	tagPost := &model.TagPostBody{
-		Tags: []string{},
-	}
-
-	err := driver.Tag(tagPost, 1)
+	err := driver.Tag(tagPost, 1, true)
 	assert.NoError(err)
 }
 

@@ -16,7 +16,8 @@ type CpCmd struct {
 	Source    string `arg:"" help:"Source post name/category/tag."`
 	Target    string `arg:"" help:"Target post/category."`
 	Force     bool   `short:"f" default:"false" help:"Skip confirmation of files to move."`
-	WithCat   int    `short:"n" help:"Copy with category."`
+	WithCat   int    `help:"Copy with category."`
+	Notice    bool   `negatable:"" help:"Copy with notify."`
 	Page      int    `short:"p" default:"1" help:"Page number."`
 	Recursive bool   `short:"r" default:"true" negatable:"" help:"Recursively list posts."`
 }
@@ -80,7 +81,7 @@ func (cmd *CpCmd) Run(ctx *kasa.Context) error {
 	for i, oldPost := range posts {
 		newPost := newPosts[i]
 		ctx.Fmt.Printf("cp '%s' '%s'\n", oldPost.FullNameWithoutTags(), postname.Join(newPost.Category, newPost.Name))
-		url, err := ctx.Driver.Post(newPost, 0)
+		url, err := ctx.Driver.Post(newPost, 0, cmd.Notice)
 
 		if err != nil {
 			return fmt.Errorf("failed to cp '%s':%w", oldPost.FullNameWithoutTags(), err)

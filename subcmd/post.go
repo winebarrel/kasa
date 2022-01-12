@@ -17,8 +17,9 @@ type PostCmd struct {
 	PostNum  int      `arg:"" optional:"" help:"Post number to update."`
 	Tags     []string `short:"t" help:"Post tags."`
 	Category string   `short:"c" help:"Post category."`
-	Wip      bool     `default:"false" negatable:"" help:"Post as WIP."`
+	Wip      bool     `negatable:"" help:"Post as WIP."`
 	Message  string   `short:"m" help:"Post message."`
+	Notice   bool     `negatable:"" help:"Post with notify."`
 }
 
 func (cmd *PostCmd) Run(ctx *kasa.Context) error {
@@ -69,7 +70,7 @@ func (cmd *PostCmd) Run(ctx *kasa.Context) error {
 		Message:  cmd.Message,
 	}
 
-	url, err := ctx.Driver.Post(newPost, cmd.PostNum)
+	url, err := ctx.Driver.Post(newPost, cmd.PostNum, cmd.Notice)
 
 	if err != nil {
 		return err

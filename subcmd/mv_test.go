@@ -43,10 +43,11 @@ func TestMv_DirToDir(t *testing.T) {
 		}, false, nil
 	}
 
-	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int) error {
+	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int, notice bool) error {
 		assert.Contains([]int{1, 2}, postNum)
 		assert.Equal("bar/baz/", movePostBody.Category)
 		assert.Empty(movePostBody.Name)
+		assert.False(notice)
 
 		return nil
 	}
@@ -96,10 +97,11 @@ func TestMv_HasMore(t *testing.T) {
 		}, true, nil
 	}
 
-	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int) error {
+	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int, notice bool) error {
 		assert.Contains([]int{1, 2}, postNum)
 		assert.Equal("bar/baz/", movePostBody.Category)
 		assert.Empty(movePostBody.Name)
+		assert.False(notice)
 
 		return nil
 	}
@@ -149,10 +151,11 @@ func TestMv_TagToDir(t *testing.T) {
 		}, false, nil
 	}
 
-	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int) error {
+	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int, notice bool) error {
 		assert.Contains([]int{1, 2}, postNum)
 		assert.Equal("bar/baz/", movePostBody.Category)
 		assert.Empty(movePostBody.Name)
+		assert.False(notice)
 
 		return nil
 	}
@@ -197,10 +200,11 @@ func TestMv_FileToFile(t *testing.T) {
 		}, false, nil
 	}
 
-	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int) error {
+	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int, notice bool) error {
 		assert.Equal(1, postNum)
 		assert.Equal("bar/baz", movePostBody.Category)
 		assert.Equal("zoo", movePostBody.Name)
+		assert.False(notice)
 
 		return nil
 	}
@@ -291,10 +295,11 @@ func TestMv_WithCat_Minus(t *testing.T) {
 		}, false, nil
 	}
 
-	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int) error {
+	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int, notice bool) error {
 		assert.Contains([]int{1, 2}, postNum)
 		assert.Contains([]string{"bar/baz/bar", "bar/baz/hoge"}, movePostBody.Category)
 		assert.Empty(movePostBody.Name)
+		assert.False(notice)
 
 		return nil
 	}
@@ -345,10 +350,11 @@ func TestMv_WithCat_Plus(t *testing.T) {
 		}, false, nil
 	}
 
-	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int) error {
+	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int, notice bool) error {
 		assert.Contains([]int{1, 2}, postNum)
 		assert.Contains([]string{"bar/baz/foo/bar", "bar/baz/foo/bar/hoge"}, movePostBody.Category)
 		assert.Empty(movePostBody.Name)
+		assert.False(notice)
 
 		return nil
 	}

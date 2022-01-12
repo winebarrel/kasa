@@ -42,10 +42,11 @@ func TestMvs_FilesToDir(t *testing.T) {
 		}, false, nil
 	}
 
-	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int) error {
+	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int, notice bool) error {
 		assert.Contains([]int{1, 2}, postNum)
 		assert.Equal("bar/baz/", movePostBody.Category)
 		assert.Empty(movePostBody.Name)
+		assert.False(notice)
 
 		return nil
 	}
@@ -94,10 +95,11 @@ func TestMvs_HasMore(t *testing.T) {
 		}, true, nil
 	}
 
-	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int) error {
+	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int, notice bool) error {
 		assert.Contains([]int{1, 2}, postNum)
 		assert.Equal("bar/baz/", movePostBody.Category)
 		assert.Empty(movePostBody.Name)
+		assert.False(notice)
 
 		return nil
 	}
@@ -142,10 +144,11 @@ func TestMvs_FileToFile(t *testing.T) {
 		}, false, nil
 	}
 
-	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int) error {
+	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int, notice bool) error {
 		assert.Equal(1, postNum)
 		assert.Equal("bar/baz", movePostBody.Category)
 		assert.Equal("qux", movePostBody.Name)
+		assert.False(notice)
 
 		return nil
 	}

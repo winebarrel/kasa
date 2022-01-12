@@ -25,7 +25,7 @@ type Driver interface {
 	Search(string, int) ([]*model.Post, bool, error)
 	ListOrTagSearch(string, int, bool) ([]*model.Post, bool, error)
 	Post(*model.NewPostBody, int) (string, error)
-	Move(*model.MovePostBody, int) error
+	Move(*model.MovePostBody, int, bool) error
 	MoveCategory(string, string) error
 	Delete(int) error
 	Tag(*model.TagPostBody, int) error
@@ -233,7 +233,7 @@ func (dri *DriverImpl) Post(newPostBody *model.NewPostBody, postNum int) (string
 	return res.URL, nil
 }
 
-func (dri *DriverImpl) Move(movePostBody *model.MovePostBody, postNum int) error {
+func (dri *DriverImpl) Move(movePostBody *model.MovePostBody, postNum int, notice bool) error {
 	movePost := model.MovePost{
 		Post: movePostBody,
 	}

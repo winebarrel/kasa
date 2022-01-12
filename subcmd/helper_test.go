@@ -16,7 +16,7 @@ type MockDriverImpl struct {
 	MockSearch          func(string, int) ([]*model.Post, bool, error)
 	MockListOrTagSearch func(string, int, bool) ([]*model.Post, bool, error)
 	MockPost            func(*model.NewPostBody, int) (string, error)
-	MockMove            func(*model.MovePostBody, int) error
+	MockMove            func(*model.MovePostBody, int, bool) error
 	MockMoveCategory    func(string, string) error
 	MockDelete          func(int) error
 	MockTag             func(*model.TagPostBody, int) error
@@ -46,8 +46,8 @@ func (dri *MockDriverImpl) Post(newPostBody *model.NewPostBody, postNum int) (st
 	return dri.MockPost(newPostBody, postNum)
 }
 
-func (dri *MockDriverImpl) Move(movePostBody *model.MovePostBody, postNum int) error {
-	return dri.MockMove(movePostBody, postNum)
+func (dri *MockDriverImpl) Move(movePostBody *model.MovePostBody, postNum int, notice bool) error {
+	return dri.MockMove(movePostBody, postNum, notice)
 }
 
 func (dri *MockDriverImpl) MoveCategory(from string, to string) error {
@@ -91,7 +91,7 @@ func NewMockDriver(t *testing.T) *MockDriverImpl {
 			assert.Fail("not implemented")
 			return "", nil
 		},
-		MockMove: func(*model.MovePostBody, int) error {
+		MockMove: func(*model.MovePostBody, int, bool) error {
 			assert.Fail("not implemented")
 			return nil
 		},

@@ -706,7 +706,7 @@ func TestDriverMove_Ok(t *testing.T) {
 		Category: "new_cat",
 	}
 
-	err := driver.Move(movePost, 1)
+	err := driver.Move(movePost, 1, false)
 	assert.NoError(err)
 }
 

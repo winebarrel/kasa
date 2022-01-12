@@ -52,10 +52,7 @@ func (cmd *RmCmd) Run(ctx *kasa.Context) error {
 	}
 
 	for _, v := range posts {
-		if cmd.Force {
-			ctx.Fmt.Printf("rm '%s'\n", v.FullNameWithoutTags())
-		}
-
+		ctx.Fmt.Printf("rm '%s'\n", v.FullNameWithoutTags())
 		err = ctx.Driver.Delete(v.Number)
 
 		if err != nil {

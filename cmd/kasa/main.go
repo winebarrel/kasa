@@ -29,6 +29,7 @@ var cli struct {
 	Rmi                subcmd.RmiCmd                `cmd:"" help:"Delete post by number."`
 	Search             subcmd.SearchCmd             `cmd:"" help:"Search posts."`
 	Tag                subcmd.TagCmd                `cmd:"" help:"Tagging posts."`
+	Open               subcmd.OpenCmd               `cmd:"" help:"Open a post in the browser."`
 	InstallCompletions kongplete.InstallCompletions `cmd:"" help:"Install shell completions"`
 }
 

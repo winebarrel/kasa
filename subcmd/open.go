@@ -5,12 +5,11 @@ import (
 	"flag"
 	"fmt"
 	"os/exec"
-	"regexp"
 	"runtime"
-	"strconv"
 
 	"github.com/winebarrel/kasa"
 	"github.com/winebarrel/kasa/esa/model"
+	"github.com/winebarrel/kasa/utils"
 )
 
 type OpenCmd struct {
@@ -31,8 +30,7 @@ func openInBrowser(u string) error {
 }
 
 func (cmd *OpenCmd) Run(ctx *kasa.Context) error {
-	num, err := cmd.getPostNum(ctx.Team)
-
+	num, err := utils.GetPostNum(ctx.Team, cmd.Path)
 	if err != nil {
 		return err
 	}
@@ -59,15 +57,4 @@ func (cmd *OpenCmd) Run(ctx *kasa.Context) error {
 		}
 	}
 	return nil
-}
-
-func (cmd *OpenCmd) getPostNum(team string) (int, error) {
-	r := regexp.MustCompile(`(?:https://` + team + `\.esa\.io/posts/|//)(\d+)$`)
-	m := r.FindStringSubmatch(cmd.Path)
-
-	if len(m) != 2 {
-		return 0, nil
-	}
-
-	return strconv.Atoi(m[1])
 }

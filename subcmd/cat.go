@@ -2,11 +2,10 @@ package subcmd
 
 import (
 	"errors"
-	"regexp"
-	"strconv"
 
 	"github.com/winebarrel/kasa"
 	"github.com/winebarrel/kasa/esa/model"
+	"github.com/winebarrel/kasa/utils"
 )
 
 type CatCmd struct {
@@ -14,8 +13,7 @@ type CatCmd struct {
 }
 
 func (cmd *CatCmd) Run(ctx *kasa.Context) error {
-	num, err := cmd.getPostNum(ctx.Team)
-
+	num, err := utils.GetPostNum(ctx.Team, cmd.Path)
 	if err != nil {
 		return err
 	}
@@ -39,15 +37,4 @@ func (cmd *CatCmd) Run(ctx *kasa.Context) error {
 	ctx.Fmt.Println(post.BodyMd)
 
 	return nil
-}
-
-func (cmd *CatCmd) getPostNum(team string) (int, error) {
-	r := regexp.MustCompile(`(?:https://` + team + `\.esa\.io/posts/|//)(\d+)$`)
-	m := r.FindStringSubmatch(cmd.Path)
-
-	if len(m) != 2 {
-		return 0, nil
-	}
-
-	return strconv.Atoi(m[1])
 }

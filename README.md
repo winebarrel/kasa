@@ -50,6 +50,9 @@ Commands:
   tag --team=STRING --token=STRING <path>
     Tagging posts.
 
+  open --team=STRING --token=STRING <path>
+    Open a post in the browser.
+
   install-completions --team=STRING --token=STRING
     Install shell completions
 

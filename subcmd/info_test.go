@@ -25,8 +25,21 @@ func TestInfo(t *testing.T) {
 		return &model.Post{
 			Category: "foo/bar",
 			Name:     "name",
+			FullName: "full_name",
 			BodyMd:   "body",
 			BodyHTML: "html",
+			CreatedBy: &model.PostAuthor{
+				Myself:     false,
+				Name:       "creator",
+				ScreenName: "cre",
+				Icon:       "iconA",
+			},
+			UpdatedBy: &model.PostAuthor{
+				Myself:     true,
+				Name:       "updater",
+				ScreenName: "upd",
+				Icon:       "iconB",
+			},
 		}, nil
 	}
 
@@ -40,7 +53,7 @@ func TestInfo(t *testing.T) {
 	assert.Equal(`{
   "number": 0,
   "name": "name",
-  "full_name": "",
+  "full_name": "full_name",
   "wip": false,
   "created_at": "0001-01-01T00:00:00Z",
   "message": "",
@@ -51,15 +64,15 @@ func TestInfo(t *testing.T) {
   "revision_number": 0,
   "created_by": {
     "myself": false,
-    "name": "",
-    "screen_name": "",
-    "icon": ""
+    "name": "creator",
+    "screen_name": "cre",
+    "icon": "iconA"
   },
   "updated_by": {
-    "myself": false,
-    "name": "",
-    "screen_name": "",
-    "icon": ""
+    "myself": true,
+    "name": "updater",
+    "screen_name": "upd",
+    "icon": "iconB"
   }
 }
 `, printer.String())

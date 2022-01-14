@@ -23,7 +23,7 @@ Commands:
   cp --team=STRING --token=STRING <source> <target>
     Copy posts.
 
-  info --team=STRING --token=STRING <post-num>
+  info --team=STRING --token=STRING <path>
     Show post info.
 
   ls --team=STRING --token=STRING [<path>]

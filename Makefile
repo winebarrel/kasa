@@ -19,3 +19,7 @@ test:
 .PHONY: clean
 clean:
 	rm -rf kasa kasa.exe
+
+.PHONY: readme
+readme: build
+	go run tool/gen_readme.go

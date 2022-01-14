@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"testing"
+	"time"
 
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
@@ -722,15 +723,17 @@ func TestDriverMove_Ok(t *testing.T) {
 
 	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
 		resBody, _ := ioutil.ReadAll(req.Body)
-		assert.Equal(`{"post":{"name":"new_name","category":"new_cat","message":"[skip notice]"}}`, string(resBody))
+		assert.Equal(`{"post":{"name":"new_name","category":"new_cat","message":"[skip notice]","updated_at":"2022-01-15T00:00:00Z"}}`, string(resBody))
 		return httpmock.NewStringResponse(http.StatusOK, ``), nil
 	})
 
 	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	updatedAt, _ := time.Parse("2006/01/02", "2022/01/15")
 
 	movePost := &model.MovePostBody{
-		Name:     "new_name",
-		Category: "new_cat",
+		Name:      "new_name",
+		Category:  "new_cat",
+		UpdatedAt: updatedAt,
 	}
 
 	err := driver.Move(movePost, 1, false)
@@ -744,15 +747,17 @@ func TestDriverMove_WithNotify(t *testing.T) {
 
 	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
 		resBody, _ := ioutil.ReadAll(req.Body)
-		assert.Equal(`{"post":{"name":"new_name","category":"new_cat"}}`, string(resBody))
+		assert.Equal(`{"post":{"name":"new_name","category":"new_cat","updated_at":"2023-02-16T00:00:00Z"}}`, string(resBody))
 		return httpmock.NewStringResponse(http.StatusOK, ``), nil
 	})
 
 	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	updatedAt, _ := time.Parse("2006/01/02", "2023/02/16")
 
 	movePost := &model.MovePostBody{
-		Name:     "new_name",
-		Category: "new_cat",
+		Name:      "new_name",
+		Category:  "new_cat",
+		UpdatedAt: updatedAt,
 	}
 
 	err := driver.Move(movePost, 1, true)
@@ -766,14 +771,16 @@ func TestDriverTag_Ok(t *testing.T) {
 
 	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
 		resBody, _ := ioutil.ReadAll(req.Body)
-		assert.Equal(`{"post":{"tags":["foo","bar","zoo"],"message":"[skip notice]"}}`, string(resBody))
+		assert.Equal(`{"post":{"tags":["foo","bar","zoo"],"message":"[skip notice]","updated_at":"2022-01-15T00:00:00Z"}}`, string(resBody))
 		return httpmock.NewStringResponse(http.StatusOK, ``), nil
 	})
 
 	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	updatedAt, _ := time.Parse("2006/01/02", "2022/01/15")
 
 	tagPost := &model.TagPostBody{
-		Tags: []string{"foo", "bar", "zoo"},
+		Tags:      []string{"foo", "bar", "zoo"},
+		UpdatedAt: updatedAt,
 	}
 
 	err := driver.Tag(tagPost, 1, false)
@@ -787,14 +794,16 @@ func TestDriverTag_Delete(t *testing.T) {
 
 	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
 		resBody, _ := ioutil.ReadAll(req.Body)
-		assert.Equal(`{"post":{"tags":[],"message":"[skip notice]"}}`, string(resBody))
+		assert.Equal(`{"post":{"tags":[],"message":"[skip notice]","updated_at":"2023-02-16T00:00:00Z"}}`, string(resBody))
 		return httpmock.NewStringResponse(http.StatusOK, ``), nil
 	})
 
 	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	updatedAt, _ := time.Parse("2006/01/02", "2023/02/16")
 
 	tagPost := &model.TagPostBody{
-		Tags: []string{},
+		Tags:      []string{},
+		UpdatedAt: updatedAt,
 	}
 
 	err := driver.Tag(tagPost, 1, false)
@@ -808,14 +817,16 @@ func TestDriverTag_WithNotify(t *testing.T) {
 
 	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
 		resBody, _ := ioutil.ReadAll(req.Body)
-		assert.Equal(`{"post":{"tags":["foo","bar","zoo"]}}`, string(resBody))
+		assert.Equal(`{"post":{"tags":["foo","bar","zoo"],"updated_at":"2024-03-17T00:00:00Z"}}`, string(resBody))
 		return httpmock.NewStringResponse(http.StatusOK, ``), nil
 	})
 
 	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	updatedAt, _ := time.Parse("2006/01/02", "2024/03/17")
 
 	tagPost := &model.TagPostBody{
-		Tags: []string{"foo", "bar", "zoo"},
+		Tags:      []string{"foo", "bar", "zoo"},
+		UpdatedAt: updatedAt,
 	}
 
 	err := driver.Tag(tagPost, 1, true)

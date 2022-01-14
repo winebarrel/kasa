@@ -18,15 +18,15 @@ var cli struct {
 	Team               string                       `required:"" env:"ESA_TEAM" help:"esa team"`
 	Token              string                       `required:"" env:"ESA_TOKEN" help:"esa access token"`
 	Debug              bool                         `help:"Debug flag."`
-	Cat                subcmd.CatCmd                `cmd:"" help:"Print post."`
+	Cat                subcmd.CatCmd                `cmd:"" help:"Print a post."`
 	Cp                 subcmd.CpCmd                 `cmd:"" help:"Copy posts."`
-	Info               subcmd.InfoCmd               `cmd:"" help:"Show post info."`
+	Info               subcmd.InfoCmd               `cmd:"" help:"Show a post info."`
 	Ls                 subcmd.LsCmd                 `cmd:"" help:"List posts."`
 	Mv                 subcmd.MvCmd                 `cmd:"" help:"Move posts."`
-	Mvcat              subcmd.MvcatCmd              `cmd:"" help:"Move category."`
-	Post               subcmd.PostCmd               `cmd:"" help:"New/Update post."`
+	Mvcat              subcmd.MvcatCmd              `cmd:"" help:"Rename a category."`
+	Post               subcmd.PostCmd               `cmd:"" help:"Create/Update a post."`
 	Rm                 subcmd.RmCmd                 `cmd:"" help:"Delete posts."`
-	Rmi                subcmd.RmiCmd                `cmd:"" help:"Delete post by number."`
+	Rmi                subcmd.RmiCmd                `cmd:"" help:"Delete a post by number."`
 	Search             subcmd.SearchCmd             `cmd:"" help:"Search posts."`
 	Tag                subcmd.TagCmd                `cmd:"" help:"Tagging posts."`
 	Open               subcmd.OpenCmd               `cmd:"" help:"Open a post in the browser."`

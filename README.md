@@ -21,13 +21,13 @@ Flags:
 
 Commands:
   cat --team=STRING --token=STRING <path>
-    Print post.
+    Print a post.
 
   cp --team=STRING --token=STRING <source> <target>
     Copy posts.
 
   info --team=STRING --token=STRING <post-num>
-    Show post info.
+    Show a post info.
 
   ls --team=STRING --token=STRING [<path>]
     List posts.
@@ -36,16 +36,16 @@ Commands:
     Move posts.
 
   mvcat --team=STRING --token=STRING <from> <to>
-    Move category.
+    Rename a category.
 
   post --team=STRING --token=STRING [<post-num>]
-    New/Update post.
+    Create/Update a post.
 
   rm --team=STRING --token=STRING <path>
     Delete posts.
 
   rmi --team=STRING --token=STRING <post-num>
-    Delete post by number.
+    Delete a post by number.
 
   search --team=STRING --token=STRING <query>
     Search posts.

@@ -68,7 +68,8 @@ func (cmd *TagCmd) Run(ctx *kasa.Context) error {
 		tags = utils.Uniq(tags)
 
 		newPost := &model.TagPostBody{
-			Tags: tags,
+			Tags:      tags,
+			UpdatedAt: v.UpdatedAt,
 		}
 
 		newPosts[i] = newPost

@@ -2,6 +2,7 @@ package subcmd_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/winebarrel/kasa"
@@ -28,38 +29,45 @@ func TestTags(t *testing.T) {
 	driver.MockSearch = func(path string, postNum int) ([]*model.Post, bool, error) {
 		assert.Equal("in:foo/bar/", path)
 		assert.Equal(1, postNum)
+		updatedAt, _ := time.Parse("2006/01/02", "2022/01/15")
 
 		return []*model.Post{
 			{
-				Number:   1,
-				Name:     "zoo",
-				BodyMd:   "zooBody",
-				Wip:      false,
-				Tags:     []string{"tagA", "tagB"},
-				Category: "foo/bar",
-				Message:  "zooMsg",
+				Number:    1,
+				Name:      "zoo",
+				BodyMd:    "zooBody",
+				Wip:       false,
+				Tags:      []string{"tagA", "tagB"},
+				Category:  "foo/bar",
+				Message:   "zooMsg",
+				UpdatedAt: updatedAt,
 			},
 			{
-				Number:   2,
-				Name:     "baz",
-				BodyMd:   "bazBody",
-				Wip:      true,
-				Tags:     []string{"tagA", "tagB"},
-				Category: "foo/bar",
-				Message:  "barMsg",
+				Number:    2,
+				Name:      "baz",
+				BodyMd:    "bazBody",
+				Wip:       true,
+				Tags:      []string{"tagA", "tagB"},
+				Category:  "foo/bar",
+				Message:   "barMsg",
+				UpdatedAt: updatedAt,
 			},
 		}, false, nil
 	}
 
 	driver.MockTag = func(tagPostBody *model.TagPostBody, postNum int, notice bool) error {
+		updatedAt, _ := time.Parse("2006/01/02", "2022/01/15")
+
 		switch postNum {
 		case 1:
 			assert.Equal(&model.TagPostBody{
-				Tags: []string{"bar", "baz", "tagA", "tagB"},
+				Tags:      []string{"bar", "baz", "tagA", "tagB"},
+				UpdatedAt: updatedAt,
 			}, tagPostBody)
 		case 2:
 			assert.Equal(&model.TagPostBody{
-				Tags: []string{"bar", "baz", "tagA", "tagB"},
+				Tags:      []string{"bar", "baz", "tagA", "tagB"},
+				UpdatedAt: updatedAt,
 			}, tagPostBody)
 		default:
 			assert.Failf("invalid post", "post num=%d", postNum)

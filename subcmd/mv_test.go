@@ -3,6 +3,7 @@ package subcmd_test
 import (
 	"errors"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/winebarrel/kasa"
@@ -28,17 +29,20 @@ func TestMv_DirToDir(t *testing.T) {
 		assert.Equal("foo/bar/", path)
 		assert.Equal(1, postNum)
 		assert.True(recursive)
+		updatedAt, _ := time.Parse("2006/01/02", "2022/01/15")
 
 		return []*model.Post{
 			{
-				Number:   1,
-				Name:     "zoo",
-				Category: "foo/bar",
+				Number:    1,
+				Name:      "zoo",
+				Category:  "foo/bar",
+				UpdatedAt: updatedAt,
 			},
 			{
-				Number:   2,
-				Name:     "baz",
-				Category: "foo/bar",
+				Number:    2,
+				Name:      "baz",
+				Category:  "foo/bar",
+				UpdatedAt: updatedAt,
 			},
 		}, false, nil
 	}
@@ -46,6 +50,7 @@ func TestMv_DirToDir(t *testing.T) {
 	driver.MockMove = func(movePostBody *model.MovePostBody, postNum int, notice bool) error {
 		assert.Contains([]int{1, 2}, postNum)
 		assert.Equal("bar/baz/", movePostBody.Category)
+		assert.Equal("2022/01/15", movePostBody.UpdatedAt.Format("2006/01/02"))
 		assert.Empty(movePostBody.Name)
 		assert.False(notice)
 

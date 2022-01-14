@@ -52,8 +52,9 @@ func (cmd *MvCmd) Run(ctx *kasa.Context) error {
 
 	for i, v := range posts {
 		movePost := &model.MovePostBody{
-			Name:     targetName,
-			Category: postname.AppendCategoryN(targetCat, v.Category, cmd.WithCat),
+			Name:      targetName,
+			Category:  postname.AppendCategoryN(targetCat, v.Category, cmd.WithCat),
+			UpdatedAt: v.UpdatedAt,
 		}
 
 		movePosts[i] = movePost

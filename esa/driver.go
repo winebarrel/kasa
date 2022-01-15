@@ -30,6 +30,7 @@ type Driver interface {
 	MoveCategory(string, string) error
 	Delete(int) error
 	Tag(*model.TagPostBody, int, bool) error
+	Comment(*model.NewCommentBody, int) (string, error)
 }
 
 type DriverImpl struct {
@@ -324,6 +325,42 @@ func (dri *DriverImpl) Delete(postNum int) error {
 	_, err = dri.esaCli.send(req)
 
 	return err
+}
+
+func (dri *DriverImpl) Comment(newCommentBody *model.NewCommentBody, postNum int) (string, error) {
+	newComment := model.NewComment{
+		Comment: newCommentBody,
+	}
+
+	commentBody, err := json.Marshal(newComment)
+
+	if err != nil {
+		return "", err
+	}
+
+	reader := bytes.NewReader(commentBody)
+	path := fmt.Sprintf("posts/%d/comments", postNum)
+	req, err := dri.esaCli.newRequest(http.MethodPost, path, reader)
+
+	if err != nil {
+		return "", err
+	}
+
+	req.Header.Add("Content-Type", "application/json")
+	body, err := dri.esaCli.send(req)
+
+	if err != nil {
+		return "", err
+	}
+
+	res := model.NewCommentResponse{}
+	err = json.Unmarshal(body, &res)
+
+	if err != nil {
+		return "", err
+	}
+
+	return res.URL, nil
 }
 
 func updateMessageUnlessNotify(msg string, notice bool) string {

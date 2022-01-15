@@ -14,6 +14,7 @@ type CatCmd struct {
 
 func (cmd *CatCmd) Run(ctx *kasa.Context) error {
 	num, err := utils.GetPostNum(ctx.Team, cmd.Path)
+
 	if err != nil {
 		return err
 	}

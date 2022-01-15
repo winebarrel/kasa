@@ -18,14 +18,16 @@ type Client struct {
 	token   string
 	httpCli *http.Client
 	debug   bool
+	version string
 }
 
-func newClient(team string, token string, debug bool) *Client {
+func newClient(team string, token string, debug bool, version string) *Client {
 	return &Client{
 		team:    team,
 		token:   token,
 		httpCli: &http.Client{},
 		debug:   debug,
+		version: version,
 	}
 }
 
@@ -38,6 +40,7 @@ func (cli *Client) newRequest(method string, path string, body io.Reader) (*http
 	}
 
 	req.Header.Add("Authorization", "Bearer "+cli.token)
+	req.Header.Add("User-Agent", "kasa v"+cli.version)
 
 	return req, nil
 }

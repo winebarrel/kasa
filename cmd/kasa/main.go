@@ -47,7 +47,7 @@ func main() {
 
 	err = ctx.Run(&kasa.Context{
 		Team:   cli.Team,
-		Driver: esa.NewDriver(cli.Team, cli.Token, cli.Debug),
+		Driver: esa.NewDriver(cli.Team, cli.Token, cli.Debug, version),
 		Fmt:    &kasa.PrinterImpl{},
 	})
 

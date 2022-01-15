@@ -61,7 +61,7 @@ func TestDriverGetFromPageNum_Ok(t *testing.T) {
 	httpmock.RegisterResponder(http.MethodGet, "https://api.esa.io/v1/teams/example/posts/1",
 		httpmock.NewStringResponder(http.StatusOK, resBody))
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 	post, err := driver.GetFromPageNum(1)
 	assert.NoError(err)
 
@@ -118,7 +118,7 @@ func TestDriverGet_Ok(t *testing.T) {
 	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
 		httpmock.NewStringResponder(http.StatusOK, `{"posts":[`+resBodyPost+`]}`))
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 	post, err := driver.Get("日報/2015/05/09/hi!")
 	assert.NoError(err)
 
@@ -177,7 +177,7 @@ func TestDriverList_Ok(t *testing.T) {
 	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
 		httpmock.NewStringResponder(http.StatusOK, resBody))
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 	posts, hasMore, err := driver.List("日報/2015/05/09/hi!", 2, true)
 	assert.NoError(err)
 
@@ -217,7 +217,7 @@ func TestDriverList_MatchNameOnly(t *testing.T) {
 	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
 		httpmock.NewStringResponder(http.StatusOK, resBody))
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 	posts, hasMore, err := driver.List("日報/2015/05/09/hi!", 2, true)
 	assert.NoError(err)
 
@@ -238,7 +238,7 @@ func TestDriverList_NotFound(t *testing.T) {
 	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
 		httpmock.NewStringResponder(http.StatusOK, resBody))
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 	_, _, err := driver.List("日報/2015/05/09/hi!", 2, true)
 	assert.Equal(errors.New("post not found"), err)
 }
@@ -254,7 +254,7 @@ func TestDriverList_NotFound_HasMore(t *testing.T) {
 	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
 		httpmock.NewStringResponder(http.StatusOK, resBody))
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 	_, _, err := driver.List("日報/2015/05/09/hi!", 2, true)
 	assert.Equal(errors.New("post not found on page 2"), err)
 }
@@ -309,7 +309,7 @@ func TestDriverList_WithCategory(t *testing.T) {
 	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
 		httpmock.NewStringResponder(http.StatusOK, resBody))
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 	posts, hasMore, err := driver.List("日報/2015/05/09/", 2, true)
 	assert.NoError(err)
 
@@ -369,7 +369,7 @@ func TestDriverList_HasMore(t *testing.T) {
 	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
 		httpmock.NewStringResponder(http.StatusOK, resBody))
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 	posts, hasMore, err := driver.List("日報/2015/05/09/hi!", 2, true)
 	assert.NoError(err)
 
@@ -429,7 +429,7 @@ func TestDriverList_NoRecursive(t *testing.T) {
 	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
 		httpmock.NewStringResponder(http.StatusOK, resBody))
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 	posts, hasMore, err := driver.List("日報/2015/05/09/hi!", 3, false)
 	assert.NoError(err)
 
@@ -489,7 +489,7 @@ func TestDriverSearch_Ok(t *testing.T) {
 	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
 		httpmock.NewStringResponder(http.StatusOK, resBody))
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 	posts, hasMore, err := driver.Search("日報", 1)
 	assert.NoError(err)
 
@@ -510,7 +510,7 @@ func TestDriverSearch_NotFound(t *testing.T) {
 	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
 		httpmock.NewStringResponder(http.StatusOK, resBody))
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 	_, _, err := driver.Search("日報", 1)
 	assert.Equal(errors.New("post not found"), err)
 }
@@ -565,7 +565,7 @@ func TestDriverListOrTagSearch_List(t *testing.T) {
 	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
 		httpmock.NewStringResponder(http.StatusOK, resBody))
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 	posts, hasMore, err := driver.ListOrTagSearch("日報/2015/05/09/hi!", 1, false)
 	assert.NoError(err)
 
@@ -625,7 +625,7 @@ func TestDriverListOrTagSearch_Search(t *testing.T) {
 	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
 		httpmock.NewStringResponder(http.StatusOK, resBody))
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 	posts, hasMore, err := driver.ListOrTagSearch("#tag", 1, false)
 	assert.NoError(err)
 
@@ -646,7 +646,7 @@ func TestDriverPost_Post(t *testing.T) {
 		return httpmock.NewStringResponse(http.StatusCreated, `{"url":"https://docs.esa.io/posts/5"}`), nil
 	})
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 
 	post := &model.NewPostBody{
 		Name:     "name",
@@ -673,7 +673,7 @@ func TestDriverPost_WithNotify(t *testing.T) {
 		return httpmock.NewStringResponse(http.StatusCreated, `{"url":"https://docs.esa.io/posts/5"}`), nil
 	})
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 
 	post := &model.NewPostBody{
 		Name:     "name",
@@ -700,7 +700,7 @@ func TestDriverPost_Update(t *testing.T) {
 		return httpmock.NewStringResponse(http.StatusOK, `{"url":"https://docs.esa.io/posts/5"}`), nil
 	})
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 
 	post := &model.NewPostBody{
 		Name:     "name",
@@ -727,7 +727,7 @@ func TestDriverMove_Ok(t *testing.T) {
 		return httpmock.NewStringResponse(http.StatusOK, ``), nil
 	})
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 	updatedAt, _ := time.Parse("2006/01/02", "2022/01/15")
 
 	movePost := &model.MovePostBody{
@@ -751,7 +751,7 @@ func TestDriverMove_WithNotify(t *testing.T) {
 		return httpmock.NewStringResponse(http.StatusOK, ``), nil
 	})
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 	updatedAt, _ := time.Parse("2006/01/02", "2023/02/16")
 
 	movePost := &model.MovePostBody{
@@ -775,7 +775,7 @@ func TestDriverTag_Ok(t *testing.T) {
 		return httpmock.NewStringResponse(http.StatusOK, ``), nil
 	})
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 	updatedAt, _ := time.Parse("2006/01/02", "2022/01/15")
 
 	tagPost := &model.TagPostBody{
@@ -798,7 +798,7 @@ func TestDriverTag_Delete(t *testing.T) {
 		return httpmock.NewStringResponse(http.StatusOK, ``), nil
 	})
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 	updatedAt, _ := time.Parse("2006/01/02", "2023/02/16")
 
 	tagPost := &model.TagPostBody{
@@ -821,7 +821,7 @@ func TestDriverTag_WithNotify(t *testing.T) {
 		return httpmock.NewStringResponse(http.StatusOK, ``), nil
 	})
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 	updatedAt, _ := time.Parse("2006/01/02", "2024/03/17")
 
 	tagPost := &model.TagPostBody{
@@ -844,7 +844,7 @@ func TestDriverMoveCategory_Ok(t *testing.T) {
 		return httpmock.NewStringResponse(http.StatusOK, ``), nil
 	})
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 	err := driver.MoveCategory("from_cat", "to_cat")
 	assert.NoError(err)
 }
@@ -857,7 +857,7 @@ func TestDriverDriverDelete_Ok(t *testing.T) {
 	httpmock.RegisterResponder(http.MethodDelete, "https://api.esa.io/v1/teams/example/posts/1",
 		httpmock.NewStringResponder(http.StatusNoContent, ""))
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 	err := driver.Delete(1)
 	assert.NoError(err)
 }
@@ -873,7 +873,7 @@ func TestDriverComment_Ok(t *testing.T) {
 		return httpmock.NewStringResponse(http.StatusCreated, `{"url":"https://docs.esa.io/posts/5"}`), nil
 	})
 
-	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
 
 	commend := &model.NewCommentBody{
 		BodyMd: "body_md",

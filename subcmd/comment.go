@@ -13,7 +13,7 @@ import (
 
 type CommentCmd struct {
 	Path string `arg:"" help:"Post name or Post URL('https://<TEAM>.esa.io/posts/<NUM>' or '//<NUM>')."`
-	Body string `short:"b" required:"" help:"Comment body file to commnet." predictor:"file"`
+	Body string `short:"b" required:"" help:"Comment body file." predictor:"file"`
 }
 
 func (cmd *CommentCmd) Run(ctx *kasa.Context) error {

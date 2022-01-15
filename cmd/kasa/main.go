@@ -20,7 +20,7 @@ var cli struct {
 	Debug              bool                         `help:"Debug flag."`
 	Append             subcmd.AppendCmd             `cmd:"" help:"Append text to a post."`
 	Cat                subcmd.CatCmd                `cmd:"" help:"Print a post."`
-	Comment            subcmd.CommentCmd            `cmd:"" help:"Comment to a post."`
+	Comment            subcmd.CommentCmd            `cmd:"" help:"Comment on a post."`
 	Cp                 subcmd.CpCmd                 `cmd:"" help:"Copy posts."`
 	Info               subcmd.InfoCmd               `cmd:"" help:"Show a post info."`
 	Ls                 subcmd.LsCmd                 `cmd:"" help:"List posts."`

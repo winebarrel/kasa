@@ -57,9 +57,15 @@ func TestClient_SendOK(t *testing.T) {
 
 	params := map[string]string{"q": "phrase"}
 	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
-		httpmock.NewStringResponder(http.StatusOK, resBody))
+		func(req *http.Request) (*http.Response, error) {
+			assert.Equal(http.Header(http.Header{"Authorization": []string{
+				"Bearer 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"},
+				"User-Agent": []string{"kasa v0.1.0"},
+			}), req.Header)
+			return httpmock.NewStringResponse(http.StatusOK, resBody), nil
+		})
 
-	client := newClient("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+	client := newClient("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "0.1.0")
 	req, err := client.newRequest(http.MethodGet, "posts", nil)
 	assert.NoError(err)
 
@@ -79,9 +85,14 @@ func TestClientSend_NotFound(t *testing.T) {
 
 	params := map[string]string{"q": "phrase"}
 	httpmock.RegisterResponderWithQuery(http.MethodGet, "https://api.esa.io/v1/teams/example/posts", params,
-		httpmock.NewStringResponder(http.StatusNotFound, `{"error":"not_found","message":"Not found"}`))
-
-	client := newClient("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+		func(req *http.Request) (*http.Response, error) {
+			assert.Equal(http.Header(http.Header{"Authorization": []string{
+				"Bearer 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"},
+				"User-Agent": []string{"kasa v0.1.0"},
+			}), req.Header)
+			return httpmock.NewStringResponse(http.StatusNotFound, `{"error":"not_found","message":"Not found"}`), nil
+		})
+	client := newClient("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "0.1.0")
 	req, err := client.newRequest(http.MethodGet, "posts", nil)
 	assert.NoError(err)
 

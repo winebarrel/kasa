@@ -37,9 +37,9 @@ type DriverImpl struct {
 	esaCli *Client
 }
 
-func NewDriver(team string, token string, debug bool) *DriverImpl {
+func NewDriver(team string, token string, debug bool, version string) *DriverImpl {
 	return &DriverImpl{
-		esaCli: newClient(team, token, debug),
+		esaCli: newClient(team, token, debug, version),
 	}
 }
 

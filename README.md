@@ -20,6 +20,9 @@ Flags:
       --debug           Debug flag.
 
 Commands:
+  append --team=STRING --token=STRING --body=STRING <path>
+    Append text to a post.
+
   cat --team=STRING --token=STRING <path>
     Print a post.
 
@@ -38,6 +41,9 @@ Commands:
   mvcat --team=STRING --token=STRING <from> <to>
     Rename a category.
 
+  open --team=STRING --token=STRING <path>
+    Open a post in the browser.
+
   post --team=STRING --token=STRING [<post-num>]
     Create/Update a post.
 
@@ -52,9 +58,6 @@ Commands:
 
   tag --team=STRING --token=STRING <path>
     Tagging posts.
-
-  open --team=STRING --token=STRING <path>
-    Open a post in the browser.
 
   install-completions --team=STRING --token=STRING
     Install shell completions

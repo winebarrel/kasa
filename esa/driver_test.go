@@ -861,3 +861,25 @@ func TestDriverDriverDelete_Ok(t *testing.T) {
 	err := driver.Delete(1)
 	assert.NoError(err)
 }
+
+func TestDriverComment_Ok(t *testing.T) {
+	assert := assert.New(t)
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	httpmock.RegisterResponder(http.MethodPost, "https://api.esa.io/v1/teams/example/posts/1/comments", func(req *http.Request) (*http.Response, error) {
+		resBody, _ := ioutil.ReadAll(req.Body)
+		assert.Equal(`{"comment":{"body_md":"body_md"}}`, string(resBody))
+		return httpmock.NewStringResponse(http.StatusCreated, `{"url":"https://docs.esa.io/posts/5"}`), nil
+	})
+
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false)
+
+	commend := &model.NewCommentBody{
+		BodyMd: "body_md",
+	}
+
+	url, err := driver.Comment(commend, 1)
+	assert.Equal("https://docs.esa.io/posts/5", url)
+	assert.NoError(err)
+}

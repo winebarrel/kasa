@@ -20,6 +20,7 @@ type MockDriverImpl struct {
 	MockMoveCategory    func(string, string) error
 	MockDelete          func(int) error
 	MockTag             func(*model.TagPostBody, int, bool) error
+	MockComment         func(*model.NewCommentBody, int) (string, error)
 }
 
 func (dri *MockDriverImpl) Get(path string) (*model.Post, error) {
@@ -60,6 +61,10 @@ func (dri *MockDriverImpl) Delete(postNum int) error {
 
 func (dri *MockDriverImpl) Tag(tagPostBody *model.TagPostBody, postNum int, notice bool) error {
 	return dri.MockTag(tagPostBody, postNum, notice)
+}
+
+func (dri *MockDriverImpl) Comment(newCommentBody *model.NewCommentBody, postNum int) (string, error) {
+	return dri.MockComment(newCommentBody, postNum)
 }
 
 func NewMockDriver(t *testing.T) *MockDriverImpl {
@@ -103,9 +108,13 @@ func NewMockDriver(t *testing.T) *MockDriverImpl {
 			assert.Fail("not implemented")
 			return nil
 		},
-		MockTag: func(tpb *model.TagPostBody, i int, b bool) error {
+		MockTag: func(*model.TagPostBody, int, bool) error {
 			assert.Fail("not implemented")
 			return nil
+		},
+		MockComment: func(*model.NewCommentBody, int) (string, error) {
+			assert.Fail("not implemented")
+			return "", nil
 		},
 	}
 }

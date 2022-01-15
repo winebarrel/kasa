@@ -26,6 +26,9 @@ Commands:
   cat --team=STRING --token=STRING <path>
     Print a post.
 
+  comment --team=STRING --token=STRING --body=STRING <path>
+    Comment to a post.
+
   cp --team=STRING --token=STRING <source> <target>
     Copy posts.
 

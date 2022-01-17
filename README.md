@@ -35,7 +35,7 @@ Commands:
   edit --team=STRING --token=STRING --editor=STRING <path>
     Edit a post.
 
-  info --team=STRING --token=STRING <post-num>
+  info --team=STRING --token=STRING <path>
     Show a post info.
 
   ls --team=STRING --token=STRING [<path>]
@@ -103,7 +103,7 @@ $ kasa ls
 $ kasa ls zoo/
 2022-01-09 09:47:24  WIP  https://winebarrel.esa.io/posts/38       zoo/title
 
-$ kasa post 38 -t tagA
+$ kasa post foo/bar/title -t tagA
 https://winebarrel.esa.io/posts/38
 
 $ kasa ls '#tagA'

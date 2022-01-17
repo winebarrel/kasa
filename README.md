@@ -73,6 +73,8 @@ Run "kasa <command> --help" for more information on a command.
 
 ### Example
 
+![t-rec](https://user-images.githubusercontent.com/117768/149797191-c877d202-8dc8-440e-aa79-9bf83fcb1b8d.gif)
+
 ```sh
 $ export ESA_TEAM=winebarrel
 $ export ESA_TOKEN=...

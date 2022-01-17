@@ -56,7 +56,7 @@ Commands:
   rm --team=STRING --token=STRING <path>
     Delete posts.
 
-  rmi --team=STRING --token=STRING <post-num>
+  rmi --team=STRING --token=STRING <path>
     Delete a post by number.
 
   search --team=STRING --token=STRING <query>

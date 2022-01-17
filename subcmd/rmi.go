@@ -10,7 +10,7 @@ import (
 )
 
 type RmiCmd struct {
-	Path  string `arg:"" required:"" help:"Post name or Post URL('https://<TEAM>.esa.io/posts/<NUM>' or '//<NUM>')."`
+	Path  string `arg:"" help:"Post name or Post URL('https://<TEAM>.esa.io/posts/<NUM>' or '//<NUM>')."`
 	Force bool   `short:"f" help:"Skip confirmation of files to delete."`
 }
 

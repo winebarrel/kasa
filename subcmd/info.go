@@ -10,7 +10,7 @@ import (
 )
 
 type InfoCmd struct {
-	Path string `arg:"" required:"" help:"Post name or Post URL('https://<TEAM>.esa.io/posts/<NUM>' or '//<NUM>')."`
+	Path string `arg:"" help:"Post name or Post URL('https://<TEAM>.esa.io/posts/<NUM>' or '//<NUM>')."`
 }
 
 func (cmd *InfoCmd) Run(ctx *kasa.Context) error {

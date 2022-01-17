@@ -16,11 +16,12 @@ type AppendCmd struct {
 	Path   string `arg:"" help:"Post name or Post URL('https://<TEAM>.esa.io/posts/<NUM>' or '//<NUM>')."`
 	Body   string `short:"b" required:"" help:"Post body file to append." predictor:"file"`
 	Prefix string `help:"Prefix text."`
-	Notice bool   `negatable:"" help:"Post with notify."`
+	Notice bool   `negatable:"" default:"true" help:"Post with notify."`
 }
 
 func (cmd *AppendCmd) Run(ctx *kasa.Context) error {
 	num, err := utils.GetPostNum(ctx.Team, cmd.Path)
+
 	if err != nil {
 		return err
 	}

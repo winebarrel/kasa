@@ -32,6 +32,9 @@ Commands:
   cp --team=STRING --token=STRING <source> <target>
     Copy posts.
 
+  edit --team=STRING --token=STRING --editor=STRING <path>
+    Edit a post.
+
   info --team=STRING --token=STRING <post-num>
     Show a post info.
 

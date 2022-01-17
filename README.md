@@ -123,6 +123,9 @@ Do you want to delete posts? (y/n) [n]: y
 
 $ kasa ls
 2021-09-07 11:07:44  -    https://winebarrel.esa.io/posts/1        README
+
+$ kasa edit any/new/post
+https://winebarrel.esa.io/posts/39
 ```
 
 ## Installation

@@ -9,12 +9,13 @@ import (
 	"github.com/winebarrel/kasa"
 	"github.com/winebarrel/kasa/esa"
 	"github.com/winebarrel/kasa/esa/model"
+	"github.com/winebarrel/kasa/utils"
 )
 
 type PostCmd struct {
 	Name     string   `short:"n" help:"Post title."`
 	Body     string   `short:"b" help:"Post body file." predictor:"file"`
-	PostNum  int      `arg:"" optional:"" help:"Post number to update."`
+	Path     string   `arg:"" optional:"" help:"Post number to update."`
 	Tags     []string `short:"t" help:"Post tags."`
 	Category string   `short:"c" help:"Post category."`
 	Wip      bool     `negatable:"" help:"Post as WIP."`
@@ -23,7 +24,9 @@ type PostCmd struct {
 }
 
 func (cmd *PostCmd) Run(ctx *kasa.Context) error {
-	if cmd.PostNum == 0 {
+	postNum := 0
+
+	if cmd.Path == "" {
 		if cmd.Name == "" {
 			return errors.New("missing flags: --name=STRING")
 		}
@@ -31,6 +34,30 @@ func (cmd *PostCmd) Run(ctx *kasa.Context) error {
 		if cmd.Body == "" {
 			return errors.New("missing flags: --body=STRING")
 		}
+	} else {
+		num, err := utils.GetPostNum(ctx.Team, cmd.Path)
+
+		if err != nil {
+			return err
+		}
+
+		var post *model.Post
+
+		if num > 0 {
+			post, err = ctx.Driver.GetFromPageNum(num)
+		} else {
+			post, err = ctx.Driver.Get(cmd.Path)
+		}
+
+		if err != nil {
+			return err
+		}
+
+		if post == nil {
+			return errors.New("post not found")
+		}
+
+		postNum = post.Number
 	}
 
 	var bodyMd []byte
@@ -70,7 +97,7 @@ func (cmd *PostCmd) Run(ctx *kasa.Context) error {
 		Message:  cmd.Message,
 	}
 
-	url, err := ctx.Driver.Post(newPost, cmd.PostNum, cmd.Notice)
+	url, err := ctx.Driver.Post(newPost, postNum, cmd.Notice)
 
 	if err != nil {
 		return err

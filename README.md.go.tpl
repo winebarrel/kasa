@@ -42,7 +42,7 @@ $ kasa ls
 $ kasa ls zoo/
 2022-01-09 09:47:24  WIP  https://winebarrel.esa.io/posts/38       zoo/title
 
-$ kasa post 38 -t tagA
+$ kasa post foo/bar/title -t tagA
 https://winebarrel.esa.io/posts/38
 
 $ kasa ls '#tagA'

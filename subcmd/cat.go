@@ -9,7 +9,7 @@ import (
 )
 
 type CatCmd struct {
-	Path string `arg:"" help:"Post name or Post URL('https://<TEAM>.esa.io/posts/<NUM>' or '//<NUM>')."`
+	Path string `arg:"" required:"" help:"Post name or Post URL('https://<TEAM>.esa.io/posts/<NUM>' or '//<NUM>')."`
 }
 
 func (cmd *CatCmd) Run(ctx *kasa.Context) error {

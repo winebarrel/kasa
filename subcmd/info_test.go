@@ -13,14 +13,14 @@ func TestInfo(t *testing.T) {
 	assert := assert.New(t)
 
 	info := &subcmd.InfoCmd{
-		PostNum: 1,
+		Path: "foo/bar/zoo",
 	}
 
 	driver := NewMockDriver(t)
 	printer := &MockPrinterImpl{}
 
-	driver.MockGetFromPageNum = func(postNum int) (*model.Post, error) {
-		assert.Equal(1, postNum)
+	driver.MockGet = func(path string) (*model.Post, error) {
+		assert.Equal("foo/bar/zoo", path)
 
 		return &model.Post{
 			Category: "foo/bar",

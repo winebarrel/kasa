@@ -89,3 +89,43 @@ func TestEdit_NotModified(t *testing.T) {
 	assert.NoError(err)
 	assert.Equal("post not modified\n", printer.String())
 }
+
+func TestEdit_NewFile(t *testing.T) {
+	assert := assert.New(t)
+	dir, _ := os.Getwd()
+	t.Setenv("EDITOR", filepath.Join(dir, "../tool/edit.sh"))
+
+	edit := &subcmd.EditCmd{
+		Path: "foo/bar/zoo",
+	}
+
+	driver := NewMockDriver(t)
+	printer := &MockPrinterImpl{}
+
+	driver.MockGet = func(path string) (*model.Post, error) {
+		assert.Equal("foo/bar/zoo", path)
+
+		return nil, nil
+	}
+
+	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int, notice bool) (string, error) {
+		assert.Equal(&model.NewPostBody{
+			Name:     "zoo",
+			BodyMd:   "modified\n",
+			Category: "foo/bar",
+		}, newPostBody)
+
+		assert.Equal(0, postNum)
+		assert.False(notice)
+
+		return "https://docs.esa.io/posts/1", nil
+	}
+
+	err := edit.Run(&kasa.Context{
+		Driver: driver,
+		Fmt:    printer,
+	})
+
+	assert.NoError(err)
+	assert.Equal("https://docs.esa.io/posts/1\n", printer.String())
+}

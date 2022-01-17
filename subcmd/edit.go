@@ -10,6 +10,7 @@ import (
 
 	"github.com/winebarrel/kasa"
 	"github.com/winebarrel/kasa/esa/model"
+	"github.com/winebarrel/kasa/postname"
 	"github.com/winebarrel/kasa/utils"
 )
 
@@ -42,8 +43,22 @@ func (cmd *EditCmd) Run(ctx *kasa.Context) error {
 		return err
 	}
 
+	newPost := &model.NewPostBody{}
+
 	if post == nil {
-		return errors.New("post not found")
+		if num > 0 {
+			return errors.New("post not found")
+		} else {
+			cat, name := postname.Split(cmd.Path)
+
+			if name == "" {
+				return errors.New("post name is empty")
+			}
+
+			post = &model.Post{}
+			newPost.Name = name
+			newPost.Category = cat
+		}
 	}
 
 	tempDir, err := ioutil.TempDir("", "kasa")
@@ -83,10 +98,7 @@ func (cmd *EditCmd) Run(ctx *kasa.Context) error {
 		return nil
 	}
 
-	newPost := &model.NewPostBody{
-		BodyMd: bodyMd,
-	}
-
+	newPost.BodyMd = bodyMd
 	url, err := ctx.Driver.Post(newPost, post.Number, cmd.Notice)
 
 	if err != nil {

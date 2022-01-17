@@ -4,6 +4,8 @@
 
 CLI for [esa.io](https://esa.io/).
 
+![](https://user-images.githubusercontent.com/117768/149801227-d64d4895-50a4-4dde-bc9e-b27950a99b81.gif)
+
 ## Usage
 
 ```
@@ -11,8 +13,6 @@ CLI for [esa.io](https://esa.io/).
 ```
 
 ### Example
-
-![](https://user-images.githubusercontent.com/117768/149801227-d64d4895-50a4-4dde-bc9e-b27950a99b81.gif)
 
 ```sh
 $ export ESA_TEAM=winebarrel

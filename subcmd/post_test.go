@@ -59,7 +59,7 @@ func TestPost_Update(t *testing.T) {
 	assert := assert.New(t)
 
 	post := &subcmd.PostCmd{
-		PostNum:  1,
+		Path:     "foo/bar/zoo",
 		Category: "foo/bar",
 		Wip:      false,
 		Tags:     []string{"tagA", "tagB"},
@@ -68,6 +68,15 @@ func TestPost_Update(t *testing.T) {
 
 	driver := NewMockDriver(t)
 	printer := &MockPrinterImpl{}
+
+	driver.MockGet = func(path string) (*model.Post, error) {
+		assert.Equal("foo/bar/zoo", path)
+
+		return &model.Post{
+			Number: 1,
+			BodyMd: "body",
+		}, nil
+	}
 
 	driver.MockPost = func(newPostBody *model.NewPostBody, postNum int, notice bool) (string, error) {
 		assert.Equal(&model.NewPostBody{

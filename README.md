@@ -50,7 +50,7 @@ Commands:
   open --team=STRING --token=STRING <path>
     Open a post in the browser.
 
-  post --team=STRING --token=STRING [<post-num>]
+  post --team=STRING --token=STRING [<path>]
     Create/Update a post.
 
   rm --team=STRING --token=STRING <path>

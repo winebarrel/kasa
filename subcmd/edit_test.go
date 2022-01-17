@@ -87,7 +87,7 @@ func TestEdit_NotModified(t *testing.T) {
 	})
 
 	assert.NoError(err)
-	assert.Equal("post not modified\n", printer.String())
+	assert.Empty(printer.String())
 }
 
 func TestEdit_NewFile(t *testing.T) {

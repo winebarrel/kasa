@@ -94,7 +94,6 @@ func (cmd *EditCmd) Run(ctx *kasa.Context) error {
 	}
 
 	if bodyMd == srcBodyMd {
-		ctx.Fmt.Println("post not modified")
 		return nil
 	}
 

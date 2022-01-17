@@ -13,7 +13,7 @@ import (
 )
 
 type AppendCmd struct {
-	Path   string `arg:"" help:"Post name or Post URL('https://<TEAM>.esa.io/posts/<NUM>' or '//<NUM>')."`
+	Path   string `arg:"" required:"" help:"Post name or Post URL('https://<TEAM>.esa.io/posts/<NUM>' or '//<NUM>')."`
 	Body   string `short:"b" required:"" help:"Post body file to append." predictor:"file"`
 	Prefix string `help:"Prefix text."`
 	Notice bool   `negatable:"" default:"true" help:"Post with notify."`

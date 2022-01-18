@@ -66,20 +66,9 @@ func TestEdit_NotModified(t *testing.T) {
 		assert.Equal("foo/bar/zoo", path)
 
 		return &model.Post{
-			BodyMd: "body\r\n",
+			BodyMd: "TestEdit_NotModified out\r\n",
 		}, nil
 	}
-
-	// driver.MockPost = func(newPostBody *model.NewPostBody, postNum int, notice bool) (string, error) {
-	// 	assert.Equal(&model.NewPostBody{
-	// 		BodyMd: "body",
-	// 	}, newPostBody)
-
-	// 	assert.Equal(0, postNum)
-	// 	assert.False(notice)
-
-	// 	return "https://docs.esa.io/posts/1", nil
-	// }
 
 	err := edit.Run(&kasa.Context{
 		Driver: driver,

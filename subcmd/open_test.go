@@ -47,7 +47,7 @@ func TestOpen_Category(t *testing.T) {
 	}
 
 	monkey.Patch(utils.OpenInBrowser, func(u string) error {
-		assert.Equal("https://docs.esa.io/#path=foo%2Fbar%2F", u)
+		assert.Equal("https://docs.esa.io/#path=%2Ffoo%2Fbar", u)
 		return nil
 	})
 

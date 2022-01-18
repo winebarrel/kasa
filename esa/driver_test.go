@@ -883,3 +883,96 @@ func TestDriverComment_Ok(t *testing.T) {
 	assert.Equal("https://docs.esa.io/posts/5", url)
 	assert.NoError(err)
 }
+
+func TestDriverGetTags_Ok(t *testing.T) {
+	assert := assert.New(t)
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	resBody := `{
+		"tags": [
+			{
+				"name": "noexpand",
+				"posts_count": 6
+			},
+			{
+				"name": "ChromeExtension",
+				"posts_count": 2
+			},
+			{
+				"name": "rubykaigi",
+				"posts_count": 2
+			},
+			{
+				"name": "stock",
+				"posts_count": 2
+			},
+			{
+				"name": "markdown",
+				"posts_count": 2
+			},
+			{
+				"name": "yapcasiaA",
+				"posts_count": 1
+			},
+			{
+				"name": "tqrk09",
+				"posts_count": 1
+			},
+			{
+				"name": "idobata_io",
+				"posts_count": 1
+			},
+			{
+				"name": "RBUC",
+				"posts_count": 1
+			},
+			{
+				"name": "hcmpl",
+				"posts_count": 1
+			},
+			{
+				"name": "railsdm",
+				"posts_count": 1
+			},
+			{
+				"name": "消費税",
+				"posts_count": 1
+			},
+			{
+				"name": "tags",
+				"posts_count": 1
+			},
+			{
+				"name": "editor",
+				"posts_count": 1
+			},
+			{
+				"name": "仕様変更",
+				"posts_count": 1
+			},
+			{
+				"name": "yapcasia",
+				"posts_count": 1
+			}
+		],
+		"prev_page": null,
+		"next_page": null,
+		"total_count": 16,
+		"page": 1,
+		"per_page": 1000,
+		"max_per_page": 1000
+	}`
+
+	httpmock.RegisterResponder(http.MethodGet, "https://api.esa.io/v1/teams/example/tags",
+		httpmock.NewStringResponder(http.StatusOK, resBody))
+
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
+	tags, hasNext, err := driver.GetTags(1)
+
+	expected := &model.Tags{}
+	json.Unmarshal([]byte(resBody), expected)
+	assert.Equal(expected, tags)
+	assert.False(hasNext)
+	assert.NoError(err)
+}

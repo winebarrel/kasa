@@ -16,6 +16,7 @@ import (
 
 const (
 	MaxPerPage        = 50
+	TagsMaxPerPage    = 1000
 	SkipNoticeMessage = "[skip notice]"
 )
 
@@ -31,6 +32,7 @@ type Driver interface {
 	Delete(int) error
 	Tag(*model.TagPostBody, int, bool) error
 	Comment(*model.NewCommentBody, int) (string, error)
+	GetTags(int) (*model.Tags, bool, error)
 }
 
 type DriverImpl struct {
@@ -289,6 +291,32 @@ func (dri *DriverImpl) Tag(tagPostBody *model.TagPostBody, postNum int, notice b
 	_, err = dri.esaCli.send(req)
 
 	return err
+}
+
+func (dri *DriverImpl) GetTags(pageNum int) (*model.Tags, bool, error) {
+	req, err := dri.esaCli.newRequest(http.MethodGet, "tags", nil)
+	query := req.URL.Query()
+	query.Add("page", strconv.Itoa(pageNum))
+	query.Add("per_page", strconv.Itoa(TagsMaxPerPage))
+
+	if err != nil {
+		return nil, false, err
+	}
+
+	body, err := dri.esaCli.send(req)
+
+	if err != nil {
+		return nil, false, err
+	}
+
+	tags := &model.Tags{}
+	err = json.Unmarshal(body, tags)
+
+	if err != nil {
+		return nil, false, err
+	}
+
+	return tags, tags.NextPage != nil, nil
 }
 
 func (dri *DriverImpl) MoveCategory(from string, to string) error {

@@ -24,13 +24,7 @@ type TagCmd struct {
 }
 
 func (cmd *TagCmd) Run(ctx *kasa.Context) error {
-	if cmd.Delete {
-		if len(cmd.Tags) > 0 {
-			return errors.New("cannot specify both '--delete' and '--tags'")
-		}
-
-		cmd.Override = true
-	} else if len(cmd.Tags) == 0 {
+	if !cmd.Delete && len(cmd.Tags) == 0 {
 		return errors.New("missing flags: --body=TAGS")
 	}
 
@@ -59,7 +53,17 @@ func (cmd *TagCmd) Run(ctx *kasa.Context) error {
 	for i, v := range posts {
 		var tags []string
 
-		if cmd.Override {
+		if cmd.Delete {
+			tags = []string{}
+
+			if len(cmd.Tags) > 0 {
+				for _, t := range v.Tags {
+					if !utils.TagContains(cmd.Tags, t) {
+						tags = append(tags, t)
+					}
+				}
+			}
+		} else if cmd.Override {
 			tags = cmd.Tags
 		} else {
 			tags = append(v.Tags, cmd.Tags...)

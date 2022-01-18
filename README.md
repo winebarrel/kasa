@@ -67,6 +67,9 @@ Commands:
   tag --team=STRING --token=STRING <path>
     Tagging posts.
 
+  tags --team=STRING --token=STRING
+    Print tags.
+
   install-completions --team=STRING --token=STRING
     Install shell completions
 

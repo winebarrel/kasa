@@ -46,7 +46,13 @@ func (cmd *OpenCmd) Run(ctx *kasa.Context) error {
 	var err error
 
 	if strings.HasSuffix(cmd.Path, "/") {
-		cat := url.QueryEscape(cmd.Path)
+		cat := strings.TrimSuffix(cmd.Path, "/")
+
+		if !strings.HasPrefix(cat, "/") {
+			cat = "/" + cat
+		}
+
+		cat = url.QueryEscape(cat)
 		postUrl = fmt.Sprintf("https://%s.esa.io/#path=%s", ctx.Team, cat)
 	} else {
 		postUrl, err = getPostUrl(ctx, cmd.Path)

@@ -304,12 +304,12 @@ tag '' 'foo/bar/baz'
 `, printer.String())
 }
 
-func TestTag_DeleteOptionError(t *testing.T) {
+func TestTag_DeleteWithTags(t *testing.T) {
 	assert := assert.New(t)
 
 	tag := &subcmd.TagCmd{
 		Path:      "foo/bar/",
-		Tags:      []string{"bar", "baz"},
+		Tags:      []string{"bar", "tagB"},
 		Override:  false,
 		Delete:    true,
 		Force:     true,
@@ -320,12 +320,62 @@ func TestTag_DeleteOptionError(t *testing.T) {
 	driver := NewMockDriver(t)
 	printer := &MockPrinterImpl{}
 
+	driver.MockListOrTagSearch = func(path string, postNum int, recursive bool) ([]*model.Post, bool, error) {
+		assert.Equal("foo/bar/", path)
+		assert.Equal(1, postNum)
+		assert.True(recursive)
+
+		return []*model.Post{
+			{
+				Number:   1,
+				Name:     "zoo",
+				BodyMd:   "zooBody",
+				Wip:      false,
+				Tags:     []string{"tagA", "tagB"},
+				Category: "foo/bar",
+				Message:  "zooMsg",
+			},
+			{
+				Number:   2,
+				Name:     "baz",
+				BodyMd:   "bazBody",
+				Wip:      true,
+				Tags:     []string{"tagA", "tagB", "bar"},
+				Category: "foo/bar",
+				Message:  "barMsg",
+			},
+		}, false, nil
+	}
+
+	driver.MockTag = func(tagPostBody *model.TagPostBody, postNum int, notice bool) error {
+		switch postNum {
+		case 1:
+			assert.Equal(&model.TagPostBody{
+				Tags: []string{"tagA"},
+			}, tagPostBody)
+		case 2:
+			assert.Equal(&model.TagPostBody{
+				Tags: []string{"tagA"},
+			}, tagPostBody)
+		default:
+			assert.Failf("invalid post", "post num=%d", postNum)
+		}
+
+		assert.False(notice)
+
+		return nil
+	}
+
 	err := tag.Run(&kasa.Context{
 		Driver: driver,
 		Fmt:    printer,
 	})
 
-	assert.Equal(errors.New("cannot specify both '--delete' and '--tags'"), err)
+	assert.NoError(err)
+
+	assert.Equal(`tag '[#tagA]' 'foo/bar/zoo'
+tag '[#tagA]' 'foo/bar/baz'
+`, printer.String())
 }
 
 func TestTag_NoTagsOptionError(t *testing.T) {

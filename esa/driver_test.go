@@ -976,3 +976,32 @@ func TestDriverGetTags_Ok(t *testing.T) {
 	assert.False(hasNext)
 	assert.NoError(err)
 }
+
+func TestDriverGeStats_Ok(t *testing.T) {
+	assert := assert.New(t)
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	resBody := `{
+		"members": 20,
+		"posts": 1959,
+		"posts_wip": 59,
+		"posts_shipped": 1900,
+		"comments": 2695,
+		"stars": 3115,
+		"daily_active_users": 8,
+		"weekly_active_users": 14,
+		"monthly_active_users": 15
+	}`
+
+	httpmock.RegisterResponder(http.MethodGet, "https://api.esa.io/v1/teams/example/stats",
+		httpmock.NewStringResponder(http.StatusOK, resBody))
+
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
+	stats, err := driver.GetStats()
+
+	expected := &model.Stats{}
+	json.Unmarshal([]byte(resBody), expected)
+	assert.Equal(expected, stats)
+	assert.NoError(err)
+}

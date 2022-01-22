@@ -33,6 +33,7 @@ type Driver interface {
 	Tag(*model.TagPostBody, int, bool) error
 	Comment(*model.NewCommentBody, int) (string, error)
 	GetTags(int) (*model.Tags, bool, error)
+	GetStats() (*model.Stats, error)
 }
 
 type DriverImpl struct {
@@ -389,6 +390,29 @@ func (dri *DriverImpl) Comment(newCommentBody *model.NewCommentBody, postNum int
 	}
 
 	return res.URL, nil
+}
+
+func (dri *DriverImpl) GetStats() (*model.Stats, error) {
+	req, err := dri.esaCli.newRequest(http.MethodGet, "stats", nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := dri.esaCli.send(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	stats := &model.Stats{}
+	err = json.Unmarshal(body, stats)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return stats, nil
 }
 
 func updateMessageUnlessNotify(msg string, notice bool) string {

@@ -22,6 +22,7 @@ type MockDriverImpl struct {
 	MockTag             func(*model.TagPostBody, int, bool) error
 	MockComment         func(*model.NewCommentBody, int) (string, error)
 	MockGetTags         func(int) (*model.Tags, bool, error)
+	MockGetStats        func() (*model.Stats, error)
 }
 
 func (dri *MockDriverImpl) Get(path string) (*model.Post, error) {
@@ -70,6 +71,10 @@ func (dri *MockDriverImpl) Comment(newCommentBody *model.NewCommentBody, postNum
 
 func (dri *MockDriverImpl) GetTags(postNum int) (*model.Tags, bool, error) {
 	return dri.MockGetTags(postNum)
+}
+
+func (dri *MockDriverImpl) GetStats() (*model.Stats, error) {
+	return dri.MockGetStats()
 }
 
 func NewMockDriver(t *testing.T) *MockDriverImpl {
@@ -124,6 +129,10 @@ func NewMockDriver(t *testing.T) *MockDriverImpl {
 		MockGetTags: func(int) (*model.Tags, bool, error) {
 			assert.Fail("not implemented")
 			return nil, false, nil
+		},
+		MockGetStats: func() (*model.Stats, error) {
+			assert.Fail("not implemented")
+			return nil, nil
 		},
 	}
 }

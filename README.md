@@ -64,6 +64,9 @@ Commands:
   search --team=STRING --token=STRING <query>
     Search posts.
 
+  stats --team=STRING --token=STRING
+    Print team statistics.
+
   tag --team=STRING --token=STRING <path>
     Tagging posts.
 

@@ -73,6 +73,9 @@ Commands:
   tags --team=STRING --token=STRING
     Print tags.
 
+  touch --team=STRING --token=STRING <path>
+    Create an empty post.
+
   install-completions --team=STRING --token=STRING
     Install shell completions
 

@@ -35,6 +35,7 @@ var cli struct {
 	Stats              subcmd.StatsCmd              `cmd:"" help:"Print team statistics."`
 	Tag                subcmd.TagCmd                `cmd:"" help:"Tagging posts."`
 	Tags               subcmd.TagsCmd               `cmd:"" help:"Print tags."`
+	Touch              subcmd.TouchCmd              `cmd:"" help:"Create an empty post."`
 	InstallCompletions kongplete.InstallCompletions `cmd:"" help:"Install shell completions"`
 }
 

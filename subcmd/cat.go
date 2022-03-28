@@ -35,7 +35,7 @@ func (cmd *CatCmd) Run(ctx *kasa.Context) error {
 		return errors.New("post not found")
 	}
 
-	ctx.Fmt.Println(post.BodyMd)
+	ctx.Fmt.Printf(post.BodyMd)
 
 	return nil
 }

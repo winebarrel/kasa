@@ -34,7 +34,7 @@ func TestCat(t *testing.T) {
 	})
 
 	assert.NoError(err)
-	assert.Equal("body\n", printer.String())
+	assert.Equal("body", printer.String())
 }
 
 func TestCat_NotFound(t *testing.T) {
@@ -86,7 +86,7 @@ func TestCat_URL(t *testing.T) {
 	})
 
 	assert.NoError(err)
-	assert.Equal("body\n", printer.String())
+	assert.Equal("body", printer.String())
 }
 
 func TestCat_NUM(t *testing.T) {
@@ -114,5 +114,5 @@ func TestCat_NUM(t *testing.T) {
 	})
 
 	assert.NoError(err)
-	assert.Equal("body\n", printer.String())
+	assert.Equal("body", printer.String())
 }

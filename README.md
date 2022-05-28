@@ -143,8 +143,7 @@ https://winebarrel.esa.io/posts/39
 
 ```sh
 # OSX or Linux
-brew tap winebarrel/kasa
-brew install kasa
+brew install winebarrel/kasa/kasa
 ```
 
 ## Install shell completions

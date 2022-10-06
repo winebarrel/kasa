@@ -3,7 +3,7 @@ package esa_test
 import (
 	"encoding/json"
 	"errors"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"testing"
 	"time"
@@ -66,7 +66,7 @@ func TestDriverGetFromPageNum_Ok(t *testing.T) {
 	assert.NoError(err)
 
 	expected := &model.Post{}
-	json.Unmarshal([]byte(resBody), expected)
+	json.Unmarshal([]byte(resBody), expected) //nolint:errcheck
 	assert.Equal(expected, post)
 }
 
@@ -123,7 +123,7 @@ func TestDriverGet_Ok(t *testing.T) {
 	assert.NoError(err)
 
 	expected := &model.Post{}
-	json.Unmarshal([]byte(resBodyPost), expected)
+	json.Unmarshal([]byte(resBodyPost), expected) //nolint:errcheck
 	assert.Equal(expected, post)
 }
 
@@ -182,7 +182,7 @@ func TestDriverList_Ok(t *testing.T) {
 	assert.NoError(err)
 
 	expected := &model.Posts{}
-	json.Unmarshal([]byte(resBody), expected)
+	json.Unmarshal([]byte(resBody), expected) //nolint:errcheck
 	assert.Equal(expected.Posts, posts)
 	assert.False(hasMore)
 }
@@ -222,7 +222,7 @@ func TestDriverList_MatchNameOnly(t *testing.T) {
 	assert.NoError(err)
 
 	expected := &model.Posts{}
-	json.Unmarshal([]byte(resBody), expected)
+	json.Unmarshal([]byte(resBody), expected) //nolint:errcheck
 	assert.Equal(expected.Posts[1:2], posts)
 	assert.False(hasMore)
 }
@@ -314,7 +314,7 @@ func TestDriverList_WithCategory(t *testing.T) {
 	assert.NoError(err)
 
 	expected := &model.Posts{}
-	json.Unmarshal([]byte(resBody), expected)
+	json.Unmarshal([]byte(resBody), expected) //nolint:errcheck
 	assert.Equal(expected.Posts, posts)
 	assert.False(hasMore)
 }
@@ -374,7 +374,7 @@ func TestDriverList_HasMore(t *testing.T) {
 	assert.NoError(err)
 
 	expected := &model.Posts{}
-	json.Unmarshal([]byte(resBody), expected)
+	json.Unmarshal([]byte(resBody), expected) //nolint:errcheck
 	assert.Equal(expected.Posts, posts)
 	assert.True(hasMore)
 }
@@ -434,7 +434,7 @@ func TestDriverList_NoRecursive(t *testing.T) {
 	assert.NoError(err)
 
 	expected := &model.Posts{}
-	json.Unmarshal([]byte(resBody), expected)
+	json.Unmarshal([]byte(resBody), expected) //nolint:errcheck
 	assert.Equal(expected.Posts, posts)
 	assert.False(hasMore)
 }
@@ -494,7 +494,7 @@ func TestDriverSearch_Ok(t *testing.T) {
 	assert.NoError(err)
 
 	expected := &model.Posts{}
-	json.Unmarshal([]byte(resBody), expected)
+	json.Unmarshal([]byte(resBody), expected) //nolint:errcheck
 	assert.Equal(expected.Posts, posts)
 	assert.False(hasMore)
 }
@@ -570,7 +570,7 @@ func TestDriverListOrTagSearch_List(t *testing.T) {
 	assert.NoError(err)
 
 	expected := &model.Posts{}
-	json.Unmarshal([]byte(resBody), expected)
+	json.Unmarshal([]byte(resBody), expected) //nolint:errcheck
 	assert.Equal(expected.Posts, posts)
 	assert.False(hasMore)
 }
@@ -630,7 +630,7 @@ func TestDriverListOrTagSearch_Search(t *testing.T) {
 	assert.NoError(err)
 
 	expected := &model.Posts{}
-	json.Unmarshal([]byte(resBody), expected)
+	json.Unmarshal([]byte(resBody), expected) //nolint:errcheck
 	assert.Equal(expected.Posts, posts)
 	assert.False(hasMore)
 }
@@ -641,7 +641,7 @@ func TestDriverPost_Post(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	httpmock.RegisterResponder(http.MethodPost, "https://api.esa.io/v1/teams/example/posts", func(req *http.Request) (*http.Response, error) {
-		resBody, _ := ioutil.ReadAll(req.Body)
+		resBody, _ := io.ReadAll(req.Body)
 		assert.Equal(`{"post":{"name":"name","body_md":"body_md","tags":["tagA","tagB"],"category":"foo/bar","wip":false,"message":"[skip notice] message"}}`, string(resBody))
 		return httpmock.NewStringResponse(http.StatusCreated, `{"url":"https://docs.esa.io/posts/5"}`), nil
 	})
@@ -668,7 +668,7 @@ func TestDriverPost_WithNotify(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	httpmock.RegisterResponder(http.MethodPost, "https://api.esa.io/v1/teams/example/posts", func(req *http.Request) (*http.Response, error) {
-		resBody, _ := ioutil.ReadAll(req.Body)
+		resBody, _ := io.ReadAll(req.Body)
 		assert.Equal(`{"post":{"name":"name","body_md":"body_md","tags":["tagA","tagB"],"category":"foo/bar","wip":false,"message":"message"}}`, string(resBody))
 		return httpmock.NewStringResponse(http.StatusCreated, `{"url":"https://docs.esa.io/posts/5"}`), nil
 	})
@@ -695,7 +695,7 @@ func TestDriverPost_Update(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
-		resBody, _ := ioutil.ReadAll(req.Body)
+		resBody, _ := io.ReadAll(req.Body)
 		assert.Equal(`{"post":{"name":"name","body_md":"body_md","tags":["tagA","tagB"],"category":"foo/bar","wip":false,"message":"[skip notice] message"}}`, string(resBody))
 		return httpmock.NewStringResponse(http.StatusOK, `{"url":"https://docs.esa.io/posts/5"}`), nil
 	})
@@ -722,7 +722,7 @@ func TestDriverMove_Ok(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
-		resBody, _ := ioutil.ReadAll(req.Body)
+		resBody, _ := io.ReadAll(req.Body)
 		assert.Equal(`{"post":{"name":"new_name","category":"new_cat","message":"[skip notice]","updated_at":"2022-01-15T00:00:00Z"}}`, string(resBody))
 		return httpmock.NewStringResponse(http.StatusOK, ``), nil
 	})
@@ -746,7 +746,7 @@ func TestDriverMove_WithNotify(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
-		resBody, _ := ioutil.ReadAll(req.Body)
+		resBody, _ := io.ReadAll(req.Body)
 		assert.Equal(`{"post":{"name":"new_name","category":"new_cat","updated_at":"2023-02-16T00:00:00Z"}}`, string(resBody))
 		return httpmock.NewStringResponse(http.StatusOK, ``), nil
 	})
@@ -770,7 +770,7 @@ func TestDriverTag_Ok(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
-		resBody, _ := ioutil.ReadAll(req.Body)
+		resBody, _ := io.ReadAll(req.Body)
 		assert.Equal(`{"post":{"tags":["foo","bar","zoo"],"message":"[skip notice]","updated_at":"2022-01-15T00:00:00Z"}}`, string(resBody))
 		return httpmock.NewStringResponse(http.StatusOK, ``), nil
 	})
@@ -793,7 +793,7 @@ func TestDriverTag_Delete(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
-		resBody, _ := ioutil.ReadAll(req.Body)
+		resBody, _ := io.ReadAll(req.Body)
 		assert.Equal(`{"post":{"tags":[],"message":"[skip notice]","updated_at":"2023-02-16T00:00:00Z"}}`, string(resBody))
 		return httpmock.NewStringResponse(http.StatusOK, ``), nil
 	})
@@ -816,7 +816,7 @@ func TestDriverTag_WithNotify(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
-		resBody, _ := ioutil.ReadAll(req.Body)
+		resBody, _ := io.ReadAll(req.Body)
 		assert.Equal(`{"post":{"tags":["foo","bar","zoo"],"updated_at":"2024-03-17T00:00:00Z"}}`, string(resBody))
 		return httpmock.NewStringResponse(http.StatusOK, ``), nil
 	})
@@ -839,7 +839,7 @@ func TestDriverMoveCategory_Ok(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	httpmock.RegisterResponder(http.MethodPost, "https://api.esa.io/v1/teams/example/categories/batch_move", func(req *http.Request) (*http.Response, error) {
-		resBody, _ := ioutil.ReadAll(req.Body)
+		resBody, _ := io.ReadAll(req.Body)
 		assert.Equal(`{"from":"from_cat","to":"to_cat"}`, string(resBody))
 		return httpmock.NewStringResponse(http.StatusOK, ``), nil
 	})
@@ -868,7 +868,7 @@ func TestDriverComment_Ok(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	httpmock.RegisterResponder(http.MethodPost, "https://api.esa.io/v1/teams/example/posts/1/comments", func(req *http.Request) (*http.Response, error) {
-		resBody, _ := ioutil.ReadAll(req.Body)
+		resBody, _ := io.ReadAll(req.Body)
 		assert.Equal(`{"comment":{"body_md":"body_md"}}`, string(resBody))
 		return httpmock.NewStringResponse(http.StatusCreated, `{"url":"https://docs.esa.io/posts/5"}`), nil
 	})
@@ -971,7 +971,7 @@ func TestDriverGetTags_Ok(t *testing.T) {
 	tags, hasNext, err := driver.GetTags(1)
 
 	expected := &model.Tags{}
-	json.Unmarshal([]byte(resBody), expected)
+	json.Unmarshal([]byte(resBody), expected) //nolint:errcheck
 	assert.Equal(expected, tags)
 	assert.False(hasNext)
 	assert.NoError(err)
@@ -1001,7 +1001,7 @@ func TestDriverGeStats_Ok(t *testing.T) {
 	stats, err := driver.GetStats()
 
 	expected := &model.Stats{}
-	json.Unmarshal([]byte(resBody), expected)
+	json.Unmarshal([]byte(resBody), expected) //nolint:errcheck
 	assert.Equal(expected, stats)
 	assert.NoError(err)
 }

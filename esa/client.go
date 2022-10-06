@@ -4,7 +4,6 @@ package esa
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/http/httputil"
 )
@@ -62,7 +61,7 @@ func (cli *Client) send(req *http.Request) ([]byte, error) {
 		return nil, err
 	}
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 
 	if err != nil {
 		return nil, err

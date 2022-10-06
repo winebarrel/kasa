@@ -3,7 +3,6 @@ package subcmd
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
@@ -61,7 +60,7 @@ func (cmd *EditCmd) Run(ctx *kasa.Context) error {
 		}
 	}
 
-	tempDir, err := ioutil.TempDir("", "kasa")
+	tempDir, err := os.MkdirTemp("", "kasa")
 
 	if err != nil {
 		return err
@@ -86,7 +85,7 @@ func (cmd *EditCmd) Run(ctx *kasa.Context) error {
 		return err
 	}
 
-	rawBodyMd, err := ioutil.ReadFile(tempPost)
+	rawBodyMd, err := os.ReadFile(tempPost)
 	bodyMd := string(rawBodyMd)
 
 	if err != nil {
@@ -112,7 +111,7 @@ func (cmd *EditCmd) Run(ctx *kasa.Context) error {
 func createTempPost(dir string, postNum int, postBody string) (string, error) {
 	file := fmt.Sprintf("%s/%d.md", dir, postNum)
 	bodyMd := strings.ReplaceAll(postBody, "\r\n", "\n")
-	err := ioutil.WriteFile(file, []byte(bodyMd), 0600)
+	err := os.WriteFile(file, []byte(bodyMd), 0600)
 
 	if err != nil {
 		return "", err

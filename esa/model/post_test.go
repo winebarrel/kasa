@@ -51,7 +51,7 @@ func TestPostFullNameWithoutTags(t *testing.T) {
 }`
 
 	post := &model.Post{}
-	json.Unmarshal([]byte(postJson), &post)
+	json.Unmarshal([]byte(postJson), &post) //nolint:errcheck
 	assert.Equal("日報/2015/05/09/hi!", post.FullNameWithoutTags())
 }
 
@@ -98,7 +98,7 @@ func TestPostFullNameWithoutTags_NoCategory(t *testing.T) {
 }`
 
 	post := &model.Post{}
-	json.Unmarshal([]byte(postJson), &post)
+	json.Unmarshal([]byte(postJson), &post) //nolint:errcheck
 	assert.Equal("hi!", post.FullNameWithoutTags())
 }
 
@@ -145,7 +145,7 @@ func TestPostListString(t *testing.T) {
 }`
 
 	post := &model.Post{}
-	json.Unmarshal([]byte(postJson), &post)
+	json.Unmarshal([]byte(postJson), &post) //nolint:errcheck
 	assert.Equal("2015-05-09 11:54:51  WIP  https://docs.esa.io/posts/1        日報/2015/05/09/hi!  [#api,#dev]", post.ListString())
 }
 
@@ -192,7 +192,7 @@ func TestPostJson(t *testing.T) {
 }`
 
 	post := &model.Post{}
-	json.Unmarshal([]byte(postJson), &post)
+	json.Unmarshal([]byte(postJson), &post) //nolint:errcheck
 	out, err := post.Json()
 	assert.Equal(`{"number":1,"name":"hi!","wip":true,"created_at":"2015-05-09T11:54:50+09:00","message":"Add Getting Started section","url":"https://docs.esa.io/posts/1","updated_at":"2015-05-09T11:54:51+09:00","tags":["api","dev"],"category":"日報/2015/05/09","revision_number":1}`, out)
 	assert.NoError(err)

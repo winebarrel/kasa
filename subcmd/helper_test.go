@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/kanmu/kasa/esa/model"
 	"github.com/stretchr/testify/assert"
-	"github.com/winebarrel/kasa/esa/model"
 )
 
 type MockDriverImpl struct {

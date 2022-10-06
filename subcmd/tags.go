@@ -1,7 +1,7 @@
 package subcmd
 
 import (
-	"github.com/winebarrel/kasa"
+	"github.com/kanmu/kasa"
 )
 
 type TagsCmd struct {

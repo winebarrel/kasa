@@ -3,7 +3,6 @@ package subcmd
 import (
 	"errors"
 	"io"
-	"io/ioutil"
 	"os"
 	"strings"
 
@@ -63,7 +62,7 @@ func (cmd *AppendCmd) Run(ctx *kasa.Context) error {
 		defer file.Close()
 	}
 
-	bodyMd, err := ioutil.ReadAll(file)
+	bodyMd, err := io.ReadAll(file)
 
 	if err != nil {
 		return err

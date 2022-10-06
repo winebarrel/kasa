@@ -1,7 +1,6 @@
 package subcmd_test
 
 import (
-	"io/ioutil"
 	"os"
 	"testing"
 
@@ -13,8 +12,8 @@ import (
 
 func TestAppend(t *testing.T) {
 	assert := assert.New(t)
-	bodyFile, _ := ioutil.TempFile("", "bodyMd")
-	bodyFile.WriteString("bodyMd")
+	bodyFile, _ := os.CreateTemp("", "bodyMd")
+	bodyFile.WriteString("bodyMd") //nolint:errcheck
 	defer os.Remove(bodyFile.Name())
 
 	append := &subcmd.AppendCmd{
@@ -55,8 +54,8 @@ func TestAppend(t *testing.T) {
 
 func TestAppend_WithPrefix(t *testing.T) {
 	assert := assert.New(t)
-	bodyFile, _ := ioutil.TempFile("", "bodyMd")
-	bodyFile.WriteString("bodyMd")
+	bodyFile, _ := os.CreateTemp("", "bodyMd")
+	bodyFile.WriteString("bodyMd") //nolint:errcheck
 	defer os.Remove(bodyFile.Name())
 
 	append := &subcmd.AppendCmd{

@@ -3,7 +3,6 @@ package subcmd
 import (
 	"errors"
 	"io"
-	"io/ioutil"
 	"os"
 
 	"github.com/kanmu/kasa"
@@ -79,7 +78,7 @@ func (cmd *PostCmd) Run(ctx *kasa.Context) error {
 		}
 
 		var err error
-		bodyMd, err = ioutil.ReadAll(file)
+		bodyMd, err = io.ReadAll(file)
 
 		if err != nil {
 			return err

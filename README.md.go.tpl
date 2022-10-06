@@ -73,7 +73,7 @@ https://kanmu.esa.io/posts/39
 
 ```sh
 # OSX or Linux
-brew tap kanmu/kasa
+brew tap kanmu/tools
 brew install kasa
 ```
 

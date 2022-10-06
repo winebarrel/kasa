@@ -5,9 +5,9 @@ import (
 	"sort"
 
 	"github.com/Songmu/prompter"
-	"github.com/winebarrel/kasa"
-	"github.com/winebarrel/kasa/esa/model"
-	"github.com/winebarrel/kasa/postname"
+	"github.com/kanmu/kasa"
+	"github.com/kanmu/kasa/esa/model"
+	"github.com/kanmu/kasa/postname"
 )
 
 type MvCmd struct {

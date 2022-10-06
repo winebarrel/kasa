@@ -1,9 +1,8 @@
-module github.com/winebarrel/kasa
+module github.com/kanmu/kasa
 
-go 1.17
+go 1.19
 
 require (
-	bou.ke/monkey v1.0.2
 	github.com/Songmu/prompter v0.5.0
 	github.com/alecthomas/kong v0.2.22
 	github.com/jarcoal/httpmock v1.1.0

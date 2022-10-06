@@ -3,7 +3,7 @@ package subcmd
 import (
 	"encoding/json"
 
-	"github.com/winebarrel/kasa"
+	"github.com/kanmu/kasa"
 )
 
 type StatsCmd struct {

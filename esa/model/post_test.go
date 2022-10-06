@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/kanmu/kasa/esa/model"
 	"github.com/stretchr/testify/assert"
-	"github.com/winebarrel/kasa/esa/model"
 )
 
 func TestPostFullNameWithoutTags(t *testing.T) {

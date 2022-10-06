@@ -3,8 +3,8 @@ package postname_test
 import (
 	"testing"
 
+	"github.com/kanmu/kasa/postname"
 	"github.com/stretchr/testify/assert"
-	"github.com/winebarrel/kasa/postname"
 )
 
 func TestPostnameSplit(t *testing.T) {

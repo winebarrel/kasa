@@ -16,7 +16,7 @@ checksum:
 brews:
   - tap:
       owner: kanmu
-      name: homebrew-kasa
+      name: homebrew-tools
     homepage: https://github.com/kanmu/kasa
     description: CLI for esa.
     license: MIT

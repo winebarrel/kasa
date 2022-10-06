@@ -143,7 +143,8 @@ https://kanmu.esa.io/posts/39
 
 ```sh
 # OSX or Linux
-brew install kanmu/kasa/kasa
+brew tap kanmu/tools
+brew install kasa
 ```
 
 ## Install shell completions

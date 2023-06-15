@@ -15,7 +15,6 @@ type MvCmd struct {
 	Target    string `arg:"" help:"Target post/category."`
 	Search    bool   `short:"s" help:"Search posts. see https://docs.esa.io/posts/104"`
 	Force     bool   `short:"f" help:"Skip confirmation of files to move."`
-	WithCat   int    `help:"Move with category."`
 	Notice    bool   `negatable:"" help:"Move with notify."`
 	Page      int    `short:"p" default:"1" help:"Page number."`
 	Recursive bool   `short:"r" default:"true" negatable:"" help:"Recursively list posts."`
@@ -49,11 +48,12 @@ func (cmd *MvCmd) Run(ctx *kasa.Context) error {
 	}
 
 	movePosts := make([]*model.MovePostBody, len(posts))
+	withCat := postname.MinCategoryDepth(posts) + 1
 
 	for i, v := range posts {
 		movePost := &model.MovePostBody{
 			Name:      targetName,
-			Category:  postname.AppendCategoryN(targetCat, v.Category, cmd.WithCat),
+			Category:  postname.AppendCategoryN(targetCat, v.Category, withCat),
 			UpdatedAt: v.UpdatedAt,
 		}
 

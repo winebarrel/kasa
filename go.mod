@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/Songmu/prompter v0.5.0
 	github.com/alecthomas/kong v0.2.22
-	github.com/jarcoal/httpmock v1.1.0
+	github.com/jarcoal/httpmock v1.3.0
 	github.com/posener/complete v1.2.3
 	github.com/stretchr/testify v1.7.0
 	github.com/willabides/kongplete v0.3.0

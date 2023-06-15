@@ -3,6 +3,8 @@ package postname
 import (
 	"path"
 	"strings"
+
+	"github.com/kanmu/kasa/esa/model"
 )
 
 func Split(fullName string) (string, string) {
@@ -52,4 +54,36 @@ func AppendCategoryN(src string, extra string, n int) string {
 	}
 
 	return path.Join(newCat...)
+}
+
+func CategoryDepth(cat string) int {
+	var depth int
+
+	if cat == "" {
+		depth = 0
+	} else {
+		depth = strings.Count(cat, "/") + 1
+	}
+
+	return depth
+}
+
+func MinCategoryDepth(posts []*model.Post) int {
+	if len(posts) == 0 {
+		return 0
+	}
+
+	var min int
+
+	for i, v := range posts {
+		depth := CategoryDepth(v.Category)
+
+		if i == 0 {
+			min = depth
+		} else if depth < min {
+			min = depth
+		}
+	}
+
+	return min
 }

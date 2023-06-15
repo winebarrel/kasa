@@ -3,6 +3,7 @@ package postname_test
 import (
 	"testing"
 
+	"github.com/kanmu/kasa/esa/model"
 	"github.com/kanmu/kasa/postname"
 	"github.com/stretchr/testify/assert"
 )
@@ -83,5 +84,49 @@ func TestPostnameAppendCategoryN(t *testing.T) {
 
 	for _, t := range tests {
 		assert.Equal(t.expected, postname.AppendCategoryN(t.src, t.extra, t.n))
+	}
+}
+
+func TestPostnameCategoryDepth(t *testing.T) {
+	assert := assert.New(t)
+	assert.Nil(nil)
+
+	tests := []struct {
+		cat      string
+		expected int
+	}{
+		{"foo/bar/zoo", 3},
+		{"foo/bar", 2},
+		{"foo", 1},
+		{"", 0},
+	}
+
+	for _, t := range tests {
+		assert.Equal(t.expected, postname.CategoryDepth(t.cat))
+	}
+}
+
+func TestPostnameMinCategoryDepth(t *testing.T) {
+	assert := assert.New(t)
+	assert.Nil(nil)
+
+	tests := []struct {
+		cats     []string
+		expected int
+	}{
+		{[]string{"foo/bar/zoo", "hoge/fuga"}, 2},
+		{[]string{"foo/bar/zoo", "hoge/fuga", "baz"}, 1},
+		{[]string{"foo/bar/zoo", "foo/bar/zoo/baz", "hoge/fuga"}, 2},
+		{[]string{"foo/bar/zoo", "hoge/fuga", "baz", ""}, 0},
+	}
+
+	for _, t := range tests {
+		posts := []*model.Post{}
+
+		for _, cat := range t.cats {
+			posts = append(posts, &model.Post{Category: cat})
+		}
+
+		assert.Equal(t.expected, postname.MinCategoryDepth(posts))
 	}
 }

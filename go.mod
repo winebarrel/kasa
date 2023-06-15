@@ -3,7 +3,7 @@ module github.com/kanmu/kasa
 go 1.19
 
 require (
-	github.com/Songmu/prompter v0.5.0
+	github.com/Songmu/prompter v0.5.1
 	github.com/alecthomas/kong v0.7.1
 	github.com/jarcoal/httpmock v1.3.0
 	github.com/posener/complete v1.2.3
@@ -20,6 +20,6 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/riywo/loginshell v0.0.0-20200815045211-7d26008be1ab // indirect
 	golang.org/x/sys v0.1.0 // indirect
-	golang.org/x/term v0.0.0-20210317153231-de623e64d2a6 // indirect
+	golang.org/x/term v0.0.0-20220526004731-065cf7ba2467 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

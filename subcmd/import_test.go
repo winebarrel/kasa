@@ -20,7 +20,7 @@ func TestImport(t *testing.T) {
 	defer os.Remove(bodyFile.Name())
 
 	imp := &subcmd.ImportCmd{
-		File: bodyFile.Name(),
+		Src:  bodyFile.Name(),
 		Path: "foo/bar/zoo",
 	}
 
@@ -57,7 +57,7 @@ func TestImport_WithoutName(t *testing.T) {
 	defer os.Remove(bodyFile.Name())
 
 	imp := &subcmd.ImportCmd{
-		File: bodyFile.Name(),
+		Src:  bodyFile.Name(),
 		Path: "foo/bar/",
 	}
 
@@ -92,7 +92,7 @@ func TestImport_WIP(t *testing.T) {
 	defer os.Remove(bodyFile.Name())
 
 	imp := &subcmd.ImportCmd{
-		File: bodyFile.Name(),
+		Src:  bodyFile.Name(),
 		Path: "foo/bar/zoo",
 		Wip:  true,
 	}
@@ -143,7 +143,7 @@ func TestImport_Dir(t *testing.T) {
 	}
 
 	imp := &subcmd.ImportCmd{
-		File: tempDir,
+		Src:  tempDir,
 		Path: "hoge/fuga",
 	}
 

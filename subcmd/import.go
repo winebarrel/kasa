@@ -12,17 +12,17 @@ import (
 )
 
 type ImportCmd struct {
-	File   string `arg:"" help:"Source file (stdin:'-')."`
+	Src    string `arg:"" help:"Source file or directory (stdin:'-')."`
 	Path   string `arg:"" help:"Post name or Post URL('https://<TEAM>.esa.io/posts/<NUM>' or '//<NUM>')."`
 	Notice bool   `negatable:"" default:"true" help:"Post with notify."`
 	Wip    bool   `negatable:"" help:"Post as WIP."`
 }
 
 func (cmd *ImportCmd) Run(ctx *kasa.Context) error {
-	if cmd.File == "-" {
+	if cmd.Src == "-" {
 		return cmd.importFile(ctx, os.Stdin, cmd.Path)
 	} else {
-		fi, err := os.Stat(cmd.File)
+		fi, err := os.Stat(cmd.Src)
 
 		if err != nil {
 			return err
@@ -31,7 +31,7 @@ func (cmd *ImportCmd) Run(ctx *kasa.Context) error {
 		if fi.IsDir() {
 			return cmd.importDir(ctx)
 		} else {
-			f, err := os.OpenFile(cmd.File, os.O_RDONLY, 0)
+			f, err := os.OpenFile(cmd.Src, os.O_RDONLY, 0)
 
 			if err != nil {
 				return err
@@ -47,7 +47,7 @@ func (cmd *ImportCmd) importFile(ctx *kasa.Context, file io.Reader, path string)
 	cat, name := postname.Split(path)
 
 	if name == "" {
-		name = filepath.Base(cmd.File)
+		name = filepath.Base(cmd.Src)
 	}
 
 	newPost := &model.NewPostBody{
@@ -75,7 +75,7 @@ func (cmd *ImportCmd) importFile(ctx *kasa.Context, file io.Reader, path string)
 }
 
 func (cmd *ImportCmd) importDir(ctx *kasa.Context) error {
-	return filepath.Walk(cmd.File, func(path string, info os.FileInfo, err error) error {
+	return filepath.Walk(cmd.Src, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -90,7 +90,7 @@ func (cmd *ImportCmd) importDir(ctx *kasa.Context) error {
 			return err
 		}
 
-		root, err := filepath.Abs(cmd.File)
+		root, err := filepath.Abs(cmd.Src)
 
 		if err != nil {
 			return err

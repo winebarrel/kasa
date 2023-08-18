@@ -1,8 +1,10 @@
 package subcmd
 
 import (
+	"fmt"
 	"io"
 	"os"
+	pathpkg "path"
 	"path/filepath"
 	"strings"
 
@@ -20,7 +22,13 @@ type ImportCmd struct {
 
 func (cmd *ImportCmd) Run(ctx *kasa.Context) error {
 	if cmd.Src == "-" {
-		return cmd.importFile(ctx, os.Stdin, cmd.Path)
+		url, err := cmd.importFile(ctx, os.Stdin, cmd.Path)
+
+		if err != nil {
+			return err
+		}
+
+		ctx.Fmt.Println(url)
 	} else {
 		fi, err := os.Stat(cmd.Src)
 
@@ -38,12 +46,20 @@ func (cmd *ImportCmd) Run(ctx *kasa.Context) error {
 			}
 
 			defer f.Close()
-			return cmd.importFile(ctx, f, cmd.Path)
+			url, err := cmd.importFile(ctx, f, cmd.Path)
+
+			if err != nil {
+				return err
+			}
+
+			ctx.Fmt.Println(url)
 		}
 	}
+
+	return nil
 }
 
-func (cmd *ImportCmd) importFile(ctx *kasa.Context, file io.Reader, path string) error {
+func (cmd *ImportCmd) importFile(ctx *kasa.Context, file io.Reader, path string) (string, error) {
 	cat, name := postname.Split(path)
 
 	if name == "" {
@@ -59,19 +75,17 @@ func (cmd *ImportCmd) importFile(ctx *kasa.Context, file io.Reader, path string)
 	bodyMd, err := io.ReadAll(file)
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	newPost.BodyMd = string(bodyMd)
 	url, err := ctx.Driver.Post(newPost, 0, cmd.Notice)
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	ctx.Fmt.Println(url)
-
-	return nil
+	return url, nil
 }
 
 func (cmd *ImportCmd) importDir(ctx *kasa.Context) error {
@@ -106,7 +120,15 @@ func (cmd *ImportCmd) importDir(ctx *kasa.Context) error {
 		path = filepath.Join(cmd.Path, path)
 		path = strings.TrimPrefix(path, "/")
 
-		return cmd.importFile(ctx, f, path)
-	})
+		url, err := cmd.importFile(ctx, f, path)
 
+		if err != nil {
+			return err
+		}
+
+		urlDir := pathpkg.Dir(url)
+		ctx.Fmt.Println(fmt.Sprintf("%-*s  %s", len(urlDir)+9, url, path))
+
+		return nil
+	})
 }

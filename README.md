@@ -37,6 +37,9 @@ Commands:
   edit --team=STRING --token=STRING --editor=STRING <path>
     Edit a post.
 
+  import --team=STRING --token=STRING <file> <path>
+    Import a post.
+
   info --team=STRING --token=STRING <path>
     Show a post info.
 
@@ -137,6 +140,9 @@ $ kasa ls
 
 $ kasa edit any/new/post
 https://kanmu.esa.io/posts/39
+
+$ echo hello | kasa - any/import/post
+https://kanmu.esa.io/posts/40
 ```
 
 ## Installation

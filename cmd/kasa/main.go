@@ -23,6 +23,7 @@ var cli struct {
 	Comment            subcmd.CommentCmd            `cmd:"" help:"Comment on a post."`
 	Cp                 subcmd.CpCmd                 `cmd:"" help:"Copy posts."`
 	Edit               subcmd.EditCmd               `cmd:"" help:"Edit a post."`
+	Import             subcmd.ImportCmd             `cmd:"" help:"Import a post."`
 	Info               subcmd.InfoCmd               `cmd:"" help:"Show a post info."`
 	Ls                 subcmd.LsCmd                 `cmd:"" help:"List posts."`
 	Mv                 subcmd.MvCmd                 `cmd:"" help:"Move posts."`

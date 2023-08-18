@@ -23,3 +23,7 @@ clean:
 .PHONY: readme
 readme: build
 	go run tool/gen_readme.go
+
+.PHONY: lint
+lint:
+	golangci-lint run

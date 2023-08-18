@@ -4,6 +4,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/kanmu/kasa"
 	"github.com/kanmu/kasa/esa/model"
@@ -18,22 +19,32 @@ type ImportCmd struct {
 }
 
 func (cmd *ImportCmd) Run(ctx *kasa.Context) error {
-	var file io.Reader
-
 	if cmd.File == "-" {
-		file = os.Stdin
+		return cmd.importFile(ctx, os.Stdin, cmd.Path)
 	} else {
-		f, err := os.OpenFile(cmd.File, os.O_RDONLY, 0)
+		fi, err := os.Stat(cmd.File)
 
 		if err != nil {
 			return err
 		}
 
-		defer f.Close()
-		file = f
-	}
+		if fi.IsDir() {
+			return cmd.importDir(ctx)
+		} else {
+			f, err := os.OpenFile(cmd.File, os.O_RDONLY, 0)
 
-	cat, name := postname.Split(cmd.Path)
+			if err != nil {
+				return err
+			}
+
+			defer f.Close()
+			return cmd.importFile(ctx, f, cmd.Path)
+		}
+	}
+}
+
+func (cmd *ImportCmd) importFile(ctx *kasa.Context, file io.Reader, path string) error {
+	cat, name := postname.Split(path)
 
 	if name == "" {
 		name = filepath.Base(cmd.File)
@@ -61,4 +72,41 @@ func (cmd *ImportCmd) Run(ctx *kasa.Context) error {
 	ctx.Fmt.Println(url)
 
 	return nil
+}
+
+func (cmd *ImportCmd) importDir(ctx *kasa.Context) error {
+	return filepath.Walk(cmd.File, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if info.IsDir() {
+			return nil
+		}
+
+		path, err = filepath.Abs(path)
+
+		if err != nil {
+			return err
+		}
+
+		root, err := filepath.Abs(cmd.File)
+
+		if err != nil {
+			return err
+		}
+
+		f, err := os.OpenFile(path, os.O_RDONLY, 0)
+
+		if err != nil {
+			return err
+		}
+
+		path = strings.TrimPrefix(path, root)
+		path = filepath.Join(cmd.Path, path)
+		path = strings.TrimPrefix(path, "/")
+
+		return cmd.importFile(ctx, f, path)
+	})
+
 }

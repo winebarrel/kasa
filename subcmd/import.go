@@ -14,6 +14,7 @@ type ImportCmd struct {
 	File   string `arg:"" help:"Source file (stdin:'-')."`
 	Path   string `arg:"" help:"Post name or Post URL('https://<TEAM>.esa.io/posts/<NUM>' or '//<NUM>')."`
 	Notice bool   `negatable:"" default:"true" help:"Post with notify."`
+	Wip    bool   `negatable:"" help:"Post as WIP."`
 }
 
 func (cmd *ImportCmd) Run(ctx *kasa.Context) error {
@@ -41,6 +42,7 @@ func (cmd *ImportCmd) Run(ctx *kasa.Context) error {
 	newPost := &model.NewPostBody{
 		Name:     name,
 		Category: cat,
+		Wip:      &cmd.Wip,
 	}
 
 	bodyMd, err := io.ReadAll(file)

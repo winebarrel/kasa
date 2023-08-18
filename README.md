@@ -37,7 +37,7 @@ Commands:
   edit --team=STRING --token=STRING --editor=STRING <path>
     Edit a post.
 
-  import --team=STRING --token=STRING <file> <path>
+  import --team=STRING --token=STRING <src> <path>
     Import a post.
 
   info --team=STRING --token=STRING <path>

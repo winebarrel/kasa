@@ -130,16 +130,16 @@ func TestImport_Dir(t *testing.T) {
 	{
 		foo, _ := os.Create(filepath.Join(tempDir, "foo"))
 		defer foo.Close()
-		foo.WriteString("hello")
-		foo.Sync()
+		foo.WriteString("hello") //nolint:errcheck
+		foo.Sync()               //nolint:errcheck
 	}
 
 	{
-		os.Mkdir(filepath.Join(tempDir, "bar"), 0755)
+		os.Mkdir(filepath.Join(tempDir, "bar"), 0755) //nolint:errcheck
 		zoo, _ := os.Create(filepath.Join(tempDir, "bar/zoo"))
 		defer zoo.Close()
-		zoo.WriteString("world")
-		zoo.Sync()
+		zoo.WriteString("world") //nolint:errcheck
+		zoo.Sync()               //nolint:errcheck
 	}
 
 	imp := &subcmd.ImportCmd{

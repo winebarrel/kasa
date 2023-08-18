@@ -141,16 +141,29 @@ $ kasa ls
 $ kasa edit any/new/post
 https://kanmu.esa.io/posts/39
 
-$ echo hello | kasa - any/import/post
+$ echo hello | kasa import - any/import/post
 https://kanmu.esa.io/posts/40
 
 $ date > hello
-$ kasa hello any/import/
+$ kasa import hello any/import/
 https://kanmu.esa.io/posts/41
 
 $ kasa ls any/import/
 2023-08-18 10:12:00  -    https://kanmu.esa.io/posts/40       any/import/post
 2023-08-18 10:12:30  -    https://kanmu.esa.io/posts/41       any/import/hello
+
+$ mkdir foo/
+$ touch foo/bar.txt
+$ mkdir foo/zoo
+$ touch foo/zoo/baz.txt
+
+$ kasa import ./foo/ any/import2/
+https://kanmu.esa.io/posts/42
+https://kanmu.esa.io/posts/43
+
+$ kasa ls any/import2/
+2023-08-18 10:32:00  -    https://kanmu.esa.io/posts/42       any/import2/bar.txt
+2023-08-18 10:22:30  -    https://kanmu.esa.io/posts/43       any/import2/zoo/baz.txt
 ```
 
 ## Installation

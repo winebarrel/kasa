@@ -185,5 +185,7 @@ func TestImport_Dir(t *testing.T) {
 	})
 
 	assert.NoError(err)
-	assert.Equal("https://docs.esa.io/posts/1\nhttps://docs.esa.io/posts/2\n", printer.String())
+	assert.Equal(`https://docs.esa.io/posts/1        hoge/fuga/bar/zoo
+https://docs.esa.io/posts/2        hoge/fuga/foo
+`, printer.String())
 }

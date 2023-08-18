@@ -86,7 +86,7 @@ $ touch foo/zoo/baz.txt
 
 $ kasa import ./foo/ any/import2/
 https://kanmu.esa.io/posts/42       any/import2/bar.txt
-https://kanmu.esa.io/posts/43       any/import2/zoo/barz.txt
+https://kanmu.esa.io/posts/43       any/import2/zoo/baz.txt
 
 $ kasa ls any/import2/
 2023-08-18 10:32:00  -    https://kanmu.esa.io/posts/42       any/import2/bar.txt

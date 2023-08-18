@@ -143,6 +143,14 @@ https://kanmu.esa.io/posts/39
 
 $ echo hello | kasa - any/import/post
 https://kanmu.esa.io/posts/40
+
+$ date > hello
+$ kasa hello any/import/
+https://kanmu.esa.io/posts/41
+
+$ kasa ls any/import/
+2023-08-18 10:12:00  -    https://kanmu.esa.io/posts/40       any/import/post
+2023-08-18 10:12:30  -    https://kanmu.esa.io/posts/41       any/import/hello
 ```
 
 ## Installation

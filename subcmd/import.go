@@ -1,9 +1,9 @@
 package subcmd
 
 import (
-	"errors"
 	"io"
 	"os"
+	"path/filepath"
 
 	"github.com/kanmu/kasa"
 	"github.com/kanmu/kasa/esa/model"
@@ -35,7 +35,7 @@ func (cmd *ImportCmd) Run(ctx *kasa.Context) error {
 	cat, name := postname.Split(cmd.Path)
 
 	if name == "" {
-		return errors.New("post name is empty")
+		name = filepath.Base(cmd.File)
 	}
 
 	newPost := &model.NewPostBody{

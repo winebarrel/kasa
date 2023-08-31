@@ -83,7 +83,7 @@ Commands:
     Unwip posts.
 
   wip --team=STRING --token=STRING <path>
-    Wip posts.
+    Make posts WIP.
 
   install-completions --team=STRING --token=STRING
     Install shell completions

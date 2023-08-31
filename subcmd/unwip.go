@@ -40,8 +40,12 @@ func (cmd *UnwipCmd) Run(ctx *kasa.Context) error {
 	}
 
 	newPosts := make([]*model.WipPostBody, len(posts))
+	hasWip := false
 
 	for i, v := range posts {
+		if v.Wip {
+			hasWip = true
+		}
 
 		newPost := &model.WipPostBody{
 			Wip:       false,
@@ -51,9 +55,16 @@ func (cmd *UnwipCmd) Run(ctx *kasa.Context) error {
 		newPosts[i] = newPost
 	}
 
+	if !hasWip {
+		ctx.Fmt.Println("WIP posts missing.")
+		return nil
+	}
+
 	if !cmd.Force {
 		for _, oldPost := range posts {
-			ctx.Fmt.Printf("unwip '%s'\n", oldPost.FullNameWithoutTags())
+			if oldPost.Wip {
+				ctx.Fmt.Printf("unwip '%s'\n", oldPost.FullNameWithoutTags())
+			}
 		}
 
 		if hasMore {

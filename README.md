@@ -79,6 +79,12 @@ Commands:
   touch --team=STRING --token=STRING <path>
     Create an empty post.
 
+  unwip --team=STRING --token=STRING <path>
+    Unwip posts.
+
+  wip --team=STRING --token=STRING <path>
+    Wip posts.
+
   install-completions --team=STRING --token=STRING
     Install shell completions
 

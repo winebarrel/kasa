@@ -1005,3 +1005,95 @@ func TestDriverGeStats_Ok(t *testing.T) {
 	assert.Equal(expected, stats)
 	assert.NoError(err)
 }
+
+func TestDriverUnwip_Ok(t *testing.T) {
+	assert := assert.New(t)
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
+		resBody, _ := io.ReadAll(req.Body)
+		assert.Equal(`{"post":{"wip":false,"message":"[skip notice]","updated_at":"2022-01-15T00:00:00Z"}}`, string(resBody))
+		return httpmock.NewStringResponse(http.StatusOK, ``), nil
+	})
+
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
+	updatedAt, _ := time.Parse("2006/01/02", "2022/01/15")
+
+	wipPost := &model.WipPostBody{
+		Wip:       false,
+		UpdatedAt: updatedAt,
+	}
+
+	err := driver.Wip(wipPost, 1, false)
+	assert.NoError(err)
+}
+
+func TestDriverUnwip_WithNotify(t *testing.T) {
+	assert := assert.New(t)
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
+		resBody, _ := io.ReadAll(req.Body)
+		assert.Equal(`{"post":{"wip":false,"updated_at":"2024-03-17T00:00:00Z"}}`, string(resBody))
+		return httpmock.NewStringResponse(http.StatusOK, ``), nil
+	})
+
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
+	updatedAt, _ := time.Parse("2006/01/02", "2024/03/17")
+
+	wipPost := &model.WipPostBody{
+		Wip:       false,
+		UpdatedAt: updatedAt,
+	}
+
+	err := driver.Wip(wipPost, 1, true)
+	assert.NoError(err)
+}
+
+func TestDriverWip_Ok(t *testing.T) {
+	assert := assert.New(t)
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
+		resBody, _ := io.ReadAll(req.Body)
+		assert.Equal(`{"post":{"wip":true,"message":"[skip notice]","updated_at":"2022-01-15T00:00:00Z"}}`, string(resBody))
+		return httpmock.NewStringResponse(http.StatusOK, ``), nil
+	})
+
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
+	updatedAt, _ := time.Parse("2006/01/02", "2022/01/15")
+
+	wipPost := &model.WipPostBody{
+		Wip:       true,
+		UpdatedAt: updatedAt,
+	}
+
+	err := driver.Wip(wipPost, 1, false)
+	assert.NoError(err)
+}
+
+func TestDriverWip_WithNotify(t *testing.T) {
+	assert := assert.New(t)
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	httpmock.RegisterResponder(http.MethodPatch, "https://api.esa.io/v1/teams/example/posts/1", func(req *http.Request) (*http.Response, error) {
+		resBody, _ := io.ReadAll(req.Body)
+		assert.Equal(`{"post":{"wip":true,"updated_at":"2024-03-17T00:00:00Z"}}`, string(resBody))
+		return httpmock.NewStringResponse(http.StatusOK, ``), nil
+	})
+
+	driver := esa.NewDriver("example", "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", false, "")
+	updatedAt, _ := time.Parse("2006/01/02", "2024/03/17")
+
+	wipPost := &model.WipPostBody{
+		Wip:       true,
+		UpdatedAt: updatedAt,
+	}
+
+	err := driver.Wip(wipPost, 1, true)
+	assert.NoError(err)
+}

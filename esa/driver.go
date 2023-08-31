@@ -34,6 +34,7 @@ type Driver interface {
 	Comment(*model.NewCommentBody, int) (string, error)
 	GetTags(int) (*model.Tags, bool, error)
 	GetStats() (*model.Stats, error)
+	Wip(*model.WipPostBody, int, bool) error
 }
 
 type DriverImpl struct {
@@ -413,6 +414,33 @@ func (dri *DriverImpl) GetStats() (*model.Stats, error) {
 	}
 
 	return stats, nil
+}
+
+func (dri *DriverImpl) Wip(wipPostBody *model.WipPostBody, postNum int, notice bool) error {
+	wipPostBody.Message = updateMessageUnlessNotify(wipPostBody.Message, notice)
+
+	wipPost := model.WipPost{
+		Post: wipPostBody,
+	}
+
+	postBody, err := json.Marshal(wipPost)
+
+	if err != nil {
+		return err
+	}
+
+	reader := bytes.NewReader(postBody)
+	path := fmt.Sprintf("posts/%d", postNum)
+	req, err := dri.esaCli.newRequest(http.MethodPatch, path, reader)
+
+	if err != nil {
+		return err
+	}
+
+	req.Header.Add("Content-Type", "application/json")
+	_, err = dri.esaCli.send(req)
+
+	return err
 }
 
 func updateMessageUnlessNotify(msg string, notice bool) string {

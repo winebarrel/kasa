@@ -21,7 +21,7 @@ jobs:
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
           account: kanmu
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v4
+        uses: goreleaser/goreleaser-action@v5
         with:
           distribution: goreleaser
           version: latest

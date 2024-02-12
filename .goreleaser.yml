@@ -14,7 +14,7 @@ builds:
 checksum:
   name_template: "checksums.txt"
 brews:
-  - tap:
+  - repository:
       owner: winebarrel
       name: homebrew-kasa
     homepage: https://github.com/winebarrel/kasa

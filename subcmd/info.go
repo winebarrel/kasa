@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/kanmu/kasa"
-	"github.com/kanmu/kasa/esa/model"
-	"github.com/kanmu/kasa/utils"
+	"github.com/winebarrel/kasa"
+	"github.com/winebarrel/kasa/esa/model"
+	"github.com/winebarrel/kasa/utils"
 )
 
 type InfoCmd struct {

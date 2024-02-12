@@ -4,7 +4,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/kanmu/kasa/esa/model"
+	"github.com/winebarrel/kasa/esa/model"
 )
 
 func Split(fullName string) (string, string) {

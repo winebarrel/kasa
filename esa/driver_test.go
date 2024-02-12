@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/jarcoal/httpmock"
-	"github.com/kanmu/kasa/esa"
-	"github.com/kanmu/kasa/esa/model"
 	"github.com/stretchr/testify/assert"
+	"github.com/winebarrel/kasa/esa"
+	"github.com/winebarrel/kasa/esa/model"
 )
 
 func TestDriverGetFromPageNum_Ok(t *testing.T) {

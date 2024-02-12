@@ -6,7 +6,7 @@ import (
 	pathpkg "path"
 	"time"
 
-	"github.com/kanmu/kasa/utils"
+	"github.com/winebarrel/kasa/utils"
 )
 
 type PostAuthor struct {

@@ -4,11 +4,11 @@ import (
 	"os"
 
 	"github.com/alecthomas/kong"
-	"github.com/kanmu/kasa"
-	"github.com/kanmu/kasa/esa"
-	"github.com/kanmu/kasa/subcmd"
 	"github.com/posener/complete"
 	"github.com/willabides/kongplete"
+	"github.com/winebarrel/kasa"
+	"github.com/winebarrel/kasa/esa"
+	"github.com/winebarrel/kasa/subcmd"
 )
 
 var version string

@@ -6,10 +6,10 @@ import (
 	"sort"
 
 	"github.com/Songmu/prompter"
-	"github.com/kanmu/kasa"
-	"github.com/kanmu/kasa/esa"
-	"github.com/kanmu/kasa/esa/model"
-	"github.com/kanmu/kasa/postname"
+	"github.com/winebarrel/kasa"
+	"github.com/winebarrel/kasa/esa"
+	"github.com/winebarrel/kasa/esa/model"
+	"github.com/winebarrel/kasa/postname"
 )
 
 type CpCmd struct {

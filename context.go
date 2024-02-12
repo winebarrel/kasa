@@ -1,7 +1,7 @@
 package kasa
 
 import (
-	"github.com/kanmu/kasa/esa"
+	"github.com/winebarrel/kasa/esa"
 )
 
 type Context struct {

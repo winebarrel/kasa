@@ -1,7 +1,7 @@
 package subcmd
 
 import (
-	"github.com/kanmu/kasa"
+	"github.com/winebarrel/kasa"
 )
 
 type MvcatCmd struct {

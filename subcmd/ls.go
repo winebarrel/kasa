@@ -3,7 +3,7 @@ package subcmd
 import (
 	"sort"
 
-	"github.com/kanmu/kasa"
+	"github.com/winebarrel/kasa"
 )
 
 type LsCmd struct {

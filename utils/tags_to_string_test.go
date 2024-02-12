@@ -3,8 +3,8 @@ package utils_test
 import (
 	"testing"
 
-	"github.com/kanmu/kasa/utils"
 	"github.com/stretchr/testify/assert"
+	"github.com/winebarrel/kasa/utils"
 )
 
 func TestTagsToString(t *testing.T) {

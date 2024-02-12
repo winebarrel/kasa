@@ -5,8 +5,8 @@ import (
 	"sort"
 
 	"github.com/Songmu/prompter"
-	"github.com/kanmu/kasa"
-	"github.com/kanmu/kasa/esa/model"
+	"github.com/winebarrel/kasa"
+	"github.com/winebarrel/kasa/esa/model"
 )
 
 type WipCmd struct {

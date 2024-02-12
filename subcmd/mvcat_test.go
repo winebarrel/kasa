@@ -3,9 +3,9 @@ package subcmd_test
 import (
 	"testing"
 
-	"github.com/kanmu/kasa"
-	"github.com/kanmu/kasa/subcmd"
 	"github.com/stretchr/testify/assert"
+	"github.com/winebarrel/kasa"
+	"github.com/winebarrel/kasa/subcmd"
 )
 
 func TestMvcat(t *testing.T) {

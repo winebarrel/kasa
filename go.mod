@@ -1,6 +1,6 @@
-module github.com/kanmu/kasa
+module github.com/winebarrel/kasa
 
-go 1.19
+go 1.21.7
 
 require (
 	github.com/Songmu/prompter v0.5.1

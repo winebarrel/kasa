@@ -4,11 +4,11 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/kanmu/kasa"
-	"github.com/kanmu/kasa/esa"
-	"github.com/kanmu/kasa/esa/model"
-	"github.com/kanmu/kasa/subcmd"
 	"github.com/stretchr/testify/assert"
+	"github.com/winebarrel/kasa"
+	"github.com/winebarrel/kasa/esa"
+	"github.com/winebarrel/kasa/esa/model"
+	"github.com/winebarrel/kasa/subcmd"
 )
 
 func TestCp_DirToDir(t *testing.T) {

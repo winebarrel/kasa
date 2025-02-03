@@ -4,7 +4,7 @@ go 1.21.7
 
 require (
 	github.com/Songmu/prompter v0.5.1
-	github.com/alecthomas/kong v1.6.1
+	github.com/alecthomas/kong v1.7.0
 	github.com/jarcoal/httpmock v1.3.1
 	github.com/posener/complete v1.2.3
 	github.com/stretchr/testify v1.10.0

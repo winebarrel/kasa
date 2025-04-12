@@ -101,5 +101,5 @@ func TestClientSend_NotFound(t *testing.T) {
 	req.URL.RawQuery = query.Encode()
 
 	_, err = client.send(req)
-	assert.Equal(errors.New(`404: {"error":"not_found","message":"Not found"}`), err)
+	assert.Equal(errors.New(`404 Not Found: {"error":"not_found","message":"Not found"}`), err)
 }

@@ -56,9 +56,7 @@ func (cmd *RmCmd) Run(ctx *kasa.Context) error {
 		err = ctx.Driver.Delete(v.Number)
 
 		if err != nil {
-			if err != nil {
-				return fmt.Errorf("failed to delete '%s':%w", v.FullNameWithoutTags(), err)
-			}
+			return fmt.Errorf("failed to delete '%s':%w", v.FullNameWithoutTags(), err)
 		}
 	}
 

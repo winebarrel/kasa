@@ -23,6 +23,7 @@ jobs:
         with:
           go-version-file: go.mod
           cache: false
-      - name: Lint
-        uses: golangci/golangci-lint-action@v7
+      - uses: golangci/golangci-lint-action@v7
       - run: make vet test
+      - name: Run install-kasa action
+        uses: ./

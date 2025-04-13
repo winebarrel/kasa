@@ -36,11 +36,6 @@ func (cmd *MvCmd) Run(ctx *kasa.Context) error {
 	}
 
 	sort.Slice(posts, func(i, j int) bool { return posts[i].FullName < posts[j].FullName })
-
-	if err != nil {
-		return err
-	}
-
 	targetCat, targetName := postname.Split(cmd.Target)
 
 	if len(posts) > 1 && targetName != "" {

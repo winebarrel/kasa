@@ -43,11 +43,6 @@ func (cmd *TagCmd) Run(ctx *kasa.Context) error {
 	}
 
 	sort.Slice(posts, func(i, j int) bool { return posts[i].FullName < posts[j].FullName })
-
-	if err != nil {
-		return err
-	}
-
 	newPosts := make([]*model.TagPostBody, len(posts))
 
 	for i, v := range posts {

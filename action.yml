@@ -5,10 +5,6 @@ inputs:
     description: "kasa version"
     default: 1.5.1
     required: false
-  checksum:
-    description: "kasa archive checksum"
-    default: c128f9d6a489418b201c58fb16b1aa54f778929e80042d3dd66be54871ef4f11
-    required: false
   os:
     description: "OS supported by kasa binary"
     default: linux
@@ -27,8 +23,6 @@ runs:
         cd /tmp
         FILENAME=kasa_${{ inputs.version }}_${{ inputs.os }}_${{ inputs.arch }}.tar.gz
         curl -sSfLO https://github.com/winebarrel/kasa/releases/download/${{ inputs.version }}/${FILENAME}
-        echo "${{ inputs.checksum }} ${FILENAME}" > sha256sum.txt
-        sha256sum -c sha256sum.txt
         tar xzvf ${FILENAME}
         sudo install kasa ${RUNNER_TOOL_CACHE}/kasa/kasa
         echo ${RUNNER_TOOL_CACHE}/kasa >> $GITHUB_PATH

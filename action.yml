@@ -22,7 +22,7 @@ runs:
         mkdir -p ${RUNNER_TOOL_CACHE}/kasa
         cd /tmp
         FILENAME=kasa_${{ inputs.version }}_${{ inputs.os }}_${{ inputs.arch }}.tar.gz
-        curl -sSfLO https://github.com/winebarrel/kasa/releases/download/${{ inputs.version }}/${FILENAME}
+        curl -sSfLO https://github.com/winebarrel/kasa/releases/download/v${{ inputs.version }}/${FILENAME}
         tar xzvf ${FILENAME}
         sudo install kasa ${RUNNER_TOOL_CACHE}/kasa/kasa
         echo ${RUNNER_TOOL_CACHE}/kasa >> $GITHUB_PATH

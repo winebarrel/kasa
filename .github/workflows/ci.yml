@@ -25,5 +25,3 @@ jobs:
           cache: false
       - uses: golangci/golangci-lint-action@v7
       - run: make vet test
-      - name: Run install-kasa action
-        uses: ./

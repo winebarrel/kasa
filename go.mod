@@ -7,7 +7,7 @@ require (
 	github.com/alecthomas/kong v1.12.1
 	github.com/jarcoal/httpmock v1.4.1
 	github.com/posener/complete v1.2.3
-	github.com/stretchr/testify v1.11.0
+	github.com/stretchr/testify v1.11.1
 	github.com/willabides/kongplete v0.4.0
 )
 

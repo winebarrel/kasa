@@ -151,13 +151,11 @@ type MockPrinterImpl struct {
 }
 
 func (printer *MockPrinterImpl) Printf(format string, a ...interface{}) (n int, err error) {
-	printer.buf.WriteString(fmt.Sprintf(format, a...))
-	return 0, nil
+	return fmt.Fprintf(&printer.buf, format, a...)
 }
 
 func (printer *MockPrinterImpl) Println(a ...interface{}) (n int, err error) {
-	printer.buf.WriteString(fmt.Sprintln(a...))
-	return n, nil
+	return fmt.Fprintln(&printer.buf, a...)
 }
 
 func (printer *MockPrinterImpl) String() string {

@@ -23,13 +23,13 @@ CLI for [esa.io](https://esa.io/).
 ### ls - List posts
 
 ```
-kasa ls [<path>] [--json] [-p PAGE] [-r/--no-r]
+kasa ls [<path>] [--json] [-p PAGE] [--recursive/--no-recursive]
 ```
 
 - `<path>` - 記事名/カテゴリ/タグ (省略可)
 - `--json` - JSON出力
 - `-p` - ページ番号 (default: 1)
-- `-r/--no-r` - 再帰的にリスト (default: true)
+- `--recursive/--no-recursive` - 再帰的にリスト (default: true)
 
 ### cat - Print a post
 
@@ -131,13 +131,13 @@ kasa mvcat <from> <to>
 ### cp - Copy posts
 
 ```
-kasa cp <source> <target> [-f] [--notice/--no-notice] [-p PAGE] [-r/--no-r]
+kasa cp <source> <target> [-f] [--notice/--no-notice] [-p PAGE] [--recursive/--no-recursive]
 ```
 
 ### rm - Delete posts
 
 ```
-kasa rm <path> [-s] [-f] [-p PAGE] [-r/--no-r]
+kasa rm <path> [-s] [-f] [-p PAGE] [--recursive/--no-recursive]
 ```
 
 - `-s` - 検索モード
@@ -152,7 +152,7 @@ kasa rmi <path> [-f]
 ### tag - Tagging posts
 
 ```
-kasa tag <path> [-t TAG ...] [-o] [-d] [-s] [-f] [--notice/--no-notice] [-p PAGE] [-r/--no-r]
+kasa tag <path> [-t TAG ...] [-o] [-d] [-s] [-f] [--notice/--no-notice] [-p PAGE] [--recursive/--no-recursive]
 ```
 
 - `-t` - タグ (複数指定可)
@@ -169,13 +169,13 @@ kasa tags [-p PAGE]
 ### wip - Make posts WIP
 
 ```
-kasa wip <path> [-s] [-f] [--notice/--no-notice] [-p PAGE] [-r/--no-r]
+kasa wip <path> [-s] [-f] [--notice/--no-notice] [-p PAGE] [--recursive/--no-recursive]
 ```
 
 ### unwip - Unwip posts
 
 ```
-kasa unwip <path> [-s] [-f] [--notice/--no-notice] [-p PAGE] [-r/--no-r]
+kasa unwip <path> [-s] [-f] [--notice/--no-notice] [-p PAGE] [--recursive/--no-recursive]
 ```
 
 ### stats - Print team statistics

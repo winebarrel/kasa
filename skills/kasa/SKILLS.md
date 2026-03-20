@@ -137,7 +137,7 @@ kasa cp <source> <target> [-f] [--notice/--no-notice] [-p PAGE] [-r/--no-r]
 ### rm - Delete posts
 
 ```
-kasa rm <path> [-s] [-f] [-p PAGE] [-r/--no-r]
+kasa rm <path> [-s] [-f] [-p PAGE] [--recursive/--no-recursive]
 ```
 
 - `-s` - 検索モード

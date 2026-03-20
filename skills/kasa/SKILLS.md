@@ -114,7 +114,7 @@ kasa import <src> <path> [--notice/--no-notice] [--wip/--no-wip]
 ### mv - Move posts
 
 ```
-kasa mv <source> <target> [-s] [-f] [--notice/--no-notice] [-p PAGE] [-r/--no-r]
+kasa mv <source> <target> [-s] [-f] [--notice/--no-notice] [-p PAGE] [--recursive/--no-recursive]
 ```
 
 - `<source>` - 移動元 (記事名/カテゴリ/タグ)

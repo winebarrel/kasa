@@ -131,13 +131,13 @@ kasa mvcat <from> <to>
 ### cp - Copy posts
 
 ```
-kasa cp <source> <target> [-f] [--notice/--no-notice] [-p PAGE] [-r/--no-r]
+kasa cp <source> <target> [-f] [--notice/--no-notice] [-p PAGE] [-r/--recursive/--no-recursive]
 ```
 
 ### rm - Delete posts
 
 ```
-kasa rm <path> [-s] [-f] [-p PAGE] [-r/--no-r]
+kasa rm <path> [-s] [-f] [-p PAGE] [-r/--recursive/--no-recursive]
 ```
 
 - `-s` - 検索モード

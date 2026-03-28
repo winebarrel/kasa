@@ -14,12 +14,16 @@ builds:
       - darwin
 checksum:
   name_template: "checksums.txt"
-brews:
+homebrew_casks:
   - repository:
       owner: winebarrel
       name: homebrew-kasa
     homepage: https://github.com/winebarrel/kasa
     description: CLI for esa.
     license: MIT
-    install: |
-      bin.install 'kasa'
+    hooks:
+      post:
+        install: |
+          if OS.mac?
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/kasa"]
+          end

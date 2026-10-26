@@ -3,7 +3,7 @@ module github.com/winebarrel/kasa
 go 1.26.1
 
 require (
-	github.com/Songmu/prompter v0.5.1
+	github.com/Songmu/prompter v1.0.0
 	github.com/alecthomas/kong v1.16.1
 	github.com/jarcoal/httpmock v1.4.2
 	github.com/posener/complete v1.2.3
@@ -14,9 +14,9 @@ require (
 require (
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
-	github.com/mattn/go-isatty v0.0.14 // indirect
+	github.com/mattn/go-isatty v0.0.24 // indirect
 	github.com/riywo/loginshell v0.0.0-20200815045211-7d26008be1ab // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
-	golang.org/x/sys v0.1.0 // indirect
-	golang.org/x/term v0.0.0-20220526004731-065cf7ba2467 // indirect
+	golang.org/x/sys v0.49.0 // indirect
+	golang.org/x/term v0.47.0 // indirect
 )
